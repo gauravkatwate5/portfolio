@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Express.js Developer Notes & Interview Q&A</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>Express</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --orange: #ce9178;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 3rem; color: var(--teal); text-align: center; margin: 2.5rem 0; }
+    h2 { font-size: 2rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 3rem 0 1.5rem; }
+    h3 { font-size: 1.6rem; color: var(--blue); margin: 2rem 0 1rem; }
+    h4 { font-size: 1.3rem; color: var(--purple); margin: 1.5rem 0 0.8rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+      font-size: 0.95rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 5rem 0; }
+    .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .highlight { background: rgba(78, 201, 176, 0.15); padding: 1.3rem; border-radius: 8px; margin: 1.5rem 0; }
+    .interview-q {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #404040;
+    }
+    .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
+    .interview-q pre { margin-top: 1rem; }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      border: 1px solid #404040;
+      padding: 0.8rem;
+      text-align: left;
+    }
+    th { background: #2d2d30; color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>Express.js Developer Notes & Interview Q&A</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
+        For 2+ Year Backend Developers<br>
+        Routes → Middleware → Auth → File Upload → 40 Full Interview Qs
+      </p>
+    </div>
+
+    <!-- Basics -->
+    <h2>Basics</h2>
+
+    <h3>What is Express.js?</h3>
+    <p>Express.js is a minimal and flexible Node.js web application framework that provides a robust set of features for building web and mobile applications. It simplifies the development of server-side logic and APIs.</p>
+
+    <h3>Why Use Express?</h3>
+    <ul>
+      <li>Lightweight and unopinionated</li>
+      <li>Middleware architecture</li>
+      <li>Easy routing</li>
+      <li>Strong community and ecosystem</li>
+      <li>Compatible with Connect middleware</li>
+    </ul>
+
+    <h3>Installing Express & First App</h3>
+    <pre><code>npm init -y
+npm install express
+
+// server.js
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello Express!');
+});
+
+app.listen(PORT, () => {
+  console.log(\`Server running on port \${PORT}\`);
+});</code></pre>
+
+    <h3>Basic Routes</h3>
+    <pre><code>app.get('/users', (req, res) => {
+  res.json({ users: ['Alice', 'Bob'] });
+});
+
+app.post('/users', (req, res) => {
+  res.status(201).json({ message: 'User created' });
+});
+
+app.put('/users/:id', (req, res) => {
+  res.json({ message: \`Updated user \${req.params.id}\` });
+});
+
+app.delete('/users/:id', (req, res) => {
+  res.json({ message: \`Deleted user \${req.params.id}\` });
+});</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Middleware -->
+    <h2>Middleware</h2>
+
+    <h3>Custom Middleware</h3>
+    <pre><code>function logger(req, res, next) {
+  console.log(\`\${req.method} \${req.url} - \${new Date().toISOString()}\`);
+  next();
+}
+
+app.use(logger);</code></pre>
+
+    <h3>Built-in Middleware</h3>
+    <pre><code>app.use(express.json());        // Parse JSON bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded
+app.use(express.static('public')); // Serve static files</code></pre>
+
+    <h3>Third-party Middleware</h3>
+    <pre><code>npm install cors helmet morgan compression
+
+app.use(cors());
+app.use(helmet());
+app.use(morgan('dev'));
+app.use(compression());</code></pre>
+
+    <h3>dotenv for Environment Variables</h3>
+    <pre><code>npm install dotenv
+// .env
+PORT=3000
+JWT_SECRET=your-secret-key
+
+// server.js
+require('dotenv').config();
+const PORT = process.env.PORT || 3000;</code></pre>
+
+    <h3>Error-handling Middleware</h3>
+    <pre><code>// Must be last
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.status || 500).json({
+    message: err.message || 'Something went wrong!',
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+  });
+});
+
+// Trigger error
+app.get('/error', (req, res, next) => {
+  const err = new Error('Intentional error');
+  err.status = 400;
+  next(err);
+});</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Authentication -->
+    <h2>Authentication</h2>
+
+    <h3>JWT Setup</h3>
+    <pre><code>npm install jsonwebtoken bcryptjs
+
+// utils/jwt.js
+const jwt = require('jsonwebtoken');
+
+const generateToken = (payload) => {
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+};
+
+const verifyToken = (token) => {
+  return jwt.verify(token, process.env.JWT_SECRET);
+};
+
+module.exports = { generateToken, verifyToken };</code></pre>
+
+    <h3>Login Route</h3>
+    <pre><code>const bcrypt = require('bcryptjs');
+const { generateToken } = require('./utils/jwt');
+
+app.post('/api/login', async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) throw new Error('Invalid credentials');
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) throw new Error('Invalid credentials');
+
+    const token = generateToken({ id: user._id, role: user.role });
+    res.json({ token, user: { id: user._id, name: user.name, role: user.role } });
+  } catch (err) {
+    next(err);
+  }
+});</code></pre>
+
+    <h3>Authentication Middleware</h3>
+    <pre><code>const { verifyToken } = require('./utils/jwt');
+
+const authMiddleware = (req, res, next) => {
+  const authHeader = req.header('Authorization');
+  if (!authHeader) return res.status(401).json({ message: 'No token' });
+
+  const token = authHeader.replace('Bearer ', '');
+  try {
+    const decoded = verifyToken(token);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    res.status(401).json({ message: 'Invalid token' });
+  }
+};
+
+app.get('/api/profile', authMiddleware, (req, res) => {
+  res.json({ message: \`Welcome user \${req.user.id}\` });
+});</code></pre>
+
+    <h3>Role-based Access Control</h3>
+    <pre><code>const restrictTo = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+    next();
+  };
+};
+
+app.delete('/api/users/:id', authMiddleware, restrictTo('admin'), (req, res) => {
+  res.json({ message: 'User deleted by admin' });
+});</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- File Upload -->
+    <h2>File Upload with Multer</h2>
+
+    <h3>Setup Multer</h3>
+    <pre><code>npm install multer
+
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, \`\${Date.now()}-\${file.fieldname}\${ext}\`);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+  if (allowedTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error('Invalid file type'), false);
+  }
+};
+
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB
+});</code></pre>
+
+    <h3>Upload Route</h3>
+    <pre><code>app.post('/api/upload-avatar', authMiddleware, upload.single('avatar'), (req, res) => {
+  if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+
+  const avatarUrl = \`/uploads/\${req.file.filename}\`;
+  // Update user avatar in DB
+  res.json({ message: 'Avatar uploaded', avatarUrl });
+});
+
+// Serve uploaded files
+app.use('/uploads', express.static('uploads'));</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Sending Emails -->
+    <h2>Sending Emails with Nodemailer</h2>
+
+    <h3>Setup Nodemailer</h3>
+    <pre><code>npm install nodemailer
+
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+// Or use SMTP
+// host: 'smtp.ethereal.email', port: 587, etc.</code></pre>
+
+    <h3>Send Email Route</h3>
+    <pre><code>app.post('/api/send-welcome', async (req, res, next) => {
+  try {
+    const { email, name } = req.body;
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Welcome to Our Platform!',
+      html: \`
+        <h1>Hello \${name}!</h1>
+        <p>Thanks for joining us. Your journey starts now!</p>
+      \`
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.json({ message: 'Welcome email sent' });
+  } catch (err) {
+    next(err);
+  }
+});</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 40 FULL INTERVIEW QUESTIONS -->
+    <h2>40 Full Express.js Interview Questions & Answers</h2>
+
+    <!-- Q1 -->
+    <div class="interview-q">
+      <h4>Q1. What is middleware in Express.js?</h4>
+      <p>Middleware functions are functions that have access to the request object (<code>req</code>), the response object (<code>res</code>), and the next middleware function in the application’s request-response cycle. They can execute any code, modify req/res, end the cycle, or call <code>next()</code> to pass control to the next middleware.</p>
+      <pre><code>app.use((req, res, next) => {
+  console.log('Time:', Date.now());
+  next();
+});</code></pre>
+    </div>
+
+    <!-- Q2 -->
+    <div class="interview-q">
+      <h4>Q2. Difference between <code>app.use()</code> and <code>app.get()</code>?</h4>
+      <p><code>app.use()</code>: Mounts middleware for all HTTP methods and all paths (or specified path). Used for logging, CORS, etc.<br>
+      <code>app.get()</code>: Handles only GET requests on a specific path. Used for route handlers.</p>
+      <pre><code>app.use('/api', logger);     // All methods, /api/*
+app.get('/users', getUsers); // Only GET /users</code></pre>
+    </div>
+
+    <!-- Q3 -->
+    <div class="interview-q">
+      <h4>Q3. How to handle async errors in Express?</h4>
+      <p>Use <code>try/catch</code> with <code>next(err)</code> or use a wrapper function. Express 5+ supports async route handlers natively.</p>
+      <pre><code>app.get('/data', async (req, res, next) => {
+  try {
+    const data = await fetchData();
+    res.json(data);
+  } catch (err) {
+    next(err); // Goes to error middleware
+  }
+});
+
+// Wrapper (Express < 5)
+const asyncHandler = fn => (req, res, next) => {
+  Promise.resolve(fn(req, res, next)).catch(next);
+};</code></pre>
+    </div>
+
+    <!-- Q4 -->
+    <div class="interview-q">
+      <h4>Q4. How to secure an Express app?</h4>
+      <p>
+        • Use <code>helmet()</code> to set security headers<br>
+        • Enable CORS properly<br>
+        • Validate and sanitize input<br>
+        • Use HTTPS<br>
+        • Rate limiting<br>
+        • JWT with httpOnly cookies<br>
+        • Environment variables<br>
+        • Hide error stack in production
+      </p>
+    </div>
+
+    <!-- Q5 -->
+    <div class="interview-q">
+      <h4>Q5. What is <code>express.json()</code>?</h4>
+      <p>Built-in middleware to parse incoming JSON requests and populate <code>req.body</code>. Replaces <code>body-parser</code> in Express 4.16+.</p>
+      <pre><code>app.use(express.json({ limit: '10mb' }));</code></pre>
+    </div>
+
+    <!-- Q6 -->
+    <div class="interview-q">
+      <h4>Q6. How does routing work in Express?</h4>
+      <p>Routes are defined using HTTP methods (<code>get</code>, <code>post</code>, etc.) and path patterns. Express matches the request path and method, then executes the handler.</p>
+      <pre><code>app.get('/users/:id', (req, res) => {
+  res.json({ id: req.params.id });
+});</code></pre>
+    </div>
+
+    <!-- Q7 -->
+    <div class="interview-q">
+      <h4>Q7. What are route parameters?</h4>
+      <p>Dynamic segments in the URL path. Accessed via <code>req.params</code>.</p>
+      <pre><code>app.put('/users/:id', updateUser);
+// req.params.id</code></pre>
+    </div>
+
+    <!-- Q8 -->
+    <div class="interview-q">
+      <h4>Q8. What are query parameters?</h4>
+      <p>Key-value pairs after <code>?</code> in URL. Accessed via <code>req.query</code>.</p>
+      <pre><code>/search?q=node&page=2
+// req.query.q, req.query.page</code></pre>
+    </div>
+
+    <!-- Q9 -->
+    <div class="interview-q">
+      <h4>Q9. How to use route prefixes?</h4>
+      <p>Use <code>express.Router()</code> to create modular route files.</p>
+      <pre><code>// routes/users.js
+const router = express.Router();
+router.get('/', getUsers);
+module.exports = router;
+
+// app.js
+app.use('/api/users', userRouter);</code></pre>
+    </div>
+
+    <!-- Q10 -->
+    <div class="interview-q">
+      <h4>Q10. What is <code>next()</code> in middleware?</h4>
+      <p>Function that passes control to the next matching middleware or route handler. If not called, the request hangs.</p>
+    </div>
+
+    <!-- Q11 -->
+    <div class="interview-q">
+      <h4>Q11. How to handle 404 errors?</h4>
+      <p>Place a catch-all route at the end.</p>
+      <pre><code>app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+});</code></pre>
+    </div>
+
+    <!-- Q12 -->
+    <div class="interview-q">
+      <h4>Q12. What is <code>res.json()</code>?</h4>
+      <p>Sends a JSON response with correct <code>Content-Type</code> header. Automatically stringifies the object.</p>
+    </div>
+
+    <!-- Q13 -->
+    <div class="interview-q">
+      <h4>Q13. How to set custom status codes?</h4>
+      <p>Use <code>res.status(code)</code> before <code>send</code> or <code>json</code>.</p>
+      <pre><code>res.status(201).json({ message: 'Created' });</code></pre>
+    </div>
+
+    <!-- Q14 -->
+    <div class="interview-q">
+      <h4>Q14. What is <code>helmet</code>?</h4>
+      <p>Collection of middleware functions that set HTTP security headers (XSS, clickjacking, etc.).</p>
+    </div>
+
+    <!-- Q15 -->
+    <div class="interview-q">
+      <h4>Q15. How to enable CORS?</h4>
+      <p>Use <code>cors</code> middleware. Configure allowed origins, methods, headers.</p>
+      <pre><code>app.use(cors({
+  origin: 'https://myapp.com',
+  credentials: true
+}));</code></pre>
+    </div>
+
+    <!-- Q16 -->
+    <div class="interview-q">
+      <h4>Q16. What is rate limiting?</h4>
+      <p>Restricts repeated requests to prevent abuse. Use <code>express-rate-limit</code>.</p>
+      <pre><code>const rateLimit = require('express-rate-limit');
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));</code></pre>
+    </div>
+
+    <!-- Q17 -->
+    <div class="interview-q">
+      <h4>Q17. How to validate request data?</h4>
+      <p>Use <code>Joi</code>, <code>express-validator</code>, or <code>zod</code>.</p>
+    </div>
+
+    <!-- Q18 -->
+    <div class="interview-q">
+      <h4>Q18. What is <code>multer</code>?</h4>
+      <p>Middleware for handling <code>multipart/form-data</code>, primarily used for file uploads.</p>
+    </div>
+
+    <!-- Q19 -->
+    <div class="interview-q">
+      <h4>Q19. How to serve static files?</h4>
+      <p>Use <code>express.static</code>.</p>
+      <pre><code>app.use('/static', express.static('public'));</code></pre>
+    </div>
+
+    <!-- Q20 -->
+    <div class="interview-q">
+      <h4>Q20. What is <code>morgan</code>?</h4>
+      <p>HTTP request logger middleware. Formats: <code>dev</code>, <code>combined</code>, etc.</p>
+    </div>
+
+    <!-- Q21 -->
+    <div class="interview-q">
+      <h4>Q21. How to compress responses?</h4>
+      <p>Use <code>compression</code> middleware (gzip).</p>
+      <pre><code>app.use(compression());</code></pre>
+    </div>
+
+    <!-- Q22 -->
+    <div class="interview-q">
+      <h4>Q22. What is <code>cookie-parser</code>?</h4>
+      <p>Parses Cookie header and populates <code>req.cookies</code>.</p>
+    </div>
+
+    <!-- Q23 -->
+    <div class="interview-q">
+      <h4>Q23. How to set cookies securely?</h4>
+      <p>Use <code>httpOnly</code>, <code>secure</code>, <code>sameSite</code> flags.</p>
+      <pre><code>res.cookie('token', token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'strict',
+  maxAge: 7 * 24 * 60 * 60 * 1000
+});</code></pre>
+    </div>
+
+    <!-- Q24 -->
+    <div class="interview-q">
+      <h4>Q24. What is <code>express-session</code>?</h4>
+      <p>Creates server-side session middleware. Stores session ID in cookie.</p>
+    </div>
+
+    <!-- Q25 -->
+    <div class="interview-q">
+      <h4>Q25. How to use JWT with Express?</h4>
+      <p>Generate token on login, verify on protected routes using middleware.</p>
+    </div>
+
+    <!-- Q26 -->
+    <div class="interview-q">
+      <h4>Q26. What is <code>req.body</code>, <code>req.params</code>, <code>req.query</code>?</h4>
+      <p>
+        • <code>req.body</code>: POST/PUT data (needs parser)<br>
+        • <code>req.params</code>: Route parameters<br>
+        • <code>req.query</code>: URL query string
+      </p>
+    </div>
+
+    <!-- Q27 -->
+    <div class="interview-q">
+      <h4>Q27. How to handle file downloads?</h4>
+      <p>Use <code>res.download()</code> or <code>res.sendFile()</code>.</p>
+      <pre><code>res.download('./files/report.pdf');</code></pre>
+    </div>
+
+    <!-- Q28 -->
+    <div class="interview-q">
+      <h4>Q28. What is <code>res.redirect()</code>?</h4>
+      <p>Sends 302 redirect (or custom status).</p>
+      <pre><code>res.redirect('/login');</code></pre>
+    </div>
+
+    <!-- Q29 -->
+    <div class="interview-q">
+      <h4>Q29. How to chain middleware?</h4>
+      <p>Call <code>next()</code> in each function.</p>
+      <pre><code>app.get('/protected', auth, logger, handler);</code></pre>
+    </div>
+
+    <!-- Q30 -->
+    <div class="interview-q">
+      <h4>Q30. What is <code>app.set()</code> and <code>app.get()</code>?</h4>
+      <p>Sets and gets application-level settings (e.g., <code>view engine</code>).</p>
+      <pre><code>app.set('view engine', 'ejs');</code></pre>
+    </div>
+
+    <!-- Q31 -->
+    <div class="interview-q">
+      <h4>Q31. How to render views?</h4>
+      <p>Use template engines: EJS, Pug, Handlebars.</p>
+      <pre><code>app.set('view engine', 'ejs');
+app.get('/', (req, res) => {
+  res.render('index', { title: 'Home' });
+});</code></pre>
+    </div>
+
+    <!-- Q32 -->
+    <div class="interview-q">
+      <h4>Q32. What is <code>express.Router</code>?</h4>
+      <p>Creates modular, mountable route handlers.</p>
+    </div>
+
+    <!-- Q33 -->
+    <div class="interview-q">
+      <h4>Q33. How to handle large file uploads?</h4>
+      <p>Use <code>multer</code> with streaming. Avoid loading entire file in memory.</p>
+    </div>
+
+    <!-- Q34 -->
+    <div class="interview-q">
+      <h4>Q34. What is <code>process.env</code>?</h4>
+      <p>Object containing environment variables. Use <code>dotenv</code> to load from <code>.env</code> file.</p>
+    </div>
+
+    <!-- Q35 -->
+    <div class="interview-q">
+      <h4>Q35. How to use WebSocket with Express?</h4>
+      <p>Use <code>ws</code> or <code>Socket.IO</code> with HTTP server.</p>
+    </div>
+
+    <!-- Q36 -->
+    <div class="interview-q">
+      <h4>Q36. What is <code>app.disable()</code>?</h4>
+      <p>Disables a setting (e.g., <code>app.disable('x-powered-by')</code>).</p>
+    </div>
+
+    <!-- Q37 -->
+    <div class="interview-q">
+      <h4>Q37. How to log requests?</h4>
+      <p>Use <code>morgan</code> or custom middleware.</p>
+    </div>
+
+    <!-- Q38 -->
+    <div class="interview-q">
+      <h4>Q38. What is <code>res.locals</code>?</h4>
+      <p>Object for passing data to views during the request-response cycle.</p>
+    </div>
+
+    <!-- Q39 -->
+    <div class="interview-q">
+      <h4>Q39. How to implement pagination?</h4>
+      <p>Use <code>limit</code> and <code>skip</code> in queries based on <code>req.query.page</code> and <code>size</code>.</p>
+    </div>
+
+    <!-- Q40 -->
+    <div class="interview-q">
+      <h4>Q40. How to deploy Express app?</h4>
+      <p>Use PM2, Docker, or platforms like Render, Railway, Vercel (Node.js), AWS EC2.</p>
+      <pre><code>pm2 start server.js --name "api"</code></pre>
+    </div>
+
+    <!-- Key Takeaways -->
+    <h2 class="key-takeaways">Key Takeaways</h2>
+    <ul>
+      <li>Middleware is the core of Express</li>
+      <li>Always use error-handling middleware</li>
+      <li>Secure with helmet, CORS, rate limiting</li>
+      <li>Use JWT with httpOnly cookies</li>
+      <li>Validate input strictly</li>
+      <li>Use <code>express.json()</code> and <code>multer</code></li>
+      <li>Modularize with <code>Router</code></li>
+      <li>Log, monitor, and handle errors</li>
+    </ul>
+
+    <!-- Next Steps -->
+    <h2 class="next-steps">Next Steps for Express Mastery</h2>
+    <ol>
+      <li>Build REST + GraphQL APIs</li>
+      <li>Learn NestJS (structured Express)</li>
+      <li>Implement OAuth2, SSO</li>
+      <li>Use Redis for caching & sessions</li>
+      <li>Add Swagger/OpenAPI docs</li>
+      <li>Write integration tests with Supertest</li>
+      <li>Deploy with Docker + Nginx</li>
+      <li>Study microservices & event-driven architecture</li>
+    </ol>
+
+  </div>
+</body>
+</html>

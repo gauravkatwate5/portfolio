@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Node.js Developer Interview Notes</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>Node</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --orange: #ce9178;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 3rem; color: var(--teal); text-align: center; margin: 2.5rem 0; }
+    h2 { font-size: 2rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 3rem 0 1.5rem; }
+    h3 { font-size: 1.6rem; color: var(--blue); margin: 2rem 0 1rem; }
+    h4 { font-size: 1.3rem; color: var(--purple); margin: 1.5rem 0 0.8rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+      font-size: 0.95rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 5rem 0; }
+    .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .highlight { background: rgba(78, 201, 176, 0.15); padding: 1.3rem; border-radius: 8px; margin: 1.5rem 0; }
+    .interview-q {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #404040;
+    }
+    .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
+    .interview-q pre { margin-top: 1rem; }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      border: 1px solid #404040;
+      padding: 0.8rem;
+      text-align: left;
+    }
+    th { background: #2d2d30; color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>Node.js Developer Interview Notes</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
+        For 2+ Year Backend Developers<br>
+        Core → Async → REST API → Streams → 40 Full Interview Qs
+      </p>
+    </div>
+
+    <!-- Core Concepts -->
+    <h2>Core Concepts</h2>
+
+    <h3>What is Node.js?</h3>
+    <p>Node.js is a JavaScript runtime built on Chrome’s V8 engine. It allows you to run JS outside the browser, enabling server-side applications. It uses an event-driven, non-blocking I/O model.</p>
+
+    <h3>How Node.js Works</h3>
+    <p><strong>Single-threaded</strong>: One main thread for JavaScript execution.<br>
+    <strong>Event Loop</strong>: Manages async callbacks.<br>
+    <strong>Non-blocking I/O</strong>: File system, network, etc., are handled by libuv (C library).</p>
+
+    <h3>Modules: require & exports</h3>
+    <pre><code>// math.js
+exports.add = (a, b) => a + b;
+
+// app.js
+const { add } = require('./math');
+console.log(add(2, 3)); // 5</code></pre>
+
+    <h3>Built-in Modules</h3>
+    <ul>
+      <li><code>fs</code>: File system operations</li>
+      <li><code>os</code>: OS info (CPUs, memory)</li>
+      <li><code>path</code>: Path manipulation</li>
+    </ul>
+    <pre><code>const fs = require('fs');
+const path = require('path');
+
+fs.readFile(path.join(__dirname, 'data.txt'), 'utf8', (err, data) => {
+  if (err) throw err;
+  console.log(data);
+});</code></pre>
+
+    <h3>NPM & package.json</h3>
+    <pre><code>npm init -y
+npm install express
+npm install -D nodemon
+
+// package.json
+{
+  "name": "api",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  }
+}</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Asynchronous Programming -->
+    <h2>Asynchronous Programming</h2>
+
+    <h3>Callbacks</h3>
+    <pre><code>fs.readFile('file.txt', (err, data) => {
+  if (err) return console.error(err);
+  console.log(data.toString());
+});</code></pre>
+
+    <h3>Promises</h3>
+    <pre><code>const readFile = util.promisify(fs.readFile);
+readFile('file.txt')
+  .then(data => console.log(data.toString()))
+  .catch(err => console.error(err));</code></pre>
+
+    <h3>Async/Await</h3>
+    <pre><code>async function read() {
+  try {
+    const data = await fs.promises.readFile('file.txt', 'utf8');
+    console.log(data);
+  } catch (err) {
+    console.error(err);
+  }
+}</code></pre>
+
+    <h3>Event Emitters</h3>
+    <pre><code>const EventEmitter = require('events');
+const emitter = new EventEmitter();
+
+emitter.on('greet', (name) => console.log(\`Hello \${name}\`));
+emitter.emit('greet', 'Gaurav');</code></pre>
+
+    <h3>Error Handling in Async</h3>
+    <pre><code>process.on('uncaughtException', (err) => {
+  console.error('Uncaught:', err);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Rejection:', reason);
+});</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Building a REST API -->
+    <h2>Building a REST API (Native Node.js)</h2>
+
+    <h3>HTTP Server</h3>
+    <pre><code>const http = require('http');
+const url = require('url');
+
+const server = http.createServer((req, res) => {
+  const parsedUrl = url.parse(req.url, true);
+  const method = req.method;
+  const path = parsedUrl.pathname;
+
+  res.setHeader('Content-Type', 'application/json');
+
+  if (method === 'GET' && path === '/api/users') {
+    res.writeHead(200);
+    res.end(JSON.stringify({ users: ['Alice', 'Bob'] }));
+  } else if (method === 'POST' && path === '/api/users') {
+    let body = '';
+    req.on('data', chunk => body += chunk);
+    req.on('end', () => {
+      const user = JSON.parse(body);
+      res.writeHead(201);
+      res.end(JSON.stringify({ message: 'User created', user }));
+    });
+  } else {
+    res.writeHead(404);
+    res.end(JSON.stringify({ error: 'Not Found' }));
+  }
+});
+
+server.listen(3000, () => console.log('Server running on port 3000'));</code></pre>
+
+    <h3>CRUD Routes</h3>
+    <ul>
+      <li><code>GET /users</code> → List</li>
+      <li><code>GET /users/1</code> → Read</li>
+      <li><code>POST /users</code> → Create</li>
+      <li><code>PUT /users/1</code> → Update</li>
+      <li><code>DELETE /users/1</code> → Delete</li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <!-- Advanced Topics -->
+    <h2>Advanced Topics</h2>
+
+    <h3>Buffers</h3>
+    <p>Raw binary data. Used for file I/O, network streams.</p>
+    <pre><code>const buf = Buffer.from('Hello');
+console.log(buf); // &lt;Buffer 48 65 6c 6c 6f&gt;
+console.log(buf.toString()); // Hello</code></pre>
+
+    <h3>Streams</h3>
+    <p>Efficiently handle large data. Types: Readable, Writable, Duplex, Transform.</p>
+    <pre><code>const readStream = fs.createReadStream('large.txt');
+const writeStream = fs.createWriteStream('copy.txt');
+
+readStream.pipe(writeStream);</code></pre>
+
+    <h3>Cluster Module</h3>
+    <p>Fork multiple worker processes to use all CPU cores.</p>
+    <pre><code>const cluster = require('cluster');
+const os = require('os');
+
+if (cluster.isMaster) {
+  const cpus = os.cpus().length;
+  for (let i = 0; i < cpus; i++) {
+    cluster.fork();
+  }
+} else {
+  http.createServer((req, res) => {
+    res.end('Hello from worker');
+  }).listen(3000);
+}</code></pre>
+
+    <h3>Environment Variables</h3>
+    <pre><code>// .env
+PORT=3000
+DB_URL=mongodb://localhost:27017
+
+// Load
+require('dotenv').config();
+console.log(process.env.PORT);</code></pre>
+
+    <h3>File Upload</h3>
+    <pre><code>// Using form-data
+const form = new FormData();
+form.append('file', fs.createReadStream('image.jpg'));
+
+fetch('http://localhost:3000/upload', {
+  method: 'POST',
+  body: form
+});</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 40 FULL INTERVIEW QUESTIONS -->
+    <h2>40 Full Node.js Interview Questions & Answers</h2>
+
+    <!-- Q1 -->
+    <div class="interview-q">
+      <h4>Q1. What is the Event Loop in Node.js?</h4>
+      <p>The event loop is a core mechanism that allows Node.js to perform non-blocking I/O operations despite being single-threaded. It continuously checks the call stack and task queues (macrotasks and microtasks). When the call stack is empty, it processes callbacks from the queues.</p>
+      <p><strong>Phases:</strong> timers → pending callbacks → idle, prepare → poll → check → close callbacks → microtasks (process.nextTick, Promise)</p>
+      <pre><code>setTimeout(() => console.log('Timer'), 0);
+Promise.resolve().then(() => console.log('Promise'));
+console.log('Sync');
+// Output: Sync → Promise → Timer</code></pre>
+    </div>
+
+    <!-- Q2 -->
+    <div class="interview-q">
+      <h4>Q2. Is Node.js single-threaded?</h4>
+      <p>Yes, the JavaScript execution is single-threaded, but I/O operations (file, network) are offloaded to the <strong>libuv</strong> thread pool (default 4 threads). This enables non-blocking behavior.</p>
+      <pre><code>fs.readFile('file.txt', () => { /* callback */ }); // Offloaded to thread pool
+console.log('Next line'); // Runs immediately</code></pre>
+    </div>
+
+    <!-- Q3 -->
+    <div class="interview-q">
+      <h4>Q3. What is the difference between <code>require</code> and <code>import</code>?</h4>
+      <p><code>require</code>: CommonJS, synchronous, runtime loading.<br><code>import</code>: ES6 modules, static, compile-time, supports top-level await.</p>
+      <pre><code>// CommonJS
+const fs = require('fs');
+
+// ESM
+import fs from 'fs';</code></pre>
+    </div>
+
+    <!-- Q4 -->
+    <div class="interview-q">
+      <h4>Q4. Explain <code>process.nextTick()</code> vs <code>setImmediate()</code>.</h4>
+      <p><code>process.nextTick()</code>: Executes in the <strong>microtask queue</strong> before any I/O or timers.<br><code>setImmediate()</code>: Executes in the <strong>check phase</strong> of the event loop, after I/O.</p>
+      <pre><code>process.nextTick(() => console.log('nextTick'));
+setImmediate(() => console.log('setImmediate'));
+// Output: nextTick → setImmediate</code></pre>
+    </div>
+
+    <!-- Q5 -->
+    <div class="interview-q">
+      <h4>Q5. What are Streams in Node.js?</h4>
+      <p>Streams are collections of data processed in chunks. Ideal for large files or real-time data. Types: Readable, Writable, Duplex, Transform.</p>
+      <pre><code>const readStream = fs.createReadStream('bigfile.mp4');
+readStream.pipe(res); // Stream video to HTTP response</code></pre>
+    </div>
+
+    <!-- Q6 -->
+    <div class="interview-q">
+      <h4>Q6. What are Buffers?</h4>
+      <p>Fixed-size chunks of memory for handling raw binary data. Used in file I/O, network streams, cryptography.</p>
+      <pre><code>const buf = Buffer.alloc(10);
+buf.write('Hello');
+console.log(buf.toString()); // Hello</code></pre>
+    </div>
+
+    <!-- Q7 -->
+    <div class="interview-q">
+      <h4>Q7. How to handle uncaught exceptions?</h4>
+      <p>Use <code>process.on('uncaughtException')</code> and <code>unhandledRejection</code>. Log and gracefully shutdown.</p>
+      <pre><code>process.on('uncaughtException', (err) => {
+  console.error('Uncaught:', err);
+  process.exit(1);
+});</code></pre>
+    </div>
+
+    <!-- Q8 -->
+    <div class="interview-q">
+      <h4>Q8. What is the difference between <code>spawn</code>, <code>exec</code>, and <code>fork</code>?</h4>
+      <table>
+        <tr><th>Method</th><th>Use Case</th><th>Streams</th><th>Memory</th></tr>
+        <tr><td><code>spawn</code></td><td>Large output</td><td>Yes</td><td>Streamed</td></tr>
+        <tr><td><code>exec</code></td><td>Shell commands</td><td>Buffered</td><td>Limited</td></tr>
+        <tr><td><code>fork</code></td><td>Node.js scripts</td><td>IPC</td><td>Full</td></tr>
+      </table>
+    </div>
+
+    <!-- Q9 -->
+    <div class="interview-q">
+      <h4>Q9. How to scale a Node.js app?</h4>
+      <p>Use <code>cluster</code> module, PM2, Kubernetes, load balancer. Horizontal scaling with multiple instances.</p>
+    </div>
+
+    <!-- Q10 -->
+    <div class="interview-q">
+      <h4>Q10. What is <code>libuv</code>?</h4>
+      <p>C library that handles asynchronous I/O. Provides thread pool, event loop, file system, DNS, etc.</p>
+    </div>
+
+    <!-- Q11 -->
+    <div class="interview-q">
+      <h4>Q11. What is <code>__dirname</code> and <code>__filename</code>?</h4>
+      <p>Global variables in CommonJS. <code>__dirname</code>: current directory path. <code>__filename</code>: current file path.</p>
+      <pre><code>console.log(__dirname);  // /home/user/project
+console.log(__filename); // /home/user/project/server.js</code></pre>
+    </div>
+
+    <!-- Q12 -->
+    <div class="interview-q">
+      <h4>Q12. How to read environment variables?</h4>
+      <p>Use <code>process.env</code> or <code>dotenv</code> package.</p>
+      <pre><code>require('dotenv').config();
+const port = process.env.PORT || 3000;</code></pre>
+    </div>
+
+    <!-- Q13 -->
+    <div class="interview-q">
+      <h4>Q13. What is middleware in Express?</h4>
+      <p>Functions that have access to <code>req</code>, <code>res</code>, and <code>next</code>. Used for logging, auth, parsing.</p>
+    </div>
+
+    <!-- Q14 -->
+    <div class="interview-q">
+      <h4>Q14. How to handle file uploads in Node.js?</h4>
+      <p>Use <code>multer</code> (Express) or parse <code>multipart/form-data</code> manually with <code>busboy</code>.</p>
+    </div>
+
+    <!-- Q15 -->
+    <div class="interview-q">
+      <h4>Q15. What is the difference between <code>development</code> and <code>production</code> mode?</h4>
+      <p>Development: hot reload, detailed errors. Production: minified, no source maps, optimized.</p>
+      <pre><code>if (process.env.NODE_ENV === 'production') {
+  // Disable logs
+}</code></pre>
+    </div>
+
+    <!-- Q16 -->
+    <div class="interview-q">
+      <h4>Q16. How to prevent callback hell?</h4>
+      <p>Use Promises, async/await, or modularize code.</p>
+      <pre><code>async function main() {
+  const user = await getUser();
+  const posts = await getPosts(user.id);
+}</code></pre>
+    </div>
+
+    <!-- Q17 -->
+    <div class="interview-q">
+      <h4>Q17. What is <code>zlib</code> module?</h4>
+      <p>Provides compression/decompression (gzip, deflate).</p>
+      <pre><code>const zlib = require('zlib');
+zlib.gzip(data, (err, compressed) => { ... });</code></pre>
+    </div>
+
+    <!-- Q18 -->
+    <div class="interview-q">
+      <h4>Q18. What is <code>REPL</code>?</h4>
+      <p>Read-Eval-Print Loop. Interactive Node.js shell.</p>
+      <pre><code>$ node
+> 2 + 2
+4</code></pre>
+    </div>
+
+    <!-- Q19 -->
+    <div class="interview-q">
+      <h4>Q19. How to debug Node.js apps?</h4>
+      <p>Use <code>--inspect</code> flag, Chrome DevTools, VS Code debugger, or <code>console.log</code>.</p>
+      <pre><code>node --inspect-brk server.js</code></pre>
+    </div>
+
+    <!-- Q20 -->
+    <div class="interview-q">
+      <h4>Q20. What is <code>pm2</code>?</h4>
+      <p>Process manager for Node.js. Features: clustering, monitoring, zero-downtime reload.</p>
+      <pre><code>pm2 start app.js --name "api"
+pm2 restart api
+pm2 logs</code></pre>
+    </div>
+
+    <!-- Q21 -->
+    <div class="interview-q">
+      <h4>Q21. What is <code>worker_threads</code>?</h4>
+      <p>Allows true parallelism in Node.js using multiple threads.</p>
+      <pre><code>const { Worker } = require('worker_threads');
+const worker = new Worker('./worker.js');</code></pre>
+    </div>
+
+    <!-- Q22 -->
+    <div class="interview-q">
+      <h4>Q22. How to secure a Node.js app?</h4>
+      <p>Use HTTPS, helmet, rate limiting, input validation, JWT, CORS, environment variables.</p>
+    </div>
+
+    <!-- Q23 -->
+    <div class="interview-q">
+      <h4>Q23. What is <code>npm ci</code>?</h4>
+      <p>Clean install from <code>package-lock.json</code>. Faster, deterministic. Used in CI/CD.</p>
+    </div>
+
+    <!-- Q24 -->
+    <div class="interview-q">
+      <h4>Q24. What is <code>nodemon</code>?</h4>
+      <p>Tool that restarts the app when file changes are detected.</p>
+      <pre><code>npm install -D nodemon
+npx nodemon server.js</code></pre>
+    </div>
+
+    <!-- Q25 -->
+    <div class="interview-q">
+      <h4>Q25. What is the difference between <code>node</code> and <code>nodejs</code>?</h4>
+      <p>No difference. <code>nodejs</code> is the package name in some Linux distros.</p>
+    </div>
+
+    <!-- Q26 -->
+    <div class="interview-q">
+      <h4>Q26. How to handle large file uploads?</h4>
+      <p>Use streams. Avoid loading entire file into memory.</p>
+      <pre><code>req.pipe(fs.createWriteStream('upload.mp4'));</code></pre>
+    </div>
+
+    <!-- Q27 -->
+    <div class="interview-q">
+      <h4>Q27. What is <code>crypto</code> module?</h4>
+      <p>Provides cryptographic functionality: hashing, HMAC, cipher, decipher.</p>
+      <pre><code>const hash = crypto.createHash('sha256').update('password').digest('hex');</code></pre>
+    </div>
+
+    <!-- Q28 -->
+    <div class="interview-q">
+      <h4>Q28. What is <code>dns</code> module?</h4>
+      <p>Performs DNS lookups and reverse lookups.</p>
+      <pre><code>dns.lookup('google.com', (err, address) => {
+  console.log(address);
+});</code></pre>
+    </div>
+
+    <!-- Q29 -->
+    <div class="interview-q">
+      <h4>Q29. What is <code>child_process</code>?</h4>
+      <p>Allows spawning subprocesses: shell commands, other Node.js scripts.</p>
+    </div>
+
+    <!-- Q30 -->
+    <div class="interview-q">
+      <h4>Q30. How to implement rate limiting?</h4>
+      <p>Use <code>express-rate-limit</code> or custom middleware with Redis.</p>
+    </div>
+
+    <!-- Q31 -->
+    <div class="interview-q">
+      <h4>Q31. What is <code>global</code> object in Node.js?</h4>
+      <p>Similar to <code>window</code> in browser. Contains <code>console</code>, <code>process</code>, <code>setTimeout</code>, etc.</p>
+    </div>
+
+    <!-- Q32 -->
+    <div class="interview-q">
+      <h4>Q32. How to profile Node.js performance?</h4>
+      <p>Use <code>clinic.js</code>, <code>--prof</code> flag, or Chrome CPU profiler.</p>
+    </div>
+
+    <!-- Q33 -->
+    <div class="interview-q">
+      <h4>Q33. What is <code>V8</code> engine?</h4>
+      <p>Google’s open-source JS engine. Compiles JS to machine code. Used in Chrome and Node.js.</p>
+    </div>
+
+    <!-- Q34 -->
+    <div class="interview-q">
+      <h4>Q34. What is <code>heap</code> and <code>stack</code> in Node.js?</h4>
+      <p><strong>Stack</strong>: Function call frames, primitives.<br><strong>Heap</strong>: Objects, closures, dynamic memory.</p>
+    </div>
+
+    <!-- Q35 -->
+    <div class="interview-q">
+      <h4>Q35. How to handle CORS in Node.js?</h4>
+      <p>Set <code>Access-Control-Allow-Origin</code> header or use <code>cors</code> middleware.</p>
+      <pre><code>res.setHeader('Access-Control-Allow-Origin', '*');</code></pre>
+    </div>
+
+    <!-- Q36 -->
+    <div class="interview-q">
+      <h4>Q36. What is <code>middleware</code> pattern?</h4>
+      <p>Chain of functions that process request/response. Each calls <code>next()</code>.</p>
+    </div>
+
+    <!-- Q37 -->
+    <div class="interview-q">
+      <h4>Q37. How to implement caching?</h4>
+      <p>Use in-memory (Node cache), Redis, or HTTP caching headers.</p>
+    </div>
+
+    <!-- Q38 -->
+    <div class="interview-q">
+      <h4>Q38. What is <code>graceful shutdown</code>?</h4>
+      <p>Close server, finish in-flight requests, close DB connections before exit.</p>
+      <pre><code>process.on('SIGTERM', () => {
+  server.close(() => {
+    db.close();
+    process.exit(0);
+  });
+});</code></pre>
+    </div>
+
+    <!-- Q39 -->
+    <div class="interview-q">
+      <h4>Q39. What is <code>npm shrinkwrap</code>?</h4>
+      <p>Deprecated. Use <code>package-lock.json</code> for deterministic installs.</p>
+    </div>
+
+    <!-- Q40 -->
+    <div class="interview-q">
+      <h4>Q40. How to deploy Node.js app?</h4>
+      <p>Use PM2, Docker, Kubernetes, or platforms like Render, Railway, AWS EC2.</p>
+      <pre><code>pm2 start ecosystem.config.js --env production</code></pre>
+    </div>
+
+    <!-- Key Takeaways -->
+    <h2 class="key-takeaways">Key Takeaways</h2>
+    <ul>
+      <li>Event loop is the heart of Node.js</li>
+      <li>Use async/await over callbacks</li>
+      <li>Always handle errors and cleanup</li>
+      <li>Use streams for large data</li>
+      <li>Scale with cluster or PM2</li>
+      <li>Secure with HTTPS, JWT, rate limiting</li>
+      <li>Monitor with PM2, logs, health checks</li>
+      <li>Graceful shutdown is critical</li>
+    </ul>
+
+    <!-- Next Steps -->
+    <h2 class="next-steps">Next Steps for Node.js Mastery</h2>
+    <ol>
+      <li>Build REST + GraphQL APIs</li>
+      <li>Learn Express, Fastify, NestJS</li>
+      <li>Master MongoDB, PostgreSQL</li>
+      <li>Implement microservices</li>
+      <li>Use Docker & Kubernetes</li>
+      <li>Set up CI/CD with GitHub Actions</li>
+      <li>Study system design (load balancing, caching)</li>
+      <li>Contribute to open-source Node.js projects</li>
+    </ol>
+
+  </div>
+</body>
+</html>

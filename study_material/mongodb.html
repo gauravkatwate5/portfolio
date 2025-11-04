@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MongoDB + Mongoose Developer Notes</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>Mongo</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --orange: #ce9178;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 3rem; color: var(--teal); text-align: center; margin: 2.5rem 0; }
+    h2 { font-size: 2rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 3rem 0 1.5rem; }
+    h3 { font-size: 1.6rem; color: var(--blue); margin: 2rem 0 1rem; }
+    h4 { font-size: 1.3rem; color: var(--purple); margin: 1.5rem 0 0.8rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+      font-size: 0.95rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 5rem 0; }
+    .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .highlight { background: rgba(78, 201, 176, 0.15); padding: 1.3rem; border-radius: 8px; margin: 1.5rem 0; }
+    .interview-q {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #404040;
+    }
+    .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
+    .interview-q pre { margin-top: 1rem; }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      border: 1px solid #404040;
+      padding: 0.8rem;
+      text-align: left;
+    }
+    th { background: #2d2d30; color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>MongoDB + Mongoose Developer Notes</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
+        For 2+ Year Backend Developers<br>
+        CRUD → Mongoose → Aggregation → 40 Full Interview Qs
+      </p>
+    </div>
+
+    <!-- Basics -->
+    <h2>Basics</h2>
+
+    <h3>What is MongoDB?</h3>
+    <p>MongoDB is a <strong>NoSQL</strong>, document-oriented database that stores data in flexible, JSON-like <strong>BSON</strong> format. It is schema-less, horizontally scalable, and designed for high performance and availability.</p>
+
+    <h3>Advantages over SQL</h3>
+    <table>
+      <tr><th>MongoDB (NoSQL)</th><th>SQL (Relational)</th></tr>
+      <tr><td>Schema-less</td><td>Fixed schema</td></tr>
+      <tr><td>Horizontal scaling</td><td>Vertical scaling</td></tr>
+      <tr><td>JSON-like documents</td><td>Tables with rows</td></tr>
+      <tr><td>Fast for nested data</td><td>Joins for relations</td></tr>
+      <tr><td>Great for unstructured data</td><td>ACID transactions</td></tr>
+    </table>
+
+    <h3>Databases, Collections, Documents</h3>
+    <ul>
+      <li><strong>Database</strong>: Container for collections</li>
+      <li><strong>Collection</strong>: Group of documents (like a table)</li>
+      <li><strong>Document</strong>: JSON-like object (like a row)</li>
+    </ul>
+    <pre><code>// Document example
+{
+  _id: ObjectId("507f1f77bcf86cd799439011"),
+  name: "Gaurav",
+  email: "gaurav@example.com",
+  age: 25,
+  hobbies: ["coding", "cricket"],
+  address: { city: "Pune", state: "MH" }
+}</code></pre>
+
+    <h3>MongoDB Data Types & BSON</h3>
+    <p><strong>BSON</strong> (Binary JSON) extends JSON with additional types:</p>
+    <ul>
+      <li><code>String</code>, <code>Number</code>, <code>Boolean</code></li>
+      <li><code>ObjectId</code>, <code>Date</code>, <code>Array</code>, <code>Null</code></li>
+      <li><code>Binary</code>, <code>Regex</code>, <code>Timestamp</code></li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <!-- CRUD Operations -->
+    <h2>CRUD Operations (Native Driver)</h2>
+
+    <h3>insertOne</h3>
+    <pre><code>db.users.insertOne({
+  name: "Alice",
+  email: "alice@example.com",
+  age: 30
+})</code></pre>
+
+    <h3>find</h3>
+    <pre><code>// Find all
+db.users.find()
+
+// Find with condition
+db.users.find({ age: { $gte: 25 } })</code></pre>
+
+    <h3>updateOne / updateMany</h3>
+    <pre><code>db.users.updateOne(
+  { _id: ObjectId("...") },
+  { $set: { age: 26 }, $push: { hobbies: "reading" } }
+)</code></pre>
+
+    <h3>deleteOne</h3>
+    <pre><code>db.users.deleteOne({ email: "old@example.com" })</code></pre>
+
+    <h3>Query Operators</h3>
+    <pre><code>$eq, $ne, $gt, $gte, $lt, $lte
+$in, $nin, $exists, $type
+$regex, $or, $and, $not</code></pre>
+
+    <h3>Projection & Sorting</h3>
+    <pre><code>// Projection: select fields
+db.users.find({}, { name: 1, email: 1, _id: 0 })
+
+// Sorting
+db.users.find().sort({ age: -1 })  // descending
+db.users.find().limit(10).skip(20)</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Mongoose ORM -->
+    <h2>Mongoose ORM</h2>
+
+    <h3>Installation & Connection</h3>
+    <pre><code>npm install mongoose
+
+// db.js
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('MongoDB Connected'))
+.catch(err => console.error(err));</code></pre>
+
+    <h3>Defining Schema & Model</h3>
+    <pre><code>const userSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true },
+  email: { type: String, required: true, unique: true, lowercase: true },
+  age: { type: Number, min: 0, max: 120 },
+  hobbies: [String],
+  isActive: { type: Boolean, default: true },
+  createdAt: { type: Date, default: Date.now }
+});
+
+const User = mongoose.model('User', userSchema);</code></pre>
+
+    <h3>CRUD with Mongoose</h3>
+    <pre><code>// Create
+const user = await User.create({ name: 'Bob', email: 'bob@example.com' });
+
+// Read
+const users = await User.find({ age: { $gt: 25 } }).select('name email');
+
+// Update
+await User.updateOne({ _id: id }, { $set: { age: 30 } });
+
+// Delete
+await User.deleteOne({ _id: id });</code></pre>
+
+    <h3>Schema Validation & Hooks</h3>
+    <pre><code>// Custom validator
+email: {
+  type: String,
+  validate: {
+    validator: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+    message: 'Invalid email'
+  }
+}
+
+// Pre-save hook
+userSchema.pre('save', async function(next) {
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
+});</code></pre>
+
+    <h3>Relationships & populate()</h3>
+    <pre><code>// Post Schema
+const postSchema = new mongoose.Schema({
+  title: String,
+  content: String,
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+});
+
+const Post = mongoose.model('Post', postSchema);
+
+// Populate
+const posts = await Post.find().populate('author', 'name email');</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Advanced Topics -->
+    <h2>Advanced Topics</h2>
+
+    <h3>Aggregation Pipeline</h3>
+    <pre><code>db.users.aggregate([
+  { $match: { age: { $gte: 18 } } },
+  { $group: { _id: "$city", total: { $sum: 1 }, avgAge: { $avg: "$age" } } },
+  { $sort: { total: -1 } },
+  { $limit: 5 }
+])</code></pre>
+
+    <h3>Indexing</h3>
+    <pre><code>// Single field
+db.users.createIndex({ email: 1 }, { unique: true })
+
+// Compound
+db.users.createIndex({ city: 1, age: -1 })
+
+// Text index
+db.articles.createIndex({ title: "text", content: "text" })</code></pre>
+
+    <h3>MongoDB Atlas</h3>
+    <p>Cloud-hosted MongoDB. Provides connection string:</p>
+    <pre><code>mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/myDatabase?retryWrites=true&w=majority</code></pre>
+
+    <h3>Environment Variables</h3>
+    <pre><code>// .env
+MONGO_URI=mongodb+srv://user:pass@cluster0.mongodb.net/app
+NODE_ENV=production</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 40 FULL INTERVIEW QUESTIONS -->
+    <h2>40 Full MongoDB + Mongoose Interview Questions & Answers</h2>
+
+    <!-- Q1 -->
+    <div class="interview-q">
+      <h4>Q1. What is the difference between SQL and NoSQL databases?</h4>
+      <p><strong>SQL (Relational)</strong>: Uses tables with fixed schema, supports ACID, uses JOINs, vertically scalable.<br>
+      <strong>NoSQL (MongoDB)</strong>: Uses collections of documents, schema-less, supports eventual consistency, horizontally scalable, no JOINs (uses embedding or referencing).</p>
+      <p>MongoDB is ideal for unstructured, rapidly changing data like logs, user profiles, real-time analytics.</p>
+    </div>
+
+    <!-- Q2 -->
+    <div class="interview-q">
+      <h4>Q2. What is BSON and why is it used?</h4>
+      <p>BSON (Binary JSON) is a binary serialization format used to store documents in MongoDB. It extends JSON by adding support for types like <code>Date</code>, <code>ObjectId</code>, <code>Binary</code>, etc. BSON enables efficient traversal and storage compared to plain JSON.</p>
+      <pre><code>{ "name": "John", "age": 30, "created": new Date() } → BSON binary</code></pre>
+    </div>
+
+    <!-- Q3 -->
+    <div class="interview-q">
+      <h4>Q3. What is ObjectId in MongoDB?</h4>
+      <p><code>ObjectId</code> is a 12-byte unique identifier for documents. It contains:</p>
+      <ul>
+        <li>4 bytes: timestamp</li>
+        <li>5 bytes: random value</li>
+        <li>3 bytes: incrementing counter</li>
+      </ul>
+      <p>It is globally unique and sortable by creation time.</p>
+      <pre><code>ObjectId("507f1f77bcf86cd799439011")</code></pre>
+    </div>
+
+    <!-- Q4 -->
+    <div class="interview-q">
+      <h4>Q4. What are indexes in MongoDB? Why are they important?</h4>
+      <p>Indexes support efficient query execution. Without index, MongoDB scans every document (Collection Scan). With index, it uses <code>Index Scan</code>.</p>
+      <p>Types: single, compound, text, geospatial, TTL.</p>
+      <pre><code>db.users.createIndex({ email: 1 }) // B-tree index
+db.logs.createIndex({ createdAt: 1 }, { expireAfterSeconds: 86400 }) // TTL</code></pre>
+    </div>
+
+    <!-- Q5 -->
+    <div class="interview-q">
+      <h4>Q5. What is the Aggregation Pipeline?</h4>
+      <p>A framework for data processing with stages like <code>$match</code>, <code>$group</code>, <code>$project</code>, <code>$sort</code>, <code>$lookup</code>. Each stage transforms documents and passes to the next.</p>
+      <pre><code>db.sales.aggregate([
+  { $match: { status: "A" } },
+  { $group: { _id: "$cust_id", total: { $sum: "$amount" } } },
+  { $sort: { total: -1 } }
+])</code></pre>
+    </div>
+
+    <!-- Q6 -->
+    <div class="interview-q">
+      <h4>Q6. What is <code>populate()</code> in Mongoose?</h4>
+      <p><code>populate()</code> replaces ObjectId references with actual documents from another collection (like SQL JOIN).</p>
+      <pre><code>const posts = await Post.find().populate('author', 'name email');</code></pre>
+      <p>Without populate: <code>author: "60d5f..."</code><br>
+      With populate: <code>author: { name: "Gaurav", email: "g@..." }</code></p>
+    </div>
+
+    <!-- Q7 -->
+    <div class="interview-q">
+      <h4>Q7. What is MongoDB Atlas?</h4>
+      <p>MongoDB Atlas is the official cloud-hosted MongoDB service. It provides automated backups, scaling, monitoring, and security. You get a connection string with <code>mongodb+srv://</code> protocol.</p>
+      <pre><code>mongodb+srv://user:pass@cluster0.xxxxx.mongodb.net/dbname</code></pre>
+    </div>
+
+    <!-- Q8 -->
+    <div class="interview-q">
+      <h4>Q8. How to connect Mongoose to MongoDB Atlas?</h4>
+      <p>Use the Atlas connection string in <code>mongoose.connect()</code>. Enable IP whitelist and create database user.</p>
+      <pre><code>mongoose.connect(process.env.MONGO_URI)</code></pre>
+    </div>
+
+    <!-- Q9 -->
+    <div class="interview-q">
+      <h4>Q9. What are Mongoose middlewares (hooks)?</h4>
+      <p>Functions that run before or after certain operations like <code>save</code>, <code>validate</code>, <code>remove</code>.</p>
+      <pre><code>schema.pre('save', function(next) {
+  this.updatedAt = Date.now();
+  next();
+});</code></pre>
+    </div>
+
+    <!-- Q10 -->
+    <div class="interview-q">
+      <h4>Q10. What is the difference between <code>find()</code> and <code>findOne()</code>?</h4>
+      <p><code>find()</code> returns a cursor (array-like) of all matching documents.<br>
+      <code>findOne()</code> returns the first matching document or <code>null</code>.</p>
+      <pre><code>await User.find({ age: 25 })     // [doc1, doc2]
+await User.findOne({ email: 'x' }) // doc or null</code></pre>
+    </div>
+
+    <!-- Q11 -->
+    <div class="interview-q">
+      <h4>Q11. What is <code>$lookup</code> in aggregation?</h4>
+      <p>Performs a left outer join with another collection.</p>
+      <pre><code>{
+  $lookup: {
+    from: "users",
+    localField: "userId",
+    foreignField: "_id",
+    as: "userDetails"
+  }
+}</code></pre>
+    </div>
+
+    <!-- Q12 -->
+    <div class="interview-q">
+      <h4>Q12. How to embedded vs reference data modeling?</h4>
+      <p><strong>Embedded</strong>: Store related data in same document (denormalized). Fast reads.<br>
+      <strong>Reference</strong>: Store ObjectId, use <code>populate()</code> or <code>$lookup</code>. Flexible, avoids duplication.</p>
+    </div>
+
+    <!-- Q13 -->
+    <div class="interview-q">
+      <h4>Q13. What is sharding in MongoDB?</h4>
+      <p>Horizontal partitioning of data across multiple servers. Each shard holds a portion of data. Enables massive scale.</p>
+    </div>
+
+    <!-- Q14 -->
+    <div class="interview-q">
+      <h4>Q14. What is replica set?</h4>
+      <p>Group of mongod instances that maintain the same data. Provides redundancy and high availability. One primary, multiple secondaries.</p>
+    </div>
+
+    <!-- Q15 -->
+    <div class="interview-q">
+      <h4>Q15. How to create a text index?</h4>
+      <p>For full-text search.</p>
+      <pre><code>db.articles.createIndex({ title: "text", content: "text" })
+db.articles.find({ $text: { $search: "mongodb" } })</code></pre>
+    </div>
+
+    <!-- Q16 -->
+    <div class="interview-q">
+      <h4>Q16. What is TTL index?</h4>
+      <p>Automatically removes documents after a specified time.</p>
+      <pre><code>db.sessions.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 })</code></pre>
+    </div>
+
+    <!-- Q17 -->
+    <div class="interview-q">
+      <h4>Q17. How to handle transactions in MongoDB?</h4>
+      <p>Multi-document ACID transactions (since v4.0) in replica sets.</p>
+      <pre><code>const session = await mongoose.startSession();
+session.startTransaction();
+try {
+  await Account.updateOne({ _id: a }, { $inc: { balance: -100 } }, { session });
+  await Account.updateOne({ _id: b }, { $inc: { balance: 100 } }, { session });
+  await session.commitTransaction();
+} catch (err) {
+  await session.abortTransaction();
+}</code></pre>
+    </div>
+
+    <!-- Q18 -->
+    <div class="interview-q">
+      <h4>Q18. What is <code>lean()</code> in Mongoose?</h4>
+      <p>Returns plain JavaScript objects instead of Mongoose documents. Faster, no methods like <code>.save()</code>.</p>
+      <pre><code>await User.find().lean()</code></pre>
+    </div>
+
+    <!-- Q19 -->
+    <div class="interview-q">
+      <h4>Q19. How to validate data in Mongoose?</h4>
+      <p>Using schema types, <code>required</code>, <code>enum</code>, <code>min</code>/<code>max</code>, custom validators.</p>
+    </div>
+
+    <!-- Q20 -->
+    <div class="interview-q">
+      <h4>Q20. What is <code>discriminator</code> in Mongoose?</h4>
+      <p>Allows schema inheritance. Different models share the same collection.</p>
+      <pre><code>const baseSchema = new Schema({ kind: String });
+const User = mongoose.model('Person', baseSchema);
+const Employee = User.discriminator('Employee', new Schema({ dept: String }));</code></pre>
+    </div>
+
+    <!-- Q21 -->
+    <div class="interview-q">
+      <h4>Q21. How to paginate results?</h4>
+      <p>Use <code>.skip()</code> and <code>.limit()</code>.</p>
+      <pre><code>const page = 2, size = 10;
+await User.find().skip((page-1)*size).limit(size);</code></pre>
+    </div>
+
+    <!-- Q22 -->
+    <div class="interview-q">
+      <h4>Q22. What is <code>explain()</code>?</h4>
+      <p>Shows query execution plan: index used, documents scanned, etc.</p>
+      <pre><code>db.users.find({ age: 30 }).explain("executionStats")</code></pre>
+    </div>
+
+    <!-- Q23 -->
+    <div class="interview-q">
+      <h4>Q23. How to backup MongoDB?</h4>
+      <p>Use <code>mongodump</code> for logical backup, Atlas automated backups, or EBS snapshots.</p>
+    </div>
+
+    <!-- Q24 -->
+    <div class="interview-q">
+      <h4>Q24. What is the <code>N+1</code> query problem?</h4>
+      <p>Fetching related data in a loop causes N+1 queries. Solve with <code>populate</code> or aggregation.</p>
+    </div>
+
+    <!-- Q25 -->
+    <div class="interview-q">
+      <h4>Q25. How to use geospatial queries?</h4>
+      <p>Use <code>2dsphere</code> index.</p>
+      <pre><code>db.places.createIndex({ location: "2dsphere" })
+db.places.find({
+  location: {
+    $near: {
+      $geometry: { type: "Point", coordinates: [ -73.9, 40.7 ] },
+      $maxDistance: 1000
+    }
+  }
+})</code></pre>
+    </div>
+
+    <!-- Q26 -->
+    <div class="interview-q">
+      <h4>Q26. What is <code>change streams</code>?</h4>
+      <p>Real-time notification of database changes. Like triggers.</p>
+      <pre><code>const changeStream = collection.watch();
+changeStream.on('change', console.log);</code></pre>
+    </div>
+
+    <!-- Q27 -->
+    <div class="interview-q">
+      <h4>Q27. How to handle large datasets?</h4>
+      <p>Use cursors, aggregation with <code>$out</code>, <code>$merge</code>, or map-reduce.</p>
+    </div>
+
+    <!-- Q28 -->
+    <div class="interview-q">
+      <h4>Q28. What is <code>schema versioning</code>?</h4>
+      <p>Add <code>version</code> field or use migration tools like <code>migrate-mongo</code>.</p>
+    </div>
+
+    <!-- Q29 -->
+    <div class="interview-q">
+      <h4>Q29. How to prevent NoSQL injection?</h4>
+      <p>Never concatenate user input into queries. Use Mongoose (sanitizes) or validate input.</p>
+    </div>
+
+    <!-- Q30 -->
+    <div class="interview-q">
+      <h4>Q30. What is <code>write concern</code>?</h4>
+      <p>Defines acknowledgment level for write operations (e.g., <code>w: "majority"</code>).</p>
+    </div>
+
+    <!-- Q31 -->
+    <div class="interview-q">
+      <h4>Q31. What is <code>read preference</code>?</h4>
+      <p>Controls which replica set member to read from: primary, secondary, etc.</p>
+    </div>
+
+    <!-- Q32 -->
+    <div class="interview-q">
+      <h4>Q32. How to optimize MongoDB performance?</h4>
+      <p>
+        • Proper indexing<br>
+        • Use projection<br>
+        • Avoid large documents (>16MB)<br>
+        • Use covered queries<br>
+        • Monitor with Atlas/Compass
+      </p>
+    </div>
+
+    <!-- Q33 -->
+    <div class="interview-q">
+      <h4>Q33. What is <code>$project</code> in aggregation?</h4>
+      <p>Reshapes documents: include, exclude, or compute fields.</p>
+      <pre><code>{ $project: { name: 1, email: 1, _id: 0 } }</code></pre>
+    </div>
+
+    <!-- Q34 -->
+    <div class="interview-q">
+      <h4>Q34. What is <code>$unwind</code>?</h4>
+      <p>Deconstructs an array field into multiple documents.</p>
+      <pre><code>{ $unwind: "$hobbies" }</code></pre>
+    </div>
+
+    <!-- Q35 -->
+    <div class="interview-q">
+      <h4>Q35. How to create a unique compound index?</h4>
+      <pre><code>db.users.createIndex({ email: 1, phone: 1 }, { unique:":
+true })</code></pre>
+    </div>
+
+    <!-- Q36 -->
+    <div class="interview-q">
+      <h4>Q36. What is the difference between <code>remove()</code> and <code>deleteOne()</code>?</h4>
+      <p><code>remove()</code> is deprecated. <code>deleteOne()</code> deletes first match. <code>deleteMany()</code> deletes all.</p>
+    </div>
+
+    <!-- Q37 -->
+    <div class="interview-q">
+      <h4>Q37. How to use virtuals in Mongoose?</h4>
+      <p>Computed fields not stored in DB.</p>
+      <pre><code>schema.virtual('fullName').get(function() {
+  return this.firstName + ' ' + this.lastName;
+});</code></pre>
+    </div>
+
+    <!-- Q38 -->
+    <div class="interview-q">
+      <h4>Q38. What is <code>statics</code> vs <code>methods</code> in Mongoose?</h4>
+      <p><code>statics</code>: Model-level functions.<br>
+      <code>methods</code>: Instance-level functions.</p>
+      <pre><code>schema.statics.findByEmail = function(email) { ... }
+schema.methods.getInitials = function() { ... }</code></pre>
+    </div>
+
+    <!-- Q39 -->
+    <div class="interview-q">
+      <h4>Q39. How to use MongoDB with TypeScript?</h4>
+      <p>Define interfaces and use Mongoose with <code>@types/mongoose</code>.</p>
+    </div>
+
+    <!-- Q40 -->
+    <div class="interview-q">
+      <h4>Q40. How to deploy MongoDB in production?</h4>
+      <p>Use MongoDB Atlas (recommended), or self-managed replica set with authentication, TLS, backups, and monitoring.</p>
+    </div>
+
+    <!-- Key Takeaways -->
+    <h2 class="key-takeaways">Key Takeaways</h2>
+    <ul>
+      <li>Always index frequently queried fields</li>
+      <li>Use <code>populate()</code> wisely to avoid N+1</li>
+      <li>Prefer embedding for 1:1, 1:few; reference for 1:many</li>
+      <li>Use aggregation for complex reporting</li>
+      <li>Enable authentication and TLS</li>
+      <li>Monitor slow queries with <code>explain()</code></li>
+      <li>Backup regularly</li>
+      <li>Use Mongoose for validation and structure</li>
+    </ul>
+
+    <!-- Next Steps -->
+    <h2 class="next-steps">Next Steps for MongoDB Mastery</h2>
+    <ol>
+      <li>Master aggregation pipeline</li>
+      <li>Build complex data models</li>
+      <li>Implement change streams</li>
+      <li>Use MongoDB with GraphQL</li>
+      <li>Learn sharding and performance tuning</li>
+      <li>Set up monitoring with Atlas</li>
+      <li>Practice with MongoDB University</li>
+      <li>Contribute to open-source projects</li>
+    </ol>
+
+  </div>
+</body>
+</html>

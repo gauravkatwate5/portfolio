@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JavaScript Advanced Interview Notes</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>JS</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --orange: #ce9178;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 3rem; color: var(--teal); text-align: center; margin: 2rem 0; }
+    h2 { font-size: 2rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 3rem 0 1.5rem; }
+    h3 { font-size: 1.6rem; color: var(--blue); margin: 2rem 0 1rem; }
+    h4 { font-size: 1.3rem; color: var(--purple); margin: 1.5rem 0 0.8rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+      font-size: 0.95rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 5rem 0; }
+    .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .highlight { background: rgba(78, 201, 176, 0.15); padding: 1.3rem; border-radius: 8px; margin: 1.5rem 0; }
+    .challenge, .interview-q {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #404040;
+    }
+    .challenge h4, .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
+    .challenge pre, .interview-q pre { margin-top: 1rem; }
+    .key-takeaways { background: #2d2d30; padding: 1.8rem; border-radius: 8px; margin: 3rem 0; }
+    .next-steps { margin-top: 3rem; }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>JavaScript Advanced Interview Notes & Coding Challenges</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
+        For 2+ Year MERN Stack Developers<br>
+        Core Concepts → Advanced Patterns → 60+ Interview Qs → 15 Coding Challenges
+      </p>
+    </div>
+
+    <!-- Core Concepts -->
+    <h2>Core Concepts</h2>
+
+    <h3>Variables: var, let, const</h3>
+    <p><code>var</code>: Function-scoped, hoisted, can be redeclared. <code>let</code>: Block-scoped, not hoisted, temporal dead zone. <code>const</code>: Block-scoped, cannot be reassigned (but object properties can).</p>
+    <pre><code>var a = 1;    // Hoisted, redeclarable
+let b = 2;    // Block scope, TDZ
+const c = 3;  // Cannot reassign
+
+const obj = { x: 10 };
+obj.x = 20;   // Allowed
+// obj = {}   // Error</code></pre>
+
+    <h3>Data Types & Operators</h3>
+    <p>Primitive: <code>String, Number, Boolean, Null, Undefined, Symbol, BigInt</code>. Non-primitive: <code>Object</code>.</p>
+    <pre><code>typeof null;        // "object" (historical bug)
+typeof [];          // "object"
+typeof function(){};// "function"
+
+1 == '1'   // true (coercion)
+1 === '1'  // false (strict)</code></pre>
+
+    <h3>Functions, Scope, Hoisting</h3>
+    <p>Functions are hoisted with definition. Variables with <code>var</code> are hoisted with <code>undefined</code>.</p>
+    <pre><code>console.log(hoist); // undefined
+var hoist = 'Hi';
+
+sayHello(); // Works
+function sayHello() { console.log('Hello'); }
+
+// Arrow functions not hoisted
+// greet(); // ReferenceError
+const greet = () => console.log('Hi');</code></pre>
+
+    <h3>Closures</h3>
+    <p>A function that remembers its outer variables even after the outer function has finished executing.</p>
+    <pre><code>function outer() {
+  let count = 0;
+  return function inner() {
+    count++;
+    return count;
+  };
+}
+const counter = outer();
+console.log(counter()); // 1
+console.log(counter()); // 2</code></pre>
+
+    <h3>IIFE (Immediately Invoked Function Expression)</h3>
+    <p>Creates private scope, avoids polluting global namespace.</p>
+    <pre><code>(function() {
+  var private = 'secret';
+  console.log(private);
+})();
+// private is not accessible here</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Intermediate Topics -->
+    <h2>Intermediate Topics</h2>
+
+    <h3>Array Methods: map, filter, reduce, find</h3>
+    <pre><code>const nums = [1, 2, 3, 4];
+
+// map: transform
+nums.map(x => x * 2); // [2,4,6,8]
+
+// filter: condition
+nums.filter(x => x > 2); // [3,4]
+
+// reduce: accumulate
+nums.reduce((acc, curr) => acc + curr, 0); // 10
+
+// find: first match
+nums.find(x => x > 2); // 3</code></pre>
+
+    <h3>Object Methods</h3>
+    <pre><code>const obj = { a: 1, b: 2, c: 3 };
+
+Object.keys(obj);     // ['a','b','c']
+Object.values(obj);   // [1,2,3]
+Object.entries(obj);  // [['a',1], ...]
+
+Object.assign({}, obj); // shallow copy
+{ ...obj } // spread copy</code></pre>
+
+    <h3>Destructuring, Spread, Rest</h3>
+    <pre><code>// Destructuring
+const { a, b } = obj;
+const [x, y] = nums;
+
+// Rest
+function sum(...numbers) {
+  return numbers.reduce((a,b) => a+b);
+}
+
+// Spread
+const merged = { ...obj1, ...obj2 };
+const arr = [...nums, 5, 6];</code></pre>
+
+    <h3>Template Literals</h3>
+    <pre><code>const name = 'Gaurav';
+const greeting = `Hello ${name}, 
+welcome to ${2025}!`;</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Advanced Topics -->
+    <h2>Advanced Topics</h2>
+
+    <h3>Promises, async/await, Callbacks</h3>
+    <pre><code>// Callback Hell
+getUser(id, (user) => {
+  getPosts(user.id, (posts) => {
+    // ...
+  });
+});
+
+// Promise
+function fetchData() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve('Data'), 1000);
+  });
+}
+
+// async/await
+async function load() {
+  try {
+    const data = await fetchData();
+    console.log(data);
+  } catch (err) {
+    console.error(err);
+  }
+}</code></pre>
+
+    <h3>Event Loop</h3>
+    <p>Call Stack → Web APIs → Task Queue → Event Loop → Call Stack. Microtasks (Promise) run before macrotasks (setTimeout).</p>
+    <pre><code>console.log('1');
+setTimeout(() => console.log('2'), 0);
+Promise.resolve().then(() => console.log('3'));
+console.log('4');
+// Output: 1, 4, 3, 2</code></pre>
+
+    <h3>Prototype & Inheritance</h3>
+    <pre><code>function Person(name) { this.name = name; }
+Person.prototype.greet = function() {
+  return `Hi, I'm ${this.name}`;
+};
+
+const gaurav = new Person('Gaurav');
+gaurav.greet(); // "Hi, I'm Gaurav"
+
+// __proto__ chain
+gaurav.__proto__ === Person.prototype;</code></pre>
+
+    <h3>Event Bubbling & Capturing</h3>
+    <pre><code>document.querySelector('div').addEventListener('click', () => {
+  console.log('Div clicked');
+}, true); // true = capturing phase</code></pre>
+
+    <h3>Debouncing</h3>
+    <p>Limit function calls after user stops typing.</p>
+    <pre><code>function debounce(fn, delay) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}</code></pre>
+
+    <h3>Throttling</h3>
+    <p>Limit function calls to once every X ms.</p>
+    <pre><code>function throttle(fn, limit) {
+  let inThrottle;
+  return function(...args) {
+    if (!inThrottle) {
+      fn.apply(this, args);
+      inThrottle = true;
+      setTimeout(() => inThrottle = false, limit);
+    }
+  };
+}</code></pre>
+
+    <h3>Optional Chaining & Nullish Coalescing</h3>
+    <pre><code>user?.profile?.name;     // Safe access
+value ?? 'default';      // Only if null/undefined</code></pre>
+
+    <h3>this Binding</h3>
+    <pre><code>const obj = {
+  name: 'Gaurav',
+  greet: function() { console.log(this.name); }
+};
+obj.greet();           // "Gaurav"
+const fn = obj.greet;
+fn();                  // undefined (lost context)
+
+fn.call(obj);          // "Gaurav"
+fn.apply(obj);
+fn.bind(obj)();        // "Gaurav"</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Error Handling & APIs -->
+    <h2>Error Handling & APIs</h2>
+
+    <h3>try / catch / finally / throw</h3>
+    <pre><code>try {
+  JSON.parse(invalidJson);
+} catch (error) {
+  console.error('Parse failed:', error.message);
+} finally {
+  console.log('Cleanup');
+}</code></pre>
+
+    <h3>LocalStorage, SessionStorage, Cookies</h3>
+    <pre><code>// LocalStorage (persistent)
+localStorage.setItem('token', 'abc123');
+localStorage.getItem('token');
+
+// SessionStorage (tab-only)
+sessionStorage.setItem('temp', 'data');
+
+// Cookies (with JS)
+document.cookie = "name=Gaurav; expires=...";</code></pre>
+
+    <h3>Fetch API</h3>
+    <pre><code>fetch('/api/users')
+  .then(res => {
+    if (!res.ok) throw new Error('Network error');
+    return res.json();
+  })
+  .then(data => console.log(data))
+  .catch(err => console.error(err));
+
+// POST
+fetch('/api/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email, password })
+});</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Coding Challenges -->
+    <h2>Coding Challenges (with Solutions)</h2>
+
+    <div class="challenge">
+      <h4>1. Reverse a String</h4>
+      <p>Return the string in reverse order without using built-in reverse.</p>
+      <pre><code>function reverseString(str) {
+  let reversed = '';
+  for (let i = str.length - 1; i >= 0; i--) {
+    reversed += str[i];
+  }
+  return reversed;
+}
+// Or: [...str].reverse().join('')</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>2. Check Palindrome</h4>
+      <p>Return true if string reads same forward and backward (ignore case, spaces).</p>
+      <pre><code>function isPalindrome(str) {
+  const clean = str.toLowerCase().replace(/[^a-z0-9]/g, '');
+  return clean === clean.split('').reverse().join('');
+}</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>3. Find Duplicates in Array</h4>
+      <p>Return array of elements that appear more than once.</p>
+      <pre><code>function findDuplicates(arr) {
+  const seen = new Set();
+  const duplicates = new Set();
+  arr.forEach(item => {
+    if (seen.has(item)) duplicates.add(item);
+    else seen.add(item);
+  });
+  return [...duplicates];
+}</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>4. Flatten Nested Array</h4>
+      <p>Flatten any level of nesting.</p>
+      <pre><code>function flatten(arr) {
+  return arr.flat(Infinity);
+}
+// Or recursive:
+function flattenDeep(arr) {
+  return arr.reduce((acc, val) => 
+    Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val), []);
+}</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>5. Implement Debounce</h4>
+      <p>Delay function call until after wait milliseconds have elapsed.</p>
+      <pre><code>function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>6. Get Unique Values</h4>
+      <p>Remove duplicates from array.</p>
+      <pre><code>const unique = [...new Set(arr)];
+// Or: Array.from(new Set(arr))</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>7. Sum of Digits</h4>
+      <p>Return sum of all digits in a number.</p>
+      <pre><code>function sumDigits(n) {
+  return Math.abs(n).toString().split('').reduce((a,b) => a + +b, 0);
+}</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>8. Anagram Check</h4>
+      <p>Check if two strings are anagrams.</p>
+      <pre><code>function areAnagrams(s1, s2) {
+  const normalize = s => s.toLowerCase().replace(/[^a-z0-9]/g, '').split('').sort().join('');
+  return normalize(s1) === normalize(s2);
+}</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>9. Currying</h4>
+      <p>Convert f(a,b,c) → f(a)(b)(c)</p>
+      <pre><code>function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      return fn(...args);
+    }
+    return (...next) => curried(...args, ...next);
+  };
+}</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>10. Deep Clone</h4>
+      <p>Clone nested objects.</p>
+      <pre><code>function deepClone(obj) {
+  if (obj === null || typeof obj !== 'object') return obj;
+  if (obj instanceof Date) return new Date(obj);
+  if (obj instanceof Array) return obj.map(deepClone);
+  if (typeof obj === 'object') {
+    const cloned = {};
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        cloned[key] = deepClone(obj[key]);
+      }
+    }
+    return cloned;
+  }
+}</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>11. Fibonacci (Memoized)</h4>
+      <pre><code>const fib = (n, memo = {}) => {
+  if (n in memo) return memo[n];
+  if (n <= 1) return n;
+  memo[n] = fib(n-1, memo) + fib(n-2, memo);
+  return memo[n];
+};</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>12. Group By</h4>
+      <pre><code>function groupBy(arr, key) {
+  return arr.reduce((acc, obj) => {
+    const k = obj[key];
+    acc[k] = acc[k] || [];
+    acc[k].push(obj);
+    return acc;
+  }, {});
+}</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>13. Promise.all Implementation</h4>
+      <pre><code>function promiseAll(promises) {
+  return new Promise((resolve, reject) => {
+    let results = [];
+    let completed = 0;
+    if (promises.length === 0) resolve([]);
+    promises.forEach((p, i) => {
+      Promise.resolve(p).then(val => {
+        results[i] = val;
+        completed++;
+        if (completed === promises.length) resolve(results);
+      }).catch(reject);
+    });
+  });
+}</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>14. Memoize Function</h4>
+      <pre><code>function memoize(fn) {
+  const cache = new Map();
+  return function(...args) {
+    const key = JSON.stringify(args);
+    if (cache.has(key)) return cache.get(key);
+    const result = fn(...args);
+    cache.set(key, result);
+    return result;
+  };
+}</code></pre>
+    </div>
+
+    <div class="challenge">
+      <h4>15. Event Emitter</h4>
+      <pre><code>class EventEmitter {
+  constructor() { this.events = {}; }
+  on(event, callback) {
+    this.events[event] = this.events[event] || [];
+    this.events[event].push(callback);
+  }
+  emit(event, ...args) {
+    if (this.events[event]) {
+      this.events[event].forEach(cb => cb(...args));
+    }
+  }
+}</code></pre>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 60 FULL INTERVIEW QUESTIONS -->
+    <h2>60 Full Interview Questions with Code & Explanations</h2>
+
+    <!-- Q1 -->
+    <div class="interview-q">
+      <h4>Q1. What is Hoisting in JavaScript?</h4>
+      <p>Hoisting is JavaScript’s default behavior of moving variable and function declarations to the top of their containing scope during the compilation phase. Function declarations are fully hoisted, <code>var</code> variables are hoisted and initialized with <code>undefined</code>, while <code>let</code> and <code>const</code> are hoisted but not initialized (Temporal Dead Zone).</p>
+      <pre><code>console.log(x); // undefined
+var x = 5;
+
+console.log(y); // ReferenceError: Cannot access 'y' before initialization
+let y = 10;
+
+greet(); // "Hello"
+function greet() { console.log('Hello'); }</code></pre>
+    </div>
+
+    <!-- Q2 -->
+    <div class="interview-q">
+      <h4>Q2. Difference between <code>==</code> and <code>===</code>?</h4>
+      <p><code>==</code> performs type coercion (converts types before comparison). <code>===</code> is strict equality — checks both value and type without coercion.</p>
+      <pre><code>1 == '1'     // true (string converted to number)
+1 === '1'    // false
+
+null == undefined   // true
+null === undefined  // false
+
+0 == false   // true
+0 === false  // false</code></pre>
+    </div>
+
+    <!-- Q3 -->
+    <div class="interview-q">
+      <h4>Q3. What is a Closure? Give a real-world use case.</h4>
+      <p>A closure is a function that retains access to its lexical scope even when the function is executed outside that scope. Used for data privacy, module pattern, and event handlers.</p>
+      <pre><code>function createCounter() {
+  let count = 0;
+  return {
+    increment: () => ++count,
+    getCount: () => count
+  };
+}
+const counter = createCounter();
+counter.increment(); // 1
+counter.increment(); // 2
+console.log(counter.getCount()); // 2</code></pre>
+    </div>
+
+    <!-- Q4 -->
+    <div class="interview-q">
+      <h4>Q4. Explain <code>this</code> keyword in different contexts.</h4>
+      <p><code>this</code> refers to the object executing the current function:</p>
+      <ul>
+        <li>Global context: <code>window</code> (browser)</li>
+        <li>Object method: the object</li>
+        <li>Constructor: new instance</li>
+        <li>Event handler: the DOM element</li>
+        <li>Arrow function: inherits from parent scope</li>
+      </ul>
+      <pre><code>const person = {
+  name: 'Gaurav',
+  greet: function() { console.log(this.name); }
+};
+person.greet(); // "Gaurav"
+
+const fn = person.greet;
+fn(); // undefined (lost context)</code></pre>
+    </div>
+
+    <!-- Q5 -->
+    <div class="interview-q">
+      <h4>Q5. What is the Event Loop?</h4>
+      <p>The event loop continuously checks the call stack. If empty, it takes the first callback from the task queue (macrotasks) or microtask queue (Promises) and pushes it to the stack. Microtasks run before macrotasks.</p>
+      <pre><code>console.log('1');
+setTimeout(() => console.log('2'), 0);
+Promise.resolve().then(() => console.log('3'));
+console.log('4');
+// Output: 1 → 4 → 3 → 2</code></pre>
+    </div>
+
+    <!-- Q6 -->
+    <div class="interview-q">
+      <h4>Q6. What are Promises? Explain states.</h4>
+      <p>Promises represent the eventual result of an asynchronous operation. States: <code>pending</code>, <code>fulfilled</code> (with value), <code>rejected</code> (with reason).</p>
+      <pre><code>const p = new Promise((resolve, reject) => {
+  setTimeout(() => resolve('Success'), 1000);
+});
+p.then(result => console.log(result))
+ .catch(err => console.error(err));</code></pre>
+    </div>
+
+    <!-- Q7 -->
+    <div class="interview-q">
+      <h4>Q7. What is <code>async/await</code>?</h4>
+      <p>Syntactic sugar over Promises that makes asynchronous code look and behave like synchronous code.</p>
+      <pre><code>async function fetchUser() {
+  try {
+    const res = await fetch('/api/user');
+    const user = await res.json();
+    return user;
+  } catch (err) {
+    console.error('Error:', err);
+  }
+}</code></pre>
+    </div>
+
+    <!-- Q8 -->
+    <div class="interview-q">
+      <h4>Q8. What is Prototypal Inheritance?</h4>
+      <p>Objects inherit properties and methods from a prototype object via the <code>[[Prototype]]</code> chain. Every object has a <code>__proto__</code> link to its constructor’s <code>prototype</code>.</p>
+      <pre><code>function Animal(name) { this.name = name; }
+Animal.prototype.speak = function() { return 'sound'; };
+const dog = new Animal('Dog');
+console.log(dog.speak()); // "sound"</code></pre>
+    </div>
+
+    <!-- Q9 -->
+    <div class="interview-q">
+      <h4>Q9. Explain <code>call</code>, <code>apply</code>, <code>bind</code>.</h4>
+      <p>All set the <code>this</code> value explicitly:</p>
+      <ul>
+        <li><code>call(thisArg, a, b, c)</code>: invokes immediately with args</li>
+        <li><code>apply(thisArg, [a, b, c])</code>: invokes with array of args</li>
+        <li><code>bind(thisArg)</code>: returns new function with bound <code>this</code></li>
+      </ul>
+      <pre><code>function greet(greeting) {
+  console.log(\`\${greeting}, \${this.name}\`);
+}
+const person = { name: 'Gaurav' };
+greet.call(person, 'Hello');
+greet.apply(person, ['Hi']);
+const bound = greet.bind(person);
+bound('Hey');</code></pre>
+    </div>
+
+    <!-- Q10 -->
+    <div class="interview-q">
+      <h4>Q10. What is Event Bubbling?</h4>
+      <p>When an event occurs on a DOM element, it first triggers on the target, then bubbles up through ancestors. Use <code>stopPropagation()</code> to prevent.</p>
+      <pre><code>child.addEventListener('click', () => console.log('Child'));
+parent.addEventListener('click', () => console.log('Parent'));
+// Click child → logs: Child → Parent</code></pre>
+    </div>
+
+    <!-- Q11 -->
+    <div class="interview-q">
+      <h4>Q11. What is <code>debounce</code> vs <code>throttle</code>?</h4>
+      <p><strong>Debounce</strong>: Waits for a pause in events before executing (e.g., search input). <strong>Throttle</strong>: Executes at most once every X ms (e.g., scroll).</p>
+      <pre><code>// Debounce: wait 300ms after last keypress
+// Throttle: fire every 200ms during scroll</code></pre>
+    </div>
+
+    <!-- Q12 -->
+    <div class="interview-q">
+      <h4>Q12. What is <code>Optional Chaining</code>?</h4>
+      <p>Allows safe access to nested object properties. Returns <code>undefined</code> instead of throwing error if intermediate property is null/undefined.</p>
+      <pre><code>const name = user?.profile?.name; // undefined if user or profile is null</code></pre>
+    </div>
+
+    <!-- Q13 -->
+    <div class="interview-q">
+      <h4>Q13. What is <code>Nullish Coalescing</code>?</h4>
+      <p>Returns right operand only if left is <code>null</code> or <code>undefined</code>. Unlike <code>||</code> which treats all falsy values.</p>
+      <pre><code>const input = value ?? 'default'; // Only if null/undefined
+const input2 = value || 'default'; // Also if 0, '', false</code></pre>
+    </div>
+
+    <!-- Q14 -->
+    <div class="interview-q">
+      <h4>Q14. How to deep clone an object?</h4>
+      <p>Use recursive function or <code>structuredClone()</code> (modern). <code>JSON.parse(JSON.stringify())</code> fails with functions, dates, circular refs.</p>
+      <pre><code>function deepClone(obj) {
+  if (obj === null || typeof obj !== 'object') return obj;
+  const clone = Array.isArray(obj) ? [] : {};
+  for (let key in obj) {
+    clone[key] = deepClone(obj[key]);
+  }
+  return clone;
+}</code></pre>
+    </div>
+
+    <!-- Q15 -->
+    <div class="interview-q">
+      <h4>Q15. What is <code>Symbol</code>?</h4>
+      <p>Primitive type for unique, immutable identifiers. Used as object keys to avoid name collisions.</p>
+      <pre><code>const id = Symbol('id');
+const user = { [id]: 123, name: 'Gaurav' };
+console.log(user[id]); // 123</code></pre>
+    </div>
+
+    <!-- Q16 -->
+    <div class="interview-q">
+      <h4>Q16. What is <code>typeof null</code>?</h4>
+      <p>Returns <code>"object"</code> — a historical bug in JavaScript that cannot be fixed due to backward compatibility.</p>
+      <pre><code>console.log(typeof null); // "object"</code></pre>
+    </div>
+
+    <!-- Q17 -->
+    <div class="interview-q">
+      <h4>Q17. What is the difference between <code>undefined</code> and <code>not defined</code>?</h4>
+      <p><code>undefined</code>: variable declared but not assigned. <code>not defined</code>: variable never declared (ReferenceError).</p>
+      <pre><code>let x;
+console.log(x); // undefined
+
+console.log(y); // ReferenceError: y is not defined</code></pre>
+    </div>
+
+    <!-- Q18 -->
+    <div class="interview-q">
+      <h4>Q18. What is <code>NaN</code>? How to check?</h4>
+      <p>Not-a-Number. Result of invalid math. Use <code>isNaN()</code> or <code>Number.isNaN()</code>.</p>
+      <pre><code>0 / 0; // NaN
+Number.isNaN(NaN); // true
+isNaN('hello'); // true (coerces)</code></pre>
+    </div>
+
+    <!-- Q19 -->
+    <div class="interview-q">
+      <h4>Q19. What is the difference between <code>null</code> and <code>undefined</code>?</h4>
+      <p><code>null</code>: intentional absence of value (object). <code>undefined</code>: uninitialized variable or missing property.</p>
+      <pre><code>let a = null;      // explicit
+let b;             // implicit undefined
+obj.missingProp;   // undefined</code></pre>
+    </div>
+
+    <!-- Q20 -->
+    <div class="interview-q">
+      <h4>Q20. What are IIFEs? Why use them?</h4>
+      <p>Immediately Invoked Function Expressions create private scope and avoid polluting global namespace.</p>
+      <pre><code>(function() {
+  var privateVar = 'secret';
+  console.log(privateVar);
+})();
+// privateVar is not accessible</code></pre>
+    </div>
+
+    <!-- Q21 -->
+    <div class="interview-q">
+      <h4>Q21. What is the Temporal Dead Zone (TDZ)?</h4>
+      <p>Time between entering scope and initialization of <code>let</code>/<code>const</code> variables. Accessing them throws ReferenceError.</p>
+      <pre><code>console.log(x); // ReferenceError
+let x = 10;</code></pre>
+    </div>
+
+    <!-- Q22 -->
+    <div class="interview-q">
+      <h4>Q22. What is <code>strict mode</code>?</h4>
+      <p>Enforces stricter parsing and error handling. Eliminates silent errors, improves security.</p>
+      <pre><code>'use strict';
+x = 10; // ReferenceError (no var/let/const)</code></pre>
+    </div>
+
+    <!-- Q23 -->
+    <div class="interview-q">
+      <h4>Q23. What is currying?</h4>
+      <p>Transforming a function with multiple arguments into a sequence of functions that take one argument each.</p>
+      <pre><code>function add(a) {
+  return function(b) {
+    return a + b;
+  };
+}
+add(2)(3); // 5</code></pre>
+    </div>
+
+    <!-- Q24 -->
+    <div class="interview-q">
+      <h4>Q24. What is memoization?</h4>
+      <p>Caching function results based on input arguments to avoid recomputation.</p>
+      <pre><code>function memoize(fn) {
+  const cache = {};
+  return function(...args) {
+    const key = JSON.stringify(args);
+    if (key in cache) return cache[key];
+    return cache[key] = fn(...args);
+  };
+}</code></pre>
+    </div>
+
+    <!-- Q25 -->
+    <div class="interview-q">
+      <h4>Q25. What is the difference between <code>for...in</code> and <code>for...of</code>?</h4>
+      <p><code>for...in</code>: iterates over enumerable property names (objects). <code>for...of</code>: iterates over iterable values (arrays, strings).</p>
+      <pre><code>const obj = {a:1, b:2};
+for (let key in obj) console.log(key); // "a", "b"
+
+const arr = [1,2,3];
+for (let val of arr) console.log(val); // 1,2,3</code></pre>
+    </div>
+
+    <!-- Q26 -->
+    <div class="interview-q">
+      <h4>Q26. What is the <code>spread</code> operator?</h4>
+      <p>Expands iterables into individual elements. Used in arrays, objects, function args.</p>
+      <pre><code>const arr = [1,2,3];
+console.log(...arr); // 1 2 3
+
+const obj = {a:1};
+const clone = {...obj};</code></pre>
+    </div>
+
+    <!-- Q27 -->
+    <div class="interview-q">
+      <h4>Q27. What is the <code>rest</code> parameter?</h4>
+      <p>Collects remaining arguments into an array. Must be last parameter.</p>
+      <pre><code>function sum(...numbers) {
+  return numbers.reduce((a,b) => a+b);
+}
+sum(1,2,3,4); // 10</code></pre>
+    </div>
+
+    <!-- Q28 -->
+    <div class="interview-q">
+      <h4>Q28. What is destructuring?</h4>
+      <p>Extract values from arrays/objects into distinct variables.</p>
+      <pre><code>const [a, b] = [1, 2];
+const {name, age} = user;</code></pre>
+    </div>
+
+    <!-- Q29 -->
+    <div class="interview-q">
+      <h4>Q29. What is <code>Promise.all()</code>?</h4>
+      <p>Runs multiple promises in parallel. Resolves with array of results when all complete. Rejects if any fails.</p>
+      <pre><code>Promise.all([p1, p2, p3])
+  .then(results => console.log(results))
+  .catch(err => console.error(err));</code></pre>
+    </div>
+
+    <!-- Q30 -->
+    <div class="interview-q">
+      <h4>Q30. What is <code>Promise.race()</code>?</h4>
+      <p>Resolves or rejects as soon as one promise settles.</p>
+      <pre><code>Promise.race([slow, fast]).then(winner => console.log(winner));</code></pre>
+    </div>
+
+    <!-- Q31 -->
+    <div class="interview-q">
+      <h4>Q31. What is <code>async</code> function return value?</h4>
+      <p>Always returns a Promise. If you return a value, it’s wrapped in resolved Promise.</p>
+      <pre><code>async function f() { return 1; }
+f().then(v => console.log(v)); // 1</code></pre>
+    </div>
+
+    <!-- Q32 -->
+    <div class="interview-q">
+      <h4>Q32. How to handle errors in <code>async/await</code>?</h4>
+      <p>Use <code>try/catch</code>. Rejected promises go to <code>catch</code> block.</p>
+      <pre><code>async function load() {
+  try {
+    const data = await fetch('/api');
+  } catch (err) {
+    console.error(err);
+  }
+}</code></pre>
+    </div>
+
+    <!-- Q33 -->
+    <div class="interview-q">
+      <h4>Q33. What is <code>event delegation</code>?</h4>
+      <p>Attach a single event listener to a parent to handle events on dynamic child elements.</p>
+      <pre><code>ul.addEventListener('click', (e) => {
+  if (e.target.tagName === 'LI') {
+    console.log(e.target.textContent);
+  }
+});</code></pre>
+    </div>
+
+    <!-- Q34 -->
+    <div class="interview-q">
+      <h4>Q34. What is <code>event.preventDefault()</code>?</h4>
+      <p>Prevents the default action of an event (e.g., form submit, link navigation).</p>
+      <pre><code>form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  // handle manually
+});</code></pre>
+    </div>
+
+    <!-- Q35 -->
+    <div class="interview-q">
+      <h4>Q35. What is the difference between <code>localStorage</code> and <code>sessionStorage</code>?</h4>
+      <p><code>localStorage</code>: persists until explicitly cleared. <code>sessionStorage</code>: cleared when tab closes.</p>
+      <pre><code>localStorage.setItem('key', 'value');
+sessionStorage.setItem('temp', 'data');</code></pre>
+    </div>
+
+    <!-- Q36 -->
+    <div class="interview-q">
+      <h4>Q36. How to set a cookie in JavaScript?</h4>
+      <p>Use <code>document.cookie</code> with expiration, path, etc.</p>
+      <pre><code>document.cookie = "username=Gaurav; expires=Fri, 31 Dec 2025 23:59:59 GMT; path=/";
+</code></pre>
+    </div>
+
+    <!-- Q37 -->
+    <div class="interview-q">
+      <h4>Q37. What is the Fetch API?</h4>
+      <p>Modern interface for making HTTP requests. Returns a Promise.</p>
+      <pre><code>fetch('/api/users')
+  .then(res => res.json())
+  .then(data => console.log(data));</code></pre>
+    </div>
+
+    <!-- Q38 -->
+    <div class="interview-q">
+      <h4>Q38. How to handle CORS with Fetch?</h4>
+      <p>Server must send <code>Access-Control-Allow-Origin</code> header. Or use proxy.</p>
+    </div>
+
+    <!-- Q39 -->
+    <div class="interview-q">
+      <h4>Q39. What is <code>JSON.stringify()</code> and <code>JSON.parse()</code>?</h4>
+      <p>Convert JS object to JSON string and vice versa.</p>
+      <pre><code>const json = JSON.stringify({name: 'Gaurav'});
+const obj = JSON.parse(json);</code></pre>
+    </div>
+
+    <!-- Q40 -->
+    <div class="interview-q">
+      <h4>Q40. What is a memory leak in JS? How to avoid?</h4>
+      <p>Memory not released when no longer needed. Causes: global vars, forgotten event listeners, <code>setInterval</code> without <code>clearInterval</code>.</p>
+      <pre><code>// Bad
+setInterval(() => { /* heavy */ }, 1000);
+
+// Good
+const id = setInterval(...);
+clearInterval(id);</code></pre>
+    </div>
+
+    <!-- Q41 -->
+    <div class="interview-q">
+      <h4>Q41. What is <code>Object.freeze()</code>?</h4>
+      <p>Makes an object immutable — prevents adding, removing, or modifying properties.</p>
+      <pre><code>const obj = Object.freeze({a:1});
+obj.a = 2; // Fails silently in non-strict mode</code></pre>
+    </div>
+
+    <!-- Q42 -->
+    <div class="interview-q">
+      <h4>Q42. What is <code>Object.seal()</code>?</h4>
+      <p>Prevents adding/removing properties but allows modifying existing ones.</p>
+      <pre><code>const obj = Object.seal({a:1});
+obj.a = 2; // OK
+obj.b = 3; // Fails</code></pre>
+    </div>
+
+    <!-- Q43 -->
+    <div class="interview-q">
+      <h4>Q43. What is the <code>new</code> keyword?</h4>
+      <p>Creates an instance of a constructor function. Steps: create object, set prototype, bind <code>this</code>, return object.</p>
+      <pre><code>function Person(name) { this.name = name; }
+const p = new Person('Gaurav');</code></pre>
+    </div>
+
+    <!-- Q44 -->
+    <div class="interview-q">
+      <h4>Q44. What is <code>instanceof</code>?</h4>
+      <p>Checks if an object is an instance of a constructor by checking prototype chain.</p>
+      <pre><code>p instanceof Person; // true</code></pre>
+    </div>
+
+    <!-- Q45 -->
+    <div class="interview-q">
+      <h4>Q45. What is <code>Array.isArray()</code>?</h4>
+      <p>Checks if a value is an array. More reliable than <code>instanceof</code> across frames.</p>
+      <pre><code>Array.isArray([1,2,3]); // true
+Array.isArray({});      // false</code></pre>
+    </div>
+
+    <!-- Q46 -->
+    <div class="interview-q">
+      <h4>Q46. What is <code>Map</code> vs <code>Object</code>?</h4>
+      <p><code>Map</code>: keys can be any type, maintains insertion order, has size, iterable. <code>Object</code>: keys are strings/symbols.</p>
+      <pre><code>const map = new Map();
+map.set('key', 'value');
+map.set({a:1}, 'obj');</code></pre>
+    </div>
+
+    <!-- Q47 -->
+    <div class="interview-q">
+      <h4>Q47. What is <code>Set</code>?</h4>
+      <p>Collection of unique values. No duplicates. Has <code>add</code>, <code>has</code>, <code>delete</code>.</p>
+      <pre><code>const set = new Set([1,2,2,3]);
+console.log(set.size); // 3</code></pre>
+    </div>
+
+    <!-- Q48 -->
+    <div class="interview-q">
+      <h4>Q48. What is <code>WeakMap</code> and <code>WeakSet</code>?</h4>
+      <p>Hold weak references to keys/objects. Allows garbage collection if no other references exist.</p>
+      <pre><code>let obj = {id:1};
+const map = new WeakMap();
+map.set(obj, 'data');
+// When obj is garbage collected, entry is removed</code></pre>
+    </div>
+
+    <!-- Q49 -->
+    <div class="interview-q">
+      <h4>Q49. What is <code>BigInt</code>?</h4>
+      <p>Primitive for arbitrary precision integers. Beyond <code>Number.MAX_SAFE_INTEGER</code>.</p>
+      <pre><code>const big = 12345678901234567890n;
+console.log(typeof big); // "bigint"</code></pre>
+    </div>
+
+    <!-- Q50 -->
+    <div class="interview-q">
+      <h4>Q50. What is <code>Proxy</code>?</h4>
+      <p>Intercepts and redefines fundamental operations on objects (get, set, has, delete).</p>
+      <pre><code>const handler = {
+  get: (target, prop) => prop in target ? target[prop] : 'unknown'
+};
+const proxy = new Proxy({name: 'Gaurav'}, handler);
+console.log(proxy.age); // "unknown"</code></pre>
+    </div>
+
+    <!-- Q51 -->
+    <div class="interview-q">
+      <h4>Q51. What is <code>Reflect</code>?</h4>
+      <p>Provides methods for interceptable JS operations. Often used with <code>Proxy</code>.</p>
+      <pre><code>Reflect.get(target, prop);
+Reflect.set(target, prop, value);</code></pre>
+    </div>
+
+    <!-- Q52 -->
+    <div class="interview-q">
+      <h4>Q52. What is <code>generator</code> function?</h4>
+      <p>Returns an iterator that can pause and resume execution with <code>yield</code>.</p>
+      <pre><code>function* gen() {
+  yield 1;
+  yield 2;
+}
+const it = gen();
+console.log(it.next().value); // 1</code></pre>
+    </div>
+
+    <!-- Q53 -->
+    <div class="interview-q">
+      <h4>Q53. What is <code>async iterator</code>?</h4>
+      <p>Allows asynchronous iteration with <code>for await...of</code>.</p>
+      <pre><code>async function* asyncGen() {
+  yield await fetchData();
+}
+for await (const data of asyncGen()) { ... }</code></pre>
+    </div>
+
+    <!-- Q54 -->
+    <div class="interview-q">
+      <h4>Q54. What is <code>module</code> in JavaScript?</h4>
+      <p>ES6 modules use <code>import</code>/<code>export</code>. Static, hoisted, async loading with <code>type="module"</code>.</p>
+      <pre><code>// math.js
+export const add = (a,b) => a+b;
+
+// main.js
+import { add } from './math.js';</code></pre>
+    </div>
+
+    <!-- Q55 -->
+    <div class="interview-q">
+      <h4>Q55. What is tree shaking?</h4>
+      <p>Dead code elimination in bundlers (Webpack, Rollup) for ES6 modules. Removes unused exports.</p>
+    </div>
+
+    <!-- Q56 -->
+    <div class="interview-q">
+      <h4>Q56. What is <code>service worker</code>?</h4>
+      <p>Background script that intercepts network requests, enables offline, caching, push notifications.</p>
+    </div>
+
+    <!-- Q57 -->
+    <div class="interview-q">
+      <h4>Q57. What is <code>Web Worker</code>?</h4>
+      <p>Runs scripts in background thread. Prevents blocking UI.</p>
+      <pre><code>const worker = new Worker('task.js');
+worker.postMessage('data');</code></pre>
+    </div>
+
+    <!-- Q58 -->
+    <div class="interview-q">
+      <h4>Q58. What is <code>requestAnimationFrame</code>?</h4>
+      <p>Schedules a function to run before the next repaint. Ideal for animations (60fps).</p>
+      <pre><code>function animate() {
+  // update
+  requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);</code></pre>
+    </div>
+
+    <!-- Q59 -->
+    <div class="interview-q">
+      <h4>Q59. What is <code>Intersection Observer</code>?</h4>
+      <p>Efficiently detects when an element enters/exits viewport. Used for lazy loading.</p>
+      <pre><code>const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // load image
+    }
+  });
+});
+observer.observe(img);</code></pre>
+    </div>
+
+    <!-- Q60 -->
+    <div class="interview-q">
+      <h4>Q60. What is <code>structuredClone()</code>?</h4>
+      <p>Modern deep cloning method. Handles circular references, dates, blobs, etc.</p>
+      <pre><code>const clone = structuredClone(original);
+</code></pre>
+    </div>
+
+    <!-- Key Takeaways -->
+    <h2 class="key-takeaways">Key Takeaways</h2>
+    <ul>
+      <li>Master <code>this</code>, closures, event loop — core of JS</li>
+      <li>Use <code>let/const</code>, avoid <code>var</code></li>
+      <li>Prefer <code>async/await</code> over raw Promises</li>
+      <li>Understand prototype chain and inheritance</li>
+      <li>Always handle errors in async code</li>
+      <li>Debounce input, throttle scroll/resize</li>
+      <li>Use <code>Optional Chaining</code> and <code>??</code> for safety</li>
+      <li>Never ignore memory leaks in long-running apps</li>
+    </ul>
+
+    <!-- Next Steps -->
+    <h2 class="next-steps">Next Steps for MERN Stack</h2>
+    <ol>
+      <li>Build 3 full-stack apps with React + Node + Express + MongoDB</li>
+      <li>Master React Hooks, Context, Redux Toolkit</li>
+      <li>Learn TypeScript for type-safe JavaScript</li>
+      <li>Study JWT, OAuth, Session Management</li>
+      <li>Optimize performance: Code splitting, lazy loading</li>
+      <li>Deploy with Docker, CI/CD, Nginx</li>
+      <li>Practice system design: Scalable MERN architecture</li>
+      <li>Contribute to open source MERN projects</li>
+    </ol>
+
+  </div>
+</body>
+</html>

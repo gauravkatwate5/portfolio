@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HTML, CSS & Bootstrap Developer Handbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+      padding: 2rem;
+    }
+    .container { max-width: 1100px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 2.8rem; color: var(--teal); text-align: center; margin: 2rem 0; }
+    h2 { font-size: 1.9rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 2.5rem 0 1.5rem; }
+    h3 { font-size: 1.5rem; color: var(--blue); margin: 1.8rem 0 1rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.2rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 4rem 0; }
+    .author { font-size: 1.3rem; color: var(--gray); margin-top: 1rem; }
+    .highlight { background: rgba(78, 201, 176, 0.1); padding: 1.2rem; border-radius: 6px; margin: 1.5rem 0; }
+    .interview-q { margin: 1.8rem 0; }
+    .interview-q h4 { color: var(--purple); margin-bottom: 0.5rem; }
+    .interview-q pre { margin-top: 1rem; }
+    .key-takeaways { background: #2d2d30; padding: 1.5rem; border-radius: 8px; }
+    .next-steps { margin-top: 3rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>HTML, CSS & Bootstrap Developer Handbook</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.1rem; color: var(--gray);">A comprehensive guide for developers with 2+ years of experience<br>Study + Interview Prep + Real-World Examples</p>
+    </div>
+
+    <!-- 🧱 HTML Section -->
+    <h2>🧱 HTML Section</h2>
+
+    <h3>Structure, Tags, Elements, Attributes</h3>
+    <p>HTML (HyperText Markup Language) is the standard markup language for creating web pages. It describes the structure of a web page using elements represented by tags.</p>
+    <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;Page Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Heading&lt;/h1&gt;
+  &lt;p class="intro" id="first"&gt;Paragraph with attributes&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+    <p><strong>Key Points:</strong> <code>&lt;!DOCTYPE html&gt;</code> declares HTML5. <code>lang</code> attribute improves accessibility. Global attributes: <code>id</code>, <code>class</code>, <code>style</code>, <code>title</code>, <code>data-*</code>.</p>
+
+    <h3>Semantic HTML</h3>
+    <p>Semantic elements clearly describe their meaning to both the browser and the developer.</p>
+    <pre><code>&lt;header&gt;
+  &lt;nav&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/nav&gt;
+&lt;/header&gt;
+&lt;main&gt;
+  &lt;section&gt;
+    &lt;article&gt;
+      &lt;h2&gt;Blog Post&lt;/h2&gt;
+      &lt;p&gt;Content...&lt;/p&gt;
+    &lt;/article&gt;
+  &lt;/section&gt;
+  &lt;aside&gt;Sidebar&lt;/aside&gt;
+&lt;/main&gt;
+&lt;footer&gt;
+  &copy; 2025 Company
+&lt;/footer&gt;</code></pre>
+    <p><strong>Benefits:</strong> Better SEO, accessibility (screen readers), maintainable code.</p>
+
+    <h3>Forms, Inputs, Buttons, Validation</h3>
+    <pre><code>&lt;form action="/submit" method="POST" novalidate&gt;
+  &lt;label for="name"&gt;Name:&lt;/label&gt;
+  &lt;input type="text" id="name" name="name" required minlength="2" maxlength="50" placeholder="John Doe"&gt;
+
+  &lt;label for="email"&gt;Email:&lt;/label&gt;
+  &lt;input type="email" id="email" name="email" required&gt;
+
+  &lt;label for="password"&gt;Password:&lt;/label&gt;
+  &lt;input type="password" id="password" name="password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"&gt;
+
+  &lt;button type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+    <p><strong>Validation Attributes:</strong> <code>required</code>, <code>minlength</code>, <code>maxlength</code>, <code>pattern</code>, <code>type="email"</code>, <code>type="url"</code>, <code>autocomplete</code>.</p>
+
+    <h3>Tables, iframes, Images, Lists, Meta, SEO</h3>
+    <pre><code>&lt;!-- Table --&gt;
+&lt;table border="1"&gt;
+  &lt;caption&gt;Monthly Sales&lt;/caption&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;&lt;th&gt;Month&lt;/th&gt;&lt;th&gt;Sales&lt;/th&gt;&lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;&lt;td&gt;Jan&lt;/td&gt;&lt;td&gt;$5000&lt;/td&gt;&lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;!-- Image with lazy loading --&gt;
+&lt;img src="photo.jpg" alt="Description" loading="lazy" width="600" height="400"&gt;
+
+&lt;!-- iframe --&gt;
+&lt;iframe src="https://example.com" title="Example" width="100%" height="500" loading="lazy"&gt;&lt;/iframe&gt;
+
+&lt;!-- Meta & SEO --&gt;
+&lt;meta name="description" content="Best handbook for HTML, CSS, Bootstrap"&gt;
+&lt;meta name="robots" content="index, follow"&gt;
+&lt;link rel="canonical" href="https://example.com/handbook"&gt;</code></pre>
+
+    <!-- 🎨 CSS Section -->
+    <h2>🎨 CSS Section</h2>
+
+    <h3>Selectors, Properties, Values, Colors</h3>
+    <pre><code>/* Element, Class, ID */
+p { color: #333; }
+.highlight { background: yellow; }
+#header { font-weight: bold; }
+
+/* Attribute selector */
+input[type="email"] { border: 1px solid blue; }
+
+/* Pseudo-classes */
+a:hover { color: red; }
+button:focus { outline: 2px solid orange; }
+
+/* Colors */
+.color-hex { color: #4ec9b0; }
+.color-rgb { color: rgb(78, 201, 176); }
+.color-hsl { color: hsl(168, 52%, 55%); }</code></pre>
+
+    <h3>Box Model, Positioning, Display</h3>
+    <pre><code>.box {
+  width: 300px;
+  height: 200px;
+  padding: 20px;
+  border: 5px solid #4ec9b0;
+  margin: 15px;
+  box-sizing: border-box; /* Includes padding & border in width */
+}
+
+.relative { position: relative; top: 10px; left: 20px; }
+.absolute { position: absolute; top: 0; right: 0; }
+.fixed { position: fixed; bottom: 20px; right: 20px; }
+.sticky { position: sticky; top: 0; background: #1e1e1e; }
+
+.inline { display: inline; }
+.block { display: block; }
+.inline-block { display: inline-block; }
+.none { display: none; }</code></pre>
+
+    <h3>Flexbox</h3>
+    <pre><code>.container {
+  display: flex;
+  flex-direction: row; /* row-reverse, column, column-reverse */
+  justify-content: space-between; /* flex-start, center, space-around */
+  align-items: center; /* stretch, flex-start, baseline */
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.item {
+  flex: 1; /* flex-grow: 1; flex-shrink: 1; flex-basis: 0% */
+  order: 2; /* Default 0 */
+}</code></pre>
+
+    <h3>CSS Grid</h3>
+    <pre><code>.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* or 200px auto 1fr */
+  grid-template-rows: 100px 200px;
+  gap: 1rem;
+  grid-template-areas:
+    "header header header"
+    "sidebar main main"
+    "footer footer footer";
+}
+
+.header { grid-area: header; }
+.sidebar { grid-area: sidebar; }
+.main { grid-area: main; }</code></pre>
+
+    <h3>Media Queries & Variables</h3>
+    <pre><code>:root {
+  --primary: #4ec9b0;
+  --spacing: 1rem;
+}
+
+.card {
+  background: var(--primary);
+  padding: var(--spacing);
+}
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .grid { grid-template-columns: 1fr; }
+}</code></pre>
+
+    <h3>Transitions, Animations, Shadows, Fonts</h3>
+    <pre><code>.btn {
+  transition: background 0.3s ease, transform 0.2s;
+}
+.btn:hover {
+  background: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.fade {
+  animation: fadeIn 1s ease-in forwards;
+}
+
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+body { font-family: 'Roboto', sans-serif; }</code></pre>
+
+    <!-- 🧩 Bootstrap 5 Section -->
+    <h2>🧩 Bootstrap 5 Section</h2>
+
+    <h3>Introduction & Grid System</h3>
+    <p>Bootstrap 5 is a free, open-source CSS framework. No jQuery dependency. Uses CSS variables, modern grid.</p>
+    <pre><code>&lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"&gt;
+
+&lt;div class="container"&gt;
+  &lt;div class="row"&gt;
+    &lt;div class="col-md-4 col-lg-3"&gt;Column 1&lt;/div&gt;
+    &lt;div class="col-md-8 col-lg-6"&gt;Column 2&lt;/div&gt;
+    &lt;div class="col-lg-3"&gt;Column 3&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    <p><strong>Breakpoints:</strong> <code>xs (&lt;576px)</code>, <code>sm (≥576)</code>, <code>md (≥768)</code>, <code>lg (≥992)</code>, <code>xl (≥1200)</code>, <code>xxl (≥1400)</code></p>
+
+    <h3>Buttons, Cards, Navbar</h3>
+    <pre><code>&lt;button class="btn btn-primary btn-lg"&gt;Primary&lt;/button&gt;
+&lt;button class="btn btn-outline-success"&gt;Outline&lt;/button&gt;
+
+&lt;div class="card shadow-sm"&gt;
+  &lt;img src="..." class="card-img-top" alt="..."&gt;
+  &lt;div class="card-body"&gt;
+    &lt;h5 class="card-title"&gt;Card Title&lt;/h5&gt;
+    &lt;p class="card-text"&gt;Some content.&lt;/p&gt;
+    &lt;a href="#" class="btn btn-primary"&gt;Go&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;nav class="navbar navbar-expand-lg navbar-dark bg-dark"&gt;
+  &lt;a class="navbar-brand" href="#"&gt;Brand&lt;/a&gt;
+  &lt;button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"&gt;
+    &lt;span class="navbar-toggler-icon"&gt;&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class="collapse navbar-collapse" id="nav"&gt;
+    &lt;ul class="navbar-nav"&gt;
+      &lt;li class="nav-item"&gt;&lt;a class="nav-link" href="#"&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/nav&gt;</code></pre>
+
+    <h3>Modals & Forms</h3>
+    <pre><code>&lt;button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"&gt;
+  Open Modal
+&lt;/button&gt;
+
+&lt;div class="modal fade" id="myModal"&gt;
+  &lt;div class="modal-dialog"&gt;
+    &lt;div class="modal-content"&gt;
+      &lt;div class="modal-header"&gt;
+        &lt;h5 class="modal-title"&gt;Title&lt;/h5&gt;
+        &lt;button type="button" class="btn-close" data-bs-dismiss="modal"&gt;&lt;/button&gt;
+      &lt;/div&gt;
+      &lt;div class="modal-body"&gt;Content...&lt;/div&gt;
+      &lt;div class="modal-footer"&gt;
+        &lt;button type="button" class="btn btn-secondary" data-bs-dismiss="modal"&gt;Close&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;form class="row g-3 needs-validation" novalidate&gt;
+  &lt;div class="col-md-6"&gt;
+    &lt;label class="form-label"&gt;Email&lt;/label&gt;
+    &lt;input type="email" class="form-control" required&gt;
+    &lt;div class="invalid-feedback"&gt;Please provide a valid email.&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;button class="btn btn-primary" type="submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+
+    <h3>Utility Classes</h3>
+    <pre><code>&lt;!-- Spacing --&gt;
+&lt;div class="m-3 p-4 mt-5 mb-2"&gt;Margins & Padding&lt;/div&gt;
+
+&lt;!-- Display --&gt;
+&lt;div class="d-none d-md-block"&gt;Hidden on small, visible on medium+&lt;/div&gt;
+
+&lt;!-- Colors --&gt;
+&lt;p class="text-primary bg-dark text-white p-3 rounded"&gt;Styled Text&lt;/p&gt;
+
+&lt;!-- Flex & Grid Utilities --&gt;
+&lt;div class="d-flex justify-content-between align-items-center"&gt;
+  &lt;div&gt;Left&lt;/div&gt;
+  &lt;div&gt;Right&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+
+    <!-- 💡 Interview Section -->
+    <h2>💡 Interview Section</h2>
+    <p><strong>40+ Real Interview Questions with Full Explanations & Code</strong></p>
+
+    <div class="interview-q">
+      <h4>Q1. What is the difference between <code>&lt;div&gt;</code> and <code>&lt;section&gt;</code>?</h4>
+      <p><code>&lt;div&gt;</code> is a generic block container with no semantic meaning. <code>&lt;section&gt;</code> represents a thematic grouping of content, typically with a heading. Use <code>&lt;section&gt;</code> when content forms a logical section (e.g., chapter, tab).</p>
+      <pre><code>&lt;!-- Not semantic --&gt;
+&lt;div&gt;&lt;h2&gt;About Us&lt;/h2&gt;&lt;p&gt;...&lt;/p&gt;&lt;/div&gt;
+
+&lt;!-- Semantic --&gt;
+&lt;section&gt;
+  &lt;h2&gt;About Us&lt;/h2&gt;
+  &lt;p&gt;We are a team...&lt;/p&gt;
+&lt;/section&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q2. Explain the HTML5 doctype and its importance.</h4>
+      <p>The <code>&lt;!DOCTYPE html&gt;</code> triggers standards mode in browsers, ensuring consistent rendering. Without it, browsers use quirks mode (legacy behavior).</p>
+      <pre><code>&lt;!DOCTYPE html&gt; &lt;!-- Must be first line --&gt;
+&lt;html lang="en"&gt;&lt;!-- Rest of document --&gt;&lt;/html&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q3. What are data attributes? Give an example.</h4>
+      <p>Custom attributes prefixed with <code>data-*</code> to store extra information. Accessible via JavaScript <code>dataset</code>.</p>
+      <pre><code>&lt;div id="user" data-id="123" data-role="admin"&gt;Gaurav&lt;/div&gt;
+
+&lt;script&gt;
+  const user = document.getElementById('user');
+  console.log(user.dataset.id); // "123"
+&lt;/script&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q4. How does <code>label</code> improve accessibility?</h4>
+      <p>Clicking a <code>&lt;label&gt;</code> focuses its associated input. Screen readers announce the label text.</p>
+      <pre><code>&lt;label for="email"&gt;Email Address:&lt;/label&gt;
+&lt;input type="email" id="email" name="email"&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q5. What is the purpose of <code>alt</code> attribute in <code>&lt;img&gt;</code>?</h4>
+      <p>Provides alternative text if image fails to load. Essential for accessibility and SEO.</p>
+      <pre><code>&lt;img src="logo.png" alt="Company Logo - Blue Circle with Text"&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q6. Difference between <code>&lt;article&gt;</code> and <code>&lt;section&gt;</code>?</h4>
+      <p><code>&lt;article&gt;</code> is standalone content (blog post, news). <code>&lt;section&gt;</code> groups related content within a document.</p>
+      <pre><code>&lt;article&gt;
+  &lt;h2&gt;Blog Post&lt;/h2&gt;
+  &lt;section&gt;&lt;h3&gt;Introduction&lt;/h3&gt;&lt;/section&gt;
+  &lt;section&gt;&lt;h3&gt;Conclusion&lt;/h3&gt;&lt;/section&gt;
+&lt;/article&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q7. What is the <code>viewport</code> meta tag?</h4>
+      <p>Controls layout on mobile browsers. Without it, mobile zooms out.</p>
+      <pre><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q8. Explain form validation attributes.</h4>
+      <p>HTML5 provides built-in validation: <code>required</code>, <code>pattern</code>, <code>min</code>, <code>max</code>, <code>type="email"</code>, etc.</p>
+      <pre><code>&lt;input type="text" required pattern="[A-Za-z]+" minlength="3"&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q9. What is the CSS box model?</h4>
+      <p>Content → Padding → Border → Margin. Default <code>content-box</code>. Use <code>border-box</code> for easier sizing.</p>
+      <pre><code>* { box-sizing: border-box; }</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q10. Difference between <code>margin</code> and <code>padding</code>?</h4>
+      <p><code>margin</code>: outside element. <code>padding</code>: inside. Margin can collapse vertically.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q11. What is <code>position: static</code> vs <code>relative</code> vs <code>absolute</code>?</h4>
+      <p><code>static</code>: default. <code>relative</code>: offset from itself. <code>absolute</code>: removed from flow, positioned relative to nearest positioned ancestor.</p>
+      <pre><code>.relative { position: relative; top: 10px; }
+.absolute { position: absolute; top: 0; right: 0; }</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q12. How does <code>z-index</code> work?</h4>
+      <p>Controls stacking order of positioned elements. Higher values appear on top. Only works on <code>position</code> not static.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q13. What is Flexbox? Explain <code>justify-content</code>.</h4>
+      <p>1D layout model. <code>justify-content</code> aligns flex items along main axis.</p>
+      <pre><code>.flex { display: flex; justify-content: space-between; }</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q14. When to use Flexbox vs Grid?</h4>
+      <p>Flexbox: 1D ( (rows or columns). Grid: 2D (rows and columns). Use Grid for page layout, Flexbox for components.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q15. Explain <code>grid-template-areas</code>.</h4>
+      <p>Named grid areas for intuitive layout.</p>
+      <pre><code>grid-template-areas: "header header" "nav main" "footer footer";</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q16. What are CSS custom properties (variables)?</h4>
+      <p>Reusable values defined in <code>:root</code> or locally.</p>
+      <pre><code>:root { --main-color: #4ec9b0; }
+.btn { background: var(--main-color); }</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q17. Difference between <code>transition</code> and <code>animation</code>?</h4>
+      <p><code>transition</code>: state change (hover). <code>animation</code>: keyframe-based, runs automatically.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q18. What is the CSS cascade?</h4>
+      <p>Specificity + source order determines which rule applies. Inline > ID > Class > Element.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q19. What does <code>!important</code> do? When to avoid?</h4>
+      <p>Highest priority. Avoid — breaks cascade, hard to override.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q20. Explain media queries for responsive design.</h4>
+      <p>Apply CSS based on device characteristics.</p>
+      <pre><code>@media (max-width: 768px) { .sidebar { display: none; } }</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q21. What is Bootstrap’s grid system based on?</h4>
+      <p>12-column flexbox grid with 6 breakpoints.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q22. How to center a div horizontally and vertically in Bootstrap?</h4>
+      <pre><code>&lt;div class="d-flex justify-content-center align-items-center vh-100"&gt;
+  &lt;div class="p-4 bg-light"&gt;Centered&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q23. What is the difference between <code>.container</code> and <code>.container-fluid</code>?</h4>
+      <p><code>.container</code>: fixed width, changes at breakpoints. <code>.container-fluid</code>: full width always.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q24. How to create a responsive navbar in Bootstrap 5?</h4>
+      <p>Use <code>navbar-expand-lg</code> and <code>data-bs-toggle="collapse"</code>.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q25. What are utility classes in Bootstrap?</h4>
+      <p>Single-purpose classes: <code>mt-3</code>, <code>text-center</code>, <code>d-none</code>, etc.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q26. How to override Bootstrap styles?</h4>
+      <p>Load custom CSS after Bootstrap. Use higher specificity or <code>!important</code> (last resort).</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q27. What is the role of <code>data-bs-target</code> in modals?</h4>
+      <p>Links button to modal via ID. <code>data-bs-toggle="modal"</code> triggers it.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q28. How to disable a button in Bootstrap?</h4>
+      <pre><code>&lt;button class="btn btn-primary" disabled&gt;Disabled&lt;/button&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q29. What is <code>shadow</code> utility in Bootstrap?</h4>
+      <p>Adds box shadows: <code>shadow-sm</code>, <code>shadow</code>, <code>shadow-lg</code>, <code>shadow-none</code>.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q30. Explain Bootstrap 5 form validation.</h4>
+      <p>Use <code>needs-validation</code> class and <code>novalidate</code> on form. Add <code>is-valid</code>/<code>is-invalid</code> via JS.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q31. What is the purpose of <code>aria-label</code>?</h4>
+      <p>Provides accessible name for elements without visible text (e.g., icons).</p>
+      <pre><code>&lt;button aria-label="Close"&gt;×&lt;/button&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q32. How to make an image responsive in Bootstrap?</h4>
+      <pre><code>&lt;img src="..." class="img-fluid" alt="..."&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q33. What is the difference between <code>btn-outline-*</code> and <code>btn-*</code>?</h4>
+      <p><code>btn-primary</code>: filled. <code>btn-outline-primary</code>: border only.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q34. How to create a card deck in Bootstrap?</h4>
+      <pre><code>&lt;div class="card-deck"&gt;
+  &lt;div class="card"&gt;...&lt;/div&gt;
+  &lt;div class="card"&gt;...&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q35. What is <code>popover</code> and how to initialize?</h4>
+      <p>Tooltip-like content. Initialize with JS: <code>new bootstrap.Popover(element)</code>.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q36. How to use Bootstrap icons?</h4>
+      <pre><code>&lt;link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"&gt;
+&lt;i class="bi bi-heart"&gt;&lt;/i&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q37. What is the <code>visually-hidden</code> class?</h4>
+      <p>Hides element visually but keeps it accessible to screen readers.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q38. How to create a sticky footer in Bootstrap?</h4>
+      <p>Use flexbox on <code>&lt;body&gt;</code> with <code>min-vh-100</code>.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q39. What are Sass variables in Bootstrap?</h4>
+      <p>Bootstrap uses Sass. Customize via <code>$primary: #yourcolor;</code> before importing.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q40. How to disable responsive features in Bootstrap?</h4>
+      <p>Remove viewport meta tag and avoid using responsive classes (<code>col-md-*</code>).</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q41. (Bonus) What is the <code>rel="noopener"</code> in links?</h4>
+      <p>Prevents security vulnerability when using <code>target="_blank"</code>. Improves performance.</p>
+      <pre><code>&lt;a href="..." target="_blank" rel="noopener"&gt;Link&lt;/a&gt;</code></pre>
+    </div>
+
+    <!-- Key Takeaways -->
+    <h2 class="key-takeaways">🔑 Key Takeaways</h2>
+    <ul>
+      <li>Semantic HTML improves SEO and accessibility.</li>
+      <li>Use <code>box-sizing: border-box</code> globally.</li>
+      <li>Flexbox for components, Grid for layout.</li>
+      <li>Bootstrap 5 uses CSS variables and flexbox grid.</li>
+      <li>Always include <code>viewport</code> meta tag.</li>
+      <li>Validate forms with HTML5 attributes + JS.</li>
+      <li>Override Bootstrap with custom CSS loaded after.</li>
+    </ul>
+
+    <!-- Next Steps -->
+    <h2 class="next-steps">🧠 Next Learning Steps</h2>
+    <ol>
+      <li>Master JavaScript (ES6+) and DOM manipulation</li>
+      <li>Learn a frontend framework: React, Vue, or Angular</li>
+      <li>Explore Tailwind CSS as alternative to Bootstrap</li>
+      <li>Study Web Accessibility (a11y) and WCAG guidelines</li>
+      <li>Build 3 full responsive projects with Bootstrap</li>
+      <li>Learn CSS preprocessors (Sass) and PostCSS</li>
+      <li>Understand performance: Lighthouse, lazy loading</li>
+    </ol>
+
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

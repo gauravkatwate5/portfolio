@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>React Developer Handbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>React</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --orange: #ce9178;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 3rem; color: var(--teal); text-align: center; margin: 2.5rem 0; }
+    h2 { font-size: 2rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 3rem 0 1.5rem; }
+    h3 { font-size: 1.6rem; color: var(--blue); margin: 2rem 0 1rem; }
+    h4 { font-size: 1.3rem; color: var(--purple); margin: 1.5rem 0 0.8rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+      font-size: 0.95rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 5rem 0; }
+    .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .highlight { background: rgba(78, 201, 176, 0.15); padding: 1.3rem; border-radius: 8px; margin: 1.5rem 0; }
+    .interview-q {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #404040;
+    }
+    .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
+    .interview-q pre { margin-top: 1rem; }
+    .key-takeaways { background: #2d2d30; padding: 1.8rem; border-radius: 8px; margin: 3rem 0; }
+    .next-steps { margin-top: 3rem; }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      border: 1px solid #404040;
+      padding: 0.8rem;
+      text-align: left;
+    }
+    th { background: #2d2d30; color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>React Developer Handbook & Interview Notes</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
+        For 2+ Year React Developers<br>
+        Hooks → Router → State → Performance → 40+ Interview Qs
+      </p>
+    </div>
+
+    <!-- React Basics -->
+    <h2>React Basics</h2>
+
+    <h3>What is React?</h3>
+    <p>React is a JavaScript library for building user interfaces using components. It uses a declarative approach and efficient DOM updates via the Virtual DOM.</p>
+
+    <h3>JSX</h3>
+    <p>JavaScript XML — syntax extension that lets you write HTML-like code in JavaScript. Transpiled by Babel.</p>
+    <pre><code>const element = &lt;h1 className="title"&gt;Hello React!&lt;/h1&gt;;
+return &lt;div&gt;{element}&lt;/div&gt;;</code></pre>
+
+    <h3>Virtual DOM</h3>
+    <p>A lightweight in-memory representation of the real DOM. React computes the difference (diffing) and updates only changed parts.</p>
+
+    <h3>Components</h3>
+    <p>Reusable, self-contained pieces of UI. Can be functional or class-based.</p>
+
+    <h3>Functional vs Class Components</h3>
+    <table>
+      <tr><th>Feature</th><th>Functional</th><th>Class</th></tr>
+      <tr><td>Syntax</td><td>Arrow/regular function</td><td>ES6 class</td></tr>
+      <tr><td>State</td><td>Hooks (useState)</td><td>this.state</td></tr>
+      <tr><td>Lifecycle</td><td>useEffect</td><td>componentDidMount etc.</td></tr>
+      <tr><td>Performance</td><td>Lighter</td><td>Heavier</td></tr>
+    </table>
+
+    <h3>Props</h3>
+    <p>Read-only data passed from parent to child. Immutable.</p>
+    <pre><code>// Parent
+&lt;UserCard name="Gaurav" role="Developer" /&gt;
+
+// Child
+function UserCard({ name, role }) {
+  return &lt;div&gt;{name} - {role}&lt;/div&gt;;
+}</code></pre>
+
+    <h3>State</h3>
+    <p>Mutable data managed within a component. Triggers re-render on change.</p>
+    <pre><code>const [count, setCount] = useState(0);
+&lt;button onClick={() => setCount(count + 1)}&gt;{count}&lt;/button&gt;</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- React Hooks -->
+    <h2>React Hooks</h2>
+
+    <h3>useState</h3>
+    <p>Adds state to functional components.</p>
+    <pre><code>const [name, setName] = useState('Gaurav');
+setName('Raj');</code></pre>
+
+    <h3>useEffect</h3>
+    <p>Handles side effects (API calls, subscriptions). Runs after render.</p>
+    <pre><code>useEffect(() => {
+  // Runs on mount + dependency change
+  fetchData();
+  return () => {
+    // Cleanup (unmount)
+    cancelRequest();
+  };
+}, [id]); // Dependency array</code></pre>
+
+    <h3>useRef</h3>
+    <p>Access DOM elements or persist values across renders without causing re-renders.</p>
+    <pre><code>const inputRef = useRef(null);
+&lt;input ref={inputRef} /&gt;
+inputRef.current.focus();</code></pre>
+
+    <h3>useContext</h3>
+    <p>Consume context values without prop drilling.</p>
+    <pre><code>const theme = useContext(ThemeContext);
+return &lt;div className={theme}&gt;Content&lt;/div&gt;;</code></pre>
+
+    <h3>useReducer</h3>
+    <p>For complex state logic. Alternative to useState.</p>
+    <pre><code>function reducer(state, action) {
+  switch (action.type) {
+    case 'increment': return { count: state.count + 1 };
+  }
+}
+const [state, dispatch] = useReducer(reducer, { count: 0 });</code></pre>
+
+    <h3>useMemo</h3>
+    <p>Memoizes expensive calculations. Recalculates only when dependencies change.</p>
+    <pre><code>const expensiveValue = useMemo(() => computeExpensive(id), [id]);</code></pre>
+
+    <h3>useCallback</h3>
+    <p>Memoizes functions to prevent unnecessary re-renders in child components.</p>
+    <pre><code>const handleClick = useCallback(() => {
+  saveData();
+}, [data]);</code></pre>
+
+    <h3>Dependency Arrays & Cleanup</h3>
+    <ul>
+      <li><code>[]</code>: Run once on mount</li>
+      <li><code>[dep]</code>: Run on mount + when <code>dep</code> changes</li>
+      <li>No array: Run on every render</li>
+      <li>Return function from <code>useEffect</code> → cleanup on unmount or before next run</li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <!-- React Router -->
+    <h2>React Router</h2>
+
+    <h3>react-router-dom v6</h3>
+    <pre><code>npm install react-router-dom</code></pre>
+
+    <h3>Setup</h3>
+    <pre><code>import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+function App() {
+  return (
+    &lt;BrowserRouter&gt;
+      &lt;Routes&gt;
+        &lt;Route path="/" element={&lt;Home /&gt;} /&gt;
+        &lt;Route path="/about" element={&lt;About /&gt;} /&gt;
+        &lt;Route path="*" element={&lt;NotFound /&gt;} /&gt;
+      &lt;/Routes&gt;
+    &lt;/BrowserRouter&gt;
+  );
+}</code></pre>
+
+    <h3>Link & useNavigate</h3>
+    <pre><code>import { Link, useNavigate } from 'react-router-dom';
+
+&lt;Link to="/profile"&gt;Profile&lt;/Link&gt;
+
+const navigate = useNavigate();
+navigate('/login');</code></pre>
+
+    <h3>Protected Routes</h3>
+    <pre><code>function ProtectedRoute({ children }) {
+  const { user } = useAuth();
+  return user ? children : &lt;Navigate to="/login" /&gt;
+}
+
+// Usage
+&lt;Route 
+  path="/dashboard" 
+  element={
+    &lt;ProtectedRoute&gt;
+      &lt;Dashboard /&gt;
+    &lt;/ProtectedRoute&gt;
+  } 
+/&gt;</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- State Management -->
+    <h2>State Management</h2>
+
+    <h3>Context API vs Redux</h3>
+    <table>
+      <tr><th>Feature</th><th>Context API</th><th>Redux</th></tr>
+      <tr><td>Setup</td><td>Built-in</td><td>External lib</td></tr>
+      <tr><td>Performance</td><td>Re-renders all consumers</td><td>Fine-grained updates</td></tr>
+      <tr><td>DevTools</td><td>Limited</td><td>Powerful time-travel</td></tr>
+      <tr><td>Best for</td><td>Small-medium apps</td><td>Large, complex state</td></tr>
+    </table>
+
+    <h3>Global State with Context + useReducer</h3>
+    <pre><code>// AuthContext.js
+const AuthContext = createContext();
+
+export function AuthProvider({ children }) {
+  const [state, dispatch] = useReducer(authReducer, initialState);
+  return (
+    &lt;AuthContext.Provider value={{ state, dispatch }}&gt;
+      {children}
+    &lt;/AuthContext.Provider&gt;
+  );
+}
+
+// In component
+const { state, dispatch } = useContext(AuthContext);
+dispatch({ type: 'LOGIN', payload: user });</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Advanced Concepts -->
+    <h2>Advanced Concepts</h2>
+
+    <h3>Higher Order Components (HOC)</h3>
+    <p>Function that takes a component and returns an enhanced version.</p>
+    <pre><code>function withAuth(WrappedComponent) {
+  return function EnhancedComponent(props) {
+    const { user } = useAuth();
+    if (!user) return &lt;Login /&gt;;
+    return &lt;WrappedComponent {...props} user={user} /&gt;;
+  };
+}
+
+const ProtectedPage = withAuth(Dashboard);</code></pre>
+
+    <h3>Error Boundaries</h3>
+    <p>Catch JavaScript errors in child component tree.</p>
+    <pre><code>class ErrorBoundary extends React.Component {
+  state = { hasError: false };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return &lt;h1&gt;Something went wrong.&lt;/h1&gt;;
+    }
+    return this.props.children;
+  }
+}</code></pre>
+
+    <h3>Lazy Loading & Suspense</h3>
+    <pre><code>const LazyComponent = React.lazy(() => import('./HeavyComponent'));
+
+function App() {
+  return (
+    &lt;Suspense fallback={&lt;div&gt;Loading...&lt;/div&gt;}&gt;
+      &lt;LazyComponent /&gt;
+    &lt;/Suspense&gt;
+  );
+}</code></pre>
+
+    <h3>Performance Optimization</h3>
+    <ul>
+      <li><code>React.memo</code>: Prevent re-render if props unchanged</li>
+      <li><code>useMemo</code>: Cache expensive computations</li>
+      <li><code>useCallback</code>: Cache functions</li>
+      <li>Code splitting with <code>React.lazy</code></li>
+      <li>Avoid inline functions/objects in render</li>
+    </ul>
+    <pre><code>const MemoizedChild = React.memo(function Child({ onClick }) {
+  return &lt;button onClick={onClick}&gt;Click&lt;/button&gt;;
+});</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Project & Deployment -->
+    <h2>Project & Deployment</h2>
+
+    <h3>Recommended Folder Structure</h3>
+    <pre><code>src/
+  ├── assets/
+  ├── components/
+  │   ├── common/
+  │   └── ui/
+  ├── pages/
+  ├── hooks/
+  ├── context/
+  ├── services/
+  ├── utils/
+  ├── App.js
+  └── index.js</code></pre>
+
+    <h3>API Integration</h3>
+    <pre><code>// services/api.js
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'https://api.example.com',
+});
+
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+export default api;
+
+// Usage
+useEffect(() => {
+  api.get('/users').then(res => setUsers(res.data));
+}, []);</code></pre>
+
+    <h3>Deployment</h3>
+    <p><strong>Vercel / Netlify:</strong> Connect GitHub repo → Auto-deploy on push</p>
+    <pre><code># Build
+npm run build
+
+# Vercel
+vercel --prod
+
+# Netlify
+netlify deploy --prod</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Interview Questions -->
+    <h2>40+ React Interview Questions & Answers</h2>
+
+    <!-- Q1 -->
+    <div class="interview-q">
+      <h4>Q1. What is the Virtual DOM?</h4>
+      <p>A lightweight copy of the real DOM kept in memory. React updates the Virtual DOM first, computes the difference (diffing), and applies only necessary changes to the real DOM.</p>
+      <pre><code>// React reconciles changes efficiently
+setState → Virtual DOM update → Diff → Real DOM patch</code></pre>
+    </div>
+
+    <!-- Q2 -->
+    <div class="interview-q">
+      <h4>Q2. Why is key prop important in lists?</h4>
+      <p>Helps React identify which items changed, added, or removed. Without stable keys, React may re-render entire list inefficiently.</p>
+      <pre><code>{users.map(user => (
+  &lt;User key={user.id} name={user.name} /&gt;
+))}</code></pre>
+    </div>
+
+    <!-- Q3 -->
+    <div class="interview-q">
+      <h4>Q3. What happens when you call setState?</h4>
+      <p>Triggers a re-render. React batches multiple setState calls for performance. In event handlers, updates are async.</p>
+      <pre><code>setCount(count + 1); // count is stale
+setCount(prev => prev + 1); // functional update</code></pre>
+    </div>
+
+    <!-- Q4 -->
+    <div class="interview-q">
+      <h4>Q4. Explain useEffect dependency array.</h4>
+      <p>Controls when effect runs:</p>
+      <ul>
+        <li><code>[]</code>: Run once on mount</li>
+        <li><code>[a, b]</code>: Run on mount + when a or b changes</li>
+        <li>No array: Run after every render</li>
+      </ul>
+      <pre><code>useEffect(() => {
+  fetchData();
+}, [id]);</code></pre>
+    </div>
+
+    <!-- Q5 -->
+    <div class="interview-q">
+      <h4>Q5. When does cleanup function in useEffect run?</h4>
+      <p>Before the component unmounts and before the effect re-runs (if dependencies change).</p>
+      <pre><code>useEffect(() => {
+  const timer = setInterval(() => {}, 1000);
+  return () => clearInterval(timer);
+}, []);</code></pre>
+    </div>
+
+    <!-- Q6 -->
+    <div class="interview-q">
+      <h4>Q6. What is useRef used for?</h4>
+      <p>Two main uses:</p>
+      <ol>
+        <li>Access DOM elements: <code>inputRef.current.focus()</code></li>
+        <li>Persist mutable values across renders without causing re-renders</li>
+      </ol>
+      <pre><code>const countRef = useRef(0);
+countRef.current++; // No re-render</code></pre>
+    </div>
+
+    <!-- Q7 -->
+    <div class="interview-q">
+      <h4>Q7. Difference between useLayoutEffect and useEffect?</h4>
+      <p><code>useLayoutEffect</code>: Runs synchronously after DOM mutations, before paint. Use for DOM measurements. <code>useEffect</code>: Runs after paint.</p>
+    </div>
+
+    <!-- Q8 -->
+    <div class="interview-q">
+      <h4>Q8. How to optimize performance in React?</h4>
+      <p>
+        • Use <code>React.memo</code><br>
+        • <code>useMemo</code> and <code>useCallback</code><br>
+        • Code splitting with <code>React.lazy</code><br>
+        • Avoid inline functions in render<br>
+        • Use production build
+      </p>
+    </div>
+
+    <!-- Q9 -->
+    <div class="interview-q">
+      <h4>Q9. What is React.memo?</h4>
+      <p>Shallow-compares props and skips re-render if they haven't changed.</p>
+      <pre><code>const MyComponent = React.memo(function MyComponent(props) {
+  /* render using props */
+});</code></pre>
+    </div>
+
+    <!-- Q10 -->
+    <div class="interview-q">
+      <h4>Q10. When to use useReducer vs useState?</h4>
+      <p>Use <code>useReducer</code> when:</p>
+      <ul>
+        <li>State logic is complex</li>
+        <li>Next state depends on previous</li>
+        <li>Multiple sub-values</li>
+        <li>Actions are dispatched</li>
+      </ul>
+    </div>
+
+    <!-- Q11 -->
+    <div class="interview-q">
+      <h4>Q11. What are custom hooks?</h4>
+      <p>Reusable functions that encapsulate logic using built-in hooks. Name must start with <code>use</code>.</p>
+      <pre><code>function useFetch(url) {
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    fetch(url).then(res => res.json()).then(setData);
+  }, [url]);
+  return data;
+}</code></pre>
+    </div>
+
+    <!-- Q12 -->
+    <div class="interview-q">
+      <h4>Q12. How does React Router v6 differ from v5?</h4>
+      <p>v6 uses <code>&lt;Routes&gt;</code> and <code>element</code> prop instead of <code>component</code>. No more <code>Switch</code>, <code>exact</code>. Better nesting.</p>
+    </div>
+
+    <!-- Q13 -->
+    <div class="interview-q">
+      <h4>Q13. What is Suspense?</h4>
+      <p>Shows fallback UI while waiting for something (lazy components, data fetching with React 18+).</p>
+      <pre><code>&lt;Suspense fallback={&lt;Spinner /&gt;}&gt;
+  &lt;LazyDashboard /&gt;
+&lt;/Suspense&gt;</code></pre>
+    </div>
+
+    <!-- Q14 -->
+    <div class="interview-q">
+      <h4>Q14. What are Error Boundaries?</h4>
+      <p>Class components that catch errors in child tree using <code>static getDerivedStateFromError</code> and <code>componentDidCatch</code>.</p>
+    </div>
+
+    <!-- Q15 -->
+    <div class="interview-q">
+      <h4>Q15. How to prevent memory leaks in React?</h4>
+      <p>Cleanup in <code>useEffect</code>: cancel API calls, clear intervals/timers, unsubscribe from events.</p>
+    </div>
+
+    <!-- Q16 -->
+    <div class="interview-q">
+      <h4>Q16. What is prop drilling? How to avoid?</h4>
+      <p>Passing props through many layers. Avoid with Context API or state management.</p>
+    </div>
+
+    <!-- Q17 -->
+    <div class="interview-q">
+      <h4>Q17. What is the difference between state and props?</h4>
+      <table>
+        <tr><th>State</th><th>Props</th></tr>
+        <tr><td>Mutable</td><td>Immutable</td></tr>
+        <tr><td>Owned by component</td><td>Passed from parent</td></tr>
+        <tr><td>Triggers re-render</td><td>Received on render</td></tr>
+      </table>
+    </div>
+
+    <!-- Q18 -->
+    <div class="interview-q">
+      <h4>Q18. Explain React reconciliation.</h4>
+      <p>Process of comparing old and new Virtual DOM trees and updating real DOM efficiently using heuristics (same type, key).</p>
+    </div>
+
+    <!-- Q19 -->
+    <div class="interview-q">
+      <h4>Q19. What is useImperativeHandle?</h4>
+      <p>Customizes the instance value exposed when using <code>ref</code> with <code>forwardRef</code>.</p>
+    </div>
+
+    <!-- Q20 -->
+    <div class="interview-q">
+      <h4>Q20. What is React Fiber?</h4>
+      <p>React’s reimplementation of the core algorithm. Enables incremental rendering, prioritization, and pausing work.</p>
+    </div>
+
+    <!-- Q21 -->
+    <div class="interview-q">
+      <h4>Q21. How to handle forms in React?</h4>
+      <p>Controlled components: value bound to state. Or uncontrolled with <code>useRef</code>.</p>
+      <pre><code>function Form() {
+  const [email, setEmail] = useState('');
+  return &lt;input value={email} onChange={e => setEmail(e.target.value)} /&gt;;
+}</code></pre>
+    </div>
+
+    <!-- Q22 -->
+    <div class="interview-q">
+      <h4>Q22. What is lifting state up?</h4>
+      <p>Moving state to the closest common ancestor so multiple components can share it.</p>
+    </div>
+
+    <!-- Q23 -->
+    <div class="interview-q">
+      <h4>Q23. What are portals?</h4>
+      <p>Render children into a DOM node outside the parent component’s DOM hierarchy (e.g., modals).</p>
+      <pre><code>ReactDOM.createPortal(&lt;Modal /&gt;, document.getElementById('modal-root'));</code></pre>
+    </div>
+
+    <!-- Q24 -->
+    <div class="interview-q">
+      <h4>Q24. What is the difference between useState and useReducer?</h4>
+      <p><code>useState</code> is simpler. <code>useReducer</code> is better for complex state transitions and when next state depends on previous.</p>
+    </div>
+
+    <!-- Q25 -->
+    <div class="interview-q">
+      <h4>Q25. How to debug performance issues?</h4>
+      <p>Use React DevTools Profiler, Chrome Performance tab, <code>why-did-you-render</code> library.</p>
+    </div>
+
+    <!-- Q26 -->
+    <div class="interview-q">
+      <h4>Q26. What is code splitting?</h4>
+      <p>Splitting bundle into smaller chunks loaded on demand. Reduces initial load time.</p>
+      <pre><code>const LazyPage = React.lazy(() => import('./Page'));</code></pre>
+    </div>
+
+    <!-- Q27 -->
+    <div class="interview-q">
+      <h4>Q27. What are React Hooks rules?</h4>
+      <p>
+        1. Only call hooks at the top level<br>
+        2. Only call hooks from React functions<br>
+        3. Don't call hooks inside loops, conditions, or nested functions
+      </p>
+    </div>
+
+    <!-- Q28 -->
+    <div class="interview-q">
+      <h4>Q28. What is the Context API?</h4>
+      <p>Provides a way to pass data through the component tree without prop drilling.</p>
+    </div>
+
+    <!-- Q29 -->
+    <div class="interview-q">
+      <h4>Q29. When should you not use index as key?</h4>
+      <p>When list items can change order, be added/removed. Index causes incorrect reconciliation.</p>
+    </div>
+
+    <!-- Q30 -->
+    <div class="interview-q">
+      <h4>Q30. What is useDeferredValue?</h4>
+      <p>Defers updating a value until more urgent updates are done (React 18).</p>
+    </div>
+
+    <!-- Q31 -->
+    <div class="interview-q">
+      <h4>Q31. What is useTransition?</h4>
+      <p>Marks updates as non-urgent. Allows keeping UI responsive (React 18).</p>
+      <pre><code>const [isPending, startTransition] = useTransition();
+startTransition(() => {
+  setTab('heavy');
+});</code></pre>
+    </div>
+
+    <!-- Q32 -->
+    <div class="interview-q">
+      <h4>Q32. How to optimize images in React?</h4>
+      <p>Use <code>&lt;img loading="lazy"&gt;</code>, WebP format, responsive images with <code>srcset</code>, or libraries like <code>react-lazy-load-image-component</code>.</p>
+    </div>
+
+    <!-- Q33 -->
+    <div class="interview-q">
+      <h4>Q33. What is Server Components (RSC)?</h4>
+      <p>React 18+ feature (Next.js). Components rendered on server, no client JS. Reduces bundle size.</p>
+    </div>
+
+    <!-- Q34 -->
+    <div class="interview-q">
+      <h4>Q34. What is the difference between client and server components?</h4>
+      <p>Client: Runs in browser, can use hooks/state. Server: Runs on server, no interactivity, faster initial load.</p>
+    </div>
+
+    <!-- Q35 -->
+    <div class="interview-q">
+      <h4>Q35. How to handle authentication in React?</h4>
+      <p>Store JWT in httpOnly cookie or memory. Use protected routes. Refresh token flow.</p>
+    </div>
+
+    <!-- Q36 -->
+    <div class="interview-q">
+      <h4>Q36. What is React Query?</h4>
+      <p>Library for managing server state: caching, refetching, pagination. Alternative to Redux for API data.</p>
+    </div>
+
+    <!-- Q37 -->
+    <div class="interview-q">
+      <h4>Q37. What is the use of useId hook?</h4>
+      <p>Generates unique IDs for accessibility (labels, aria attributes). Works with SSR.</p>
+      <pre><code>const id = useId();
+&lt;label htmlFor={id}&gt;Name&lt;/label&gt;
+&lt;input id={id} /&gt;</code></pre>
+    </div>
+
+    <!-- Q38 -->
+    <div class="interview-q">
+      <h4>Q38. How to test React components?</h4>
+      <p>Use Jest + React Testing Library. Test behavior, not implementation.</p>
+      <pre><code>render(&lt;Button /&gt;);
+expect(screen.getByText('Click')).toBeInTheDocument();</code></pre>
+    </div>
+
+    <!-- Q39 -->
+    <div class="interview-q">
+      <h4>Q39. What is the difference between controlled and uncontrolled components?</h4>
+      <p>Controlled: Value managed by React state. Uncontrolled: Value managed by DOM (use <code>ref</code>).</p>
+    </div>
+
+    <!-- Q40 -->
+    <div class="interview-q">
+      <h4>Q40. How to deploy a React app?</h4>
+      <p>Build with <code>npm run build</code>. Deploy <code>build/</code> folder to Vercel, Netlify, AWS S3, or any static host.</p>
+    </div>
+
+    <!-- Key Takeaways -->
+    <h2 class="key-takeaways">Key Takeaways</h2>
+    <ul>
+      <li>Always cleanup in <code>useEffect</code></li>
+      <li>Use <code>React.memo</code>, <code>useMemo</code>, <code>useCallback</code> wisely</li>
+      <li>Prefer functional components and hooks</li>
+      <li>Code split heavy components</li>
+      <li>Use stable keys in lists</li>
+      <li>Handle errors with Error Boundaries</li>
+      <li>Protect routes and manage auth state</li>
+      <li>Test behavior, not implementation</li>
+    </ul>
+
+    <!-- Next Steps -->
+    <h2 class="next-steps">Next Steps for React Mastery</h2>
+    <ol>
+      <li>Build 3 complex apps (e-commerce, dashboard, social)</li>
+      <li>Learn TypeScript with React</li>
+      <li>Master React Query or RTK Query</li>
+      <li>Study Next.js 14+ (App Router, Server Components)</li>
+      <li>Implement CI/CD and testing (Jest, Cypress)</li>
+      <li>Optimize bundle size and Lighthouse scores</li>
+      <li>Contribute to open-source React projects</li>
+      <li>Prepare for system design interviews</li>
+    </ol>
+
+  </div>
+</body>
+</html>
