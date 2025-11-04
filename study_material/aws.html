@@ -60,6 +60,7 @@
     }
     .cover { text-align: center; padding: 5rem 0; }
     .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .highlight { background: rgba(78, 201, 176, 0.15); padding: 1.3rem; border-radius: 8px; margin: 1.5rem 0; }
     .interview-q {
       background: #2d2d30;
       padding: 1.5rem;
@@ -92,16 +93,257 @@
       <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
       <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
         For 2+ Year Developers | Real-World Deployment + Interview Prep<br>
-        EC2 → S3 → Lambda → VPC → CI/CD → 40 Full Scenario-Based Qs
+        EC2 → S3 → Lambda → VPC → CI/CD → 40+ Scenario-Based Qs
       </p>
     </div>
 
-    <!-- [Previous sections: Overview, Compute, Storage, etc. - Omitted for brevity in this response] -->
-    <!-- Full content up to "40 Interview Questions" -->
+    <!-- AWS Overview -->
+    <h2>AWS Overview</h2>
+
+    <h3>What is Cloud Computing?</h3>
+    <p>Delivery of on-demand computing resources over the internet. Pay-as-you-go. Eliminates upfront costs and maintenance.</p>
+
+    <h3>Cloud Service Models</h3>
+    <table>
+      <tr><th>Model</th><th>You Manage</th><th>AWS Manages</th></tr>
+      <tr><td>IaaS</td><td>OS, Apps, Data</td><td>Hardware, Virtualization</td></tr>
+      <tr><td>PaaS</td><td>Apps, Data</td><td>OS, Runtime, Middleware</td></tr>
+      <tr><td>SaaS</td><td>Data</td><td>Everything</td></tr>
+    </table>
+
+    <h3>AWS Global Infrastructure</h3>
+    <ul>
+      <li><strong>Regions</strong>: Isolated geographic areas (e.g., <code>us-east-1</code>)</li>
+      <li><strong>Availability Zones (AZs)</strong>: Data centers within a region (e.g., <code>us-east-1a</code>)</li>
+      <li><strong>Edge Locations</strong>: For CloudFront CDN caching</li>
+    </ul>
+
+    <h3>Shared Responsibility Model</h3>
+    <p><strong>AWS</strong>: Security <em>of</em> the cloud (hardware, facilities)<br>
+    <strong>You</strong>: Security <em>in</em> the cloud (IAM, data, OS patches)</p>
+
+    <h3>Key AWS Service Categories</h3>
+    <ul>
+      <li>Compute: EC2, Lambda, ECS</li>
+      <li>Storage: S3, EBS, EFS</li>
+      <li>Database: RDS, DynamoDB</li>
+      <li>Networking: VPC, Route 53</li>
+      <li>Security: IAM, KMS</li>
+      <li>DevOps: CodePipeline, CloudFormation</li>
+    </ul>
 
     <div class="divider"></div>
 
-    <!-- 40 FULL INTERVIEW QUESTIONS -->
+    <!-- Compute -->
+    <h2>Compute</h2>
+
+    <h3>EC2 (Elastic Compute Cloud)</h3>
+    <ul>
+      <li>Virtual servers in the cloud</li>
+      <li>Instance types: <code>t3.micro</code> (free tier), <code>m5.large</code>, <code>c6g</code> (ARM)</li>
+      <li>Key pairs: SSH access</li>
+      <li>EBS: Block storage (SSD/HDD)</li>
+      <li>AMI: Pre-configured images</li>
+    </ul>
+    <pre><code># Launch via CLI
+aws ec2 run-instances --image-id ami-0abcdef1234567890 --instance-type t3.micro --key-name MyKeyPair</code></pre>
+
+    <h3>Elastic Beanstalk</h3>
+    <p>PaaS for deploying apps. Upload code → auto-provisions EC2, ELB, ASG.</p>
+    <pre><code>eb init -p nodejs my-app
+eb create prod-env
+eb deploy</code></pre>
+
+    <h3>Lambda</h3>
+    <p>Serverless compute. Runs code in response to events.</p>
+    <ul>
+      <li>Triggers: API Gateway, S3, CloudWatch</li>
+      <li>Execution: Stateless, < 15 min timeout</li>
+      <li>Use cases: Image resize, cron jobs, API backend</li>
+    </ul>
+    <pre><code>exports.handler = async (event) => {
+  return { statusCode: 200, body: 'Hello from Lambda!' };
+};</code></pre>
+
+    <h3>Auto Scaling Groups (ASG)</h3>
+    <p>Automatically adjusts EC2 instances based on CPU, traffic.</p>
+    <pre><code>Min: 1, Max: 10, Desired: 2
+Scale out: CPU > 70%
+Scale in: CPU < 30%</code></pre>
+
+    <h3>Elastic Load Balancer (ELB)</h3>
+    <p>Distributes traffic across multiple targets.</p>
+    <ul>
+      <li>ALB: Layer 7 (HTTP/HTTPS), path-based routing</li>
+      <li>NLB: Layer 4 (TCP), ultra-low latency</li>
+      <li>Health checks: <code>/health</code></li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <!-- Storage -->
+    <h2>Storage</h2>
+
+    <h3>S3 (Simple Storage Service)</h3>
+    <ul>
+      <li>Object storage: <code>bucket-name.s3.amazonaws.com/object.jpg</code></li>
+      <li>99.999999999% durability</li>
+      <li>Versioning, lifecycle policies, static website hosting</li>
+    </ul>
+    <pre><code># Make bucket public
+aws s3api put-bucket-policy --bucket my-site --policy file://policy.json
+
+# policy.json
+{
+  "Statement": [{
+    "Effect": "Allow",
+    "Principal": "*",
+    "Action": "s3:GetObject",
+    "Resource": "arn:aws:s3:::my-site/*"
+  }]
+}</code></pre>
+
+    <h3>EBS vs EFS vs S3</h3>
+    <table>
+      <tr><th>Service</th><th>Type</th><th>Use Case</th></tr>
+      <tr><td>EBS</td><td>Block</td><td>EC2 root volume, databases</td></tr>
+      <tr><td>EFS</td><td>File</td><td>Shared file system (NFS)</td></tr>
+      <tr><td>S3</td><td>Object</td><td>Static assets, backups</td></tr>
+    </table>
+
+    <h3>Glacier</h3>
+    <p>Low-cost archival storage. Retrieval: minutes to hours.</p>
+
+    <h3>CloudFront</h3>
+    <p>CDN for low latency. Caches content at edge locations.</p>
+    <pre><code>Origin: S3 bucket
+Behavior: /images/* → cache 1h</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Databases -->
+    <h2>Databases</h2>
+
+    <h3>RDS</h3>
+    <p>Managed relational DB: MySQL, PostgreSQL, SQL Server.</p>
+    <ul>
+      <li>Automated backups, patching, failover</li>
+      <li>Multi-AZ for HA</li>
+    </ul>
+
+    <h3>DynamoDB</h3>
+    <p>Fully managed NoSQL. Key-value + document store.</p>
+    <ul>
+      <li>Single-digit ms latency</li>
+      <li>Provisioned or on-demand capacity</li>
+      <li>GSI, LSI for querying</li>
+    </ul>
+
+    <h3>Aurora</h3>
+    <p>MySQL/PostgreSQL-compatible. Up to 5x faster than standard.</p>
+
+    <div class="divider"></div>
+
+    <!-- Networking -->
+    <h2>Networking</h2>
+
+    <h3>VPC</h3>
+    <p>Isolated virtual network.</p>
+    <ul>
+      <li>Subnets: Public (IGW), Private (NAT)</li>
+      <li>Route tables: 0.0.0.0/0 → IGW</li>
+      <li>Security Groups: Stateful firewall</li>
+      <li>NACLs: Stateless</li>
+    </ul>
+
+    <h3>Route 53</h3>
+    <p>DNS + health checks. Supports alias records to AWS resources.</p>
+
+    <h3>API Gateway</h3>
+    <p>Build, deploy, manage APIs. Integrates with Lambda, EC2.</p>
+
+    <div class="divider"></div>
+
+    <!-- Security -->
+    <h2>Security & Identity</h2>
+
+    <h3>IAM</h3>
+    <ul>
+      <li>Users, Groups, Roles, Policies</li>
+      <li>Policy: JSON document defining permissions</li>
+      <li>Role: Assumed by EC2, Lambda</li>
+    </ul>
+    <pre><code>{
+  "Effect": "Allow",
+  "Action": "s3:*",
+  "Resource": "arn:aws:s3:::my-bucket/*"
+}</code></pre>
+
+    <h3>IAM Best Practices</h3>
+    <ul>
+      <li>Least privilege</li>
+      <li>Enable MFA for root</li>
+      <li>Use roles, not access keys</li>
+      <li>Rotate keys</li>
+    </ul>
+
+    <h3>KMS</h3>
+    <p>Manage encryption keys. Used by S3, EBS, RDS.</p>
+
+    <h3>Secrets Manager vs Parameter Store</h3>
+    <table>
+      <tr><th>Feature</th><th>Secrets Manager</th><th>Parameter Store</th></tr>
+      <tr><td>Rotation</td><td>Automatic</td><td>Manual</td></tr>
+      <tr><td>Cost</td><td>Paid</td><td>Free tier</td></tr>
+    </table>
+
+    <div class="divider"></div>
+
+    <!-- DevOps & Deployment -->
+    <h2>DevOps & Deployment</h2>
+
+    <h3>CodePipeline</h3>
+    <p>CI/CD pipeline: Source → Build → Deploy</p>
+    <pre><code>Source: GitHub
+Build: CodeBuild (Node.js)
+Deploy: Elastic Beanstalk</code></pre>
+
+    <h3>CloudFormation</h3>
+    <p>IaC. Define infrastructure in YAML/JSON.</p>
+    <pre><code>Resources:
+  MyBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: my-app-prod</code></pre>
+
+    <h3>CloudWatch</h3>
+    <p>Monitoring: Logs, Metrics, Alarms.</p>
+    <pre><code>Alarm: CPU > 80% → Notify SNS</code></pre>
+
+    <h3>CloudTrail</h3>
+    <p>Audit log of API calls.</p>
+
+    <div class="divider"></div>
+
+    <!-- Cost Management -->
+    <h2>Cost Management</h2>
+
+    <h3>Pricing Models</h3>
+    <ul>
+      <li>On-Demand: Pay per hour</li>
+      <li>Reserved: 1-3 year commitment</li>
+      <li>Spot: Bid on spare capacity</li>
+    </ul>
+
+    <h3>Cost Explorer</h3>
+    <p>Visualize spend by service, region, tag.</p>
+
+    <h3>Trusted Advisor</h3>
+    <p>Best practice checks: open ports, MFA, cost optimization.</p>
+
+    <div class="divider"></div>
+
+        <!-- 40 FULL INTERVIEW QUESTIONS -->
     <h2>40 Full AWS Interview Questions & Answers</h2>
 
     <!-- Q1 -->
@@ -413,29 +655,88 @@ SSL: ACM certificate</code></pre>
   - Deploy: Elastic Beanstalk</code></pre>
     </div>
 
+    <div class="divider"></div>
+
+    <!-- Best Practices -->
+    <h2>Best Practices</h2>
+
+    <ul>
+      <li><strong>HA</strong>: Multi-AZ, ASG, ELB</li>
+      <li><strong>Security</strong>: IAM roles, least privilege, MFA</li>
+      <li><strong>VPC</strong>: Public/private subnets, NACLs</li>
+      <li><strong>Backup</strong>: RDS snapshots, S3 versioning</li>
+      <li><strong>IaC</strong>: CloudFormation/Terraform</li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <!-- Real Project: MERN Stack on AWS -->
+    <h2>Real Project: Deploy MERN Stack on AWS</h2>
+
+    <h3>Architecture</h3>
+    <pre><code>Frontend → S3 + CloudFront[](https://app.example.com)
+Backend  → Elastic Beanstalk (Node.js)
+Database → RDS (MongoDB or PostgreSQL)
+Domain   → Route 53
+SSL      → ACM
+CI/CD    → CodePipeline → GitHub</code></pre>
+
+    <h3>Steps</h3>
+    <ol>
+      <li>Create VPC with public/private subnets</li>
+      <li>Launch RDS in private subnet</li>
+      <li>Deploy backend to Beanstalk</li>
+      <li>Build React → upload to S3</li>
+      <li>Configure CloudFront with ACM SSL</li>
+      <li>Point Route 53 to CloudFront</li>
+      <li>Set up CodePipeline</li>
+    </ol>
+
+    <div class="divider"></div>
+
+    <!-- Extra Topics -->
+    <h2>Extra Topics</h2>
+
+    <h3>AWS CLI</h3>
+    <pre><code>aws s3 ls
+aws ec2 describe-instances
+aws configure</code></pre>
+
+    <h3>AWS SDK (Node.js)</h3>
+    <pre><code>const s3 = new AWS.S3();
+await s3.upload({ Bucket: 'my-bucket', Key: 'file.txt', Body: data }).promise();</code></pre>
+
+    <h3>VPC Peering</h3>
+    <p>Connect two VPCs privately.</p>
+
+    <h3>CloudFront Invalidation</h3>
+    <pre><code>aws cloudfront create-invalidation --distribution-id XYZ --paths "/*"</code></pre>
+
+    <div class="divider"></div>
+
     <!-- Key Takeaways -->
     <h2 class="key-takeaways">Key Takeaways</h2>
     <ul>
-      <li>Use IAM roles, never long-term keys</li>
-      <li>Design for Multi-AZ and auto-scaling</li>
-      <li>S3 + CloudFront for static sites</li>
-      <li>Automate everything with IaC</li>
-      <li>Monitor with CloudWatch, audit with CloudTrail</li>
-      <li>Secure with least privilege and encryption</li>
-      <li>Optimize costs with right-sizing and lifecycle policies</li>
+      <li>Always use IAM roles, not keys</li>
+      <li>Design for Multi-AZ HA</li>
+      <li>Use S3 + CloudFront for static sites</li>
+      <li>Automate with CloudFormation</li>
+      <li>Monitor with CloudWatch</li>
+      <li>Secure with least privilege</li>
+      <li>Optimize costs with right-sizing</li>
     </ul>
 
     <!-- Next Steps -->
     <h2 class="next-steps">Next Steps: DevOps + AWS Certification Roadmap</h2>
     <ol>
-      <li>AWS Certified Cloud Practitioner</li>
-      <li>AWS Certified Developer Associate</li>
+      <li>Get AWS Certified Cloud Practitioner</li>
+      <li>Then Developer Associate</li>
       <li>Build 3 full-stack apps on AWS</li>
-      <li>Master Terraform + CloudFormation</li>
-      <li>Learn ECS, EKS, Fargate</li>
-      <li>Implement blue/green & canary deployments</li>
+      <li>Master Terraform</li>
+      <li>Learn ECS/EKS</li>
+      <li>Implement blue/green deployments</li>
       <li>Study Well-Architected Framework</li>
-      <li>Aim for Solutions Architect Associate</li>
+      <li>Aim for Solutions Architect</li>
     </ol>
 
   </div>
