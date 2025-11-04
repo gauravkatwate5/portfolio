@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Docker Developer & Deployment Handbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>Docker</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --orange: #ce9178;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 3rem; color: var(--teal); text-align: center; margin: 2.5rem 0; }
+    h2 { font-size: 2rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 3rem 0 1.5rem; }
+    h3 { font-size: 1.6rem; color: var(--blue); margin: 2rem 0 1rem; }
+    h4 { font-size: 1.3rem; color: var(--purple); margin: 1.5rem 0 0.8rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+      font-size: 0.95rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 5rem 0; }
+    .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .highlight { background: rgba(78, 201, 176, 0.15); padding: 1.3rem; border-radius: 8px; margin: 1.5rem 0; }
+    .interview-q {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #404040;
+    }
+    .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
+    .interview-q pre { margin-top: 1rem; }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      border: 1px solid #404040;
+      padding: 0.8rem;
+      text-align: left;
+    }
+    th { background: #2d2d30; color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>Docker Developer & Deployment Handbook</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
+        For 2+ Year MERN/Backend Developers | Docker → Compose → CI/CD → 40 Full Interview Qs
+      </p>
+    </div>
+
+    <!-- 1. Docker Basics -->
+    <h2>Docker Basics</h2>
+
+    <h3>What is Docker?</h3>
+    <p>Docker is a platform to develop, ship, and run applications inside lightweight, portable <strong>containers</strong>. It ensures consistency across environments (dev, staging, prod).</p>
+
+    <h3>Why Use Docker?</h3>
+    <ul>
+      <li>Eliminates “it works on my machine”</li>
+      <li>Fast, consistent deployments</li>
+      <li>Lightweight vs VMs</li>
+      <li>Easy scaling & orchestration</li>
+      <li>CI/CD integration</li>
+    </ul>
+
+    <h3>VM vs Container</h3>
+    <table>
+      <tr><th>Virtual Machine</th><th>Container</th></tr>
+      <tr><td>Heavy (GBs)</td><td>Lightweight (MBs)</td></tr>
+      <tr><td>Full OS</td><td>Shares host kernel</td></tr>
+      <tr><td>Minutes to start</td><td>Seconds</td></tr>
+      <tr><td>Hypervisor</td><td>Docker Engine</td></tr>
+    </table>
+
+    <h3>Docker Architecture</h3>
+    <ul>
+      <li><strong>Client</strong>: CLI (<code>docker</code>)</li>
+      <li><strong>Daemon</strong>: Background service (<code>dockerd</code>)</li>
+      <li><strong>Images</strong>: Read-only templates</li>
+      <li><strong>Containers</strong>: Runnable instances</li>
+      <li><strong>Volumes</strong>: Persistent storage</li>
+      <li><strong>Registry</strong>: Docker Hub, ECR</li>
+    </ul>
+
+    <h3>Installation</h3>
+    <pre><code># Linux (Ubuntu)
+sudo apt update && sudo apt install docker.io
+sudo usermod -aG docker $USER
+
+# Verify
+docker --version
+docker run hello-world</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 2. Core Concepts -->
+    <h2>Core Docker Concepts</h2>
+
+    <h3>Images</h3>
+    <p>Immutable, layered filesystem snapshots. Each instruction in Dockerfile creates a layer (cached).</p>
+    <pre><code>docker pull nginx:alpine
+docker images</code></pre>
+
+    <h3>Containers</h3>
+    <pre><code>docker run -d --name web nginx
+docker ps           # running
+docker ps -a        # all
+docker stop web
+docker rm web</code></pre>
+
+    <h3>Dockerfile</h3>
+    <pre><code>FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+EXPOSE 3000
+CMD ["node", "server.js"]</code></pre>
+
+    <h3>Build & Run</h3>
+    <pre><code>docker build -t myapp:latest .
+docker run -p 3000:3000 --name myapp-container myapp</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 3. Volumes & Networking -->
+    <h2>Volumes & Networking</h2>
+
+    <h3>Volumes</h3>
+    <ul>
+      <li><strong>Named</strong>: Reusable, managed by Docker</li>
+      <li><strong>Anonymous</strong>: Auto-created</li>
+      <li><strong>Bind Mount</strong>: Host path → container</li>
+    </ul>
+    <pre><code>docker volume create app_data
+docker run -v app_data:/data myapp
+docker run -v $(pwd):/app myapp  # bind</code></pre>
+
+    <h3>Networking</h3>
+    <ul>
+      <li><code>bridge</code>: Default, isolated</li>
+      <li><code>host</code>: Shares host network</li>
+      <li><code>none</code>: No network</li>
+    </ul>
+    <pre><code>docker network ls
+docker run --network host myapp</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 4. Docker Compose -->
+    <h2>Docker Compose</h2>
+
+    <h3>docker-compose.yml</h3>
+    <pre><code>version: "3.8"
+services:
+  backend:
+    build: ./server
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/mydb
+    depends_on:
+      - mongo
+  frontend:
+    build: ./client
+    ports:
+      - "3000:3000"
+  mongo:
+    image: mongo:6
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+volumes:
+  mongo_data:</code></pre>
+
+    <h3>Commands</h3>
+    <pre><code>docker-compose up -d
+docker-compose logs -f
+docker-compose down -v</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 5. Advanced -->
+    <h2>Advanced Docker</h2>
+
+    <h3>Multi-Stage Build</h3>
+    <pre><code>FROM node:18 AS builder
+WORKDIR /app
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=builder /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]</code></pre>
+
+    <h3>.dockerignore</h3>
+    <pre><code>node_modules
+.git
+.env
+npm-debug.log</code></pre>
+
+    <h3>Health Checks</h3>
+    <pre><code>HEALTHCHECK --interval=30s --timeout=3s \
+  CMD curl -f http://localhost/health || exit 1</code></pre>
+
+    <h3>Security</h3>
+    <ul>
+      <li>Run as non-root: <code>USER node</code></li>
+      <li>Scan images: <code>trivy image myapp</code></li>
+      <li>Use official base images</li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <!-- 6. CI/CD -->
+    <h2>Docker in CI/CD</h2>
+
+    <h3>GitHub Actions</h3>
+    <pre><code>name: CI/CD
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build & Push
+        run: |
+          docker build -t gaurav/myapp:${{ github.sha }} .
+          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+          docker push gaurav/myapp:${{ github.sha }}</code></pre>
+
+    <h3>Push to ECR</h3>
+    <pre><code>aws ecr get-login-password | docker login --username AWS --password-stdin 123456789.dkr.ecr.region.amazonaws.com
+docker tag myapp:latest 123456789.dkr.ecr.region.amazonaws.com/myapp:latest
+docker push 123456789.dkr.ecr.region.amazonaws.com/myapp:latest</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 7. 40 Interview Questions -->
+    <h2>40 Full Docker Interview Questions & Answers</h2>
+
+    <!-- Q1 -->
+    <div class="interview-q">
+      <h4>Q1. What is Docker and why is it lightweight?</h4>
+      <p>Docker uses OS-level virtualization (containers) that share the host kernel, unlike VMs which run a full guest OS. This makes containers start in seconds and use MBs of RAM.</p>
+      <pre><code>Container: App + Dependencies + Minimal OS
+VM: App + Full Guest OS + Hypervisor</code></pre>
+    </div>
+
+    <!-- Q2 -->
+    <div class="interview-q">
+      <h4>Q2. Difference between Image and Container?</h4>
+      <p><strong>Image</strong>: Immutable template (like class).<br>
+      <strong>Container</strong>: Running instance of image (like object).</p>
+      <pre><code>docker build → image
+docker run → container</code></pre>
+    </div>
+
+    <!-- Q3 -->
+    <div class="interview-q">
+      <h4>Q3. What is a Dockerfile?</h4>
+      <p>Text file with instructions to build a Docker image. Each line creates a cached layer.</p>
+      <pre><code>FROM, RUN, COPY, EXPOSE, CMD</code></pre>
+    </div>
+
+    <!-- Q4 -->
+    <div class="interview-q">
+      <h4>Q4. CMD vs ENTRYPOINT?</h4>
+      <table>
+        <tr><th>CMD</th><th>ENTRYPOINT</th></tr>
+        <tr><td>Default command</td><td>Fixed command</td></tr>
+        <tr><td>Overridable</td><td>Not easily overridden</td></tr>
+        <tr><td><code>["npm", "start"]</code></td><td><code>["node", "server.js"]</code></td></tr>
+      </table>
+    </div>
+
+    <!-- Q5 -->
+    <div class="interview-q">
+      <h4>Q5. How to persist data?</h4>
+      <p>Use <strong>volumes</strong> or <strong>bind mounts</strong>. Data survives container removal.</p>
+      <pre><code>docker run -v db_data:/data/db mongo</code></pre>
+    </div>
+
+    <!-- Q6 -->
+    <div class="interview-q">
+      <h4>Q6. How do containers communicate?</h4>
+      <p>Via Docker networks. Containers on same user-defined network can use service names as DNS.</p>
+      <pre><code>backend → http://mongo:27017</code></pre>
+    </div>
+
+    <!-- Q7 -->
+    <div class="interview-q">
+      <h4>Q7. What is Docker Compose?</h4>
+      <p>Tool to define and run multi-container apps using YAML. Manages networks, volumes, dependencies.</p>
+    </div>
+
+    <!-- Q8 -->
+    <div class="interview-q">
+      <h4>Q8. Explain multi-stage builds.</h4>
+      <p>Reduce image size by building in stages. Final stage copies only artifacts.</p>
+      <pre><code>Stage 1: Build app
+Stage 2: Copy to slim runtime</code></pre>
+    </div>
+
+    <!-- Q9 -->
+    <div class="interview-q">
+      <h4>Q9. How to connect Docker to AWS ECS?</h4>
+      <p>Push image to ECR → Create ECS Task Definition → Run as Fargate or EC2 service.</p>
+    </div>
+
+    <!-- Q10 -->
+    <div class="interview-q">
+      <h4>Q10. How to optimize Dockerfile?</h4>
+      <ul>
+        <li>Use <code>.dockerignore</code></li>
+        <li>Combine RUN commands</li>
+        <li>Copy only needed files</li>
+        <li>Use alpine base images</li>
+        <li>Leverage cache (COPY package.json first)</li>
+      </ul>
+    </div>
+
+    <!-- Q11 -->
+    <div class="interview-q">
+      <h4>Q11. What is .dockerignore?</h4>
+      <p>Excludes files from build context (like .gitignore). Speeds up build.</p>
+    </div>
+
+    <!-- Q12 -->
+    <div class="interview-q">
+      <h4>Q12. How to view container logs?</h4>
+      <pre><code>docker logs -f container_name</code></pre>
+    </div>
+
+    <!-- Q13 -->
+    <div class="interview-q">
+      <h4>Q13. What is docker inspect?</h4>
+      <p>Returns low-level JSON info about container/image.</p>
+      <pre><code>docker inspect myapp</code></pre>
+    </div>
+
+    <!-- Q14 -->
+    <div class="interview-q">
+      <h4>Q14. How to tag images?</h4>
+      <pre><code>docker tag myapp gaurav/myapp:v1.2.0</code></pre>
+    </div>
+
+    <!-- Q15 -->
+    <div class="interview-q">
+      <h4>Q15. What is the default network?</h4>
+      <p><code>bridge</code> – isolated network for containers on same host.</p>
+    </div>
+
+    <!-- Q16 -->
+    <div class="interview-q">
+      <h4>Q16. How to clean up Docker?</h4>
+      <pre><code>docker system prune -a  # remove all unused</code></pre>
+    </div>
+
+    <!-- Q17 -->
+    <div class="interview-q">
+      <h4>Q17. What is a bind mount?</h4>
+      <p>Maps host directory to container path. Great for development.</p>
+      <pre><code>-v /host/path:/container/path</code></pre>
+    </div>
+
+    <!-- Q18 -->
+    <div class="interview-q">
+      <h4>Q18. How to run container in detached mode?</h4>
+      <pre><code>docker run -d myapp</code></pre>
+    </div>
+
+    <!-- Q19 -->
+    <div class="interview-q">
+      <h4>Q19. What is Docker Hub?</h4>
+      <p>Public registry for images. Push/pull with <code>docker push</code>, <code>docker pull</code>.</p>
+    </div>
+
+    <!-- Q20 -->
+    <div class="interview-q">
+      <h4>Q20. How to override CMD?</h4>
+      <pre><code>docker run myapp npm test</code></pre>
+    </div>
+
+    <!-- Q21 -->
+    <div class="interview-q">
+      <h4>Q21. What is the purpose of EXPOSE?</h4>
+      <p>Documents which port the container listens on. Does not publish.</p>
+    </div>
+
+    <!-- Q22 -->
+    <div class="interview-q">
+      <h4>Q22. How to copy files to container?</h4>
+      <pre><code>docker cp file.txt mycontainer:/app/</code></pre>
+    </div>
+
+    <!-- Q23 -->
+    <div class="interview-q">
+      <h4>Q23. What is docker exec?</h4>
+      <p>Run command in running container.</p>
+      <pre><code>docker exec -it myapp sh</code></pre>
+    </div>
+
+    <!-- Q24 -->
+    <div class="interview-q">
+      <h4>Q24. How to limit container resources?</h4>
+      <pre><code>--memory="512m" --cpus="1"</code></pre>
+    </div>
+
+    <!-- Q25 -->
+    <div class="interview-q">
+      <h4>Q25. What is a Docker layer?</h4>
+      <p>Each Dockerfile instruction creates a cached layer. Rebuild uses cache if unchanged.</p>
+    </div>
+
+    <!-- Q26 -->
+    <div class="interview-q">
+      <h4>Q26. How to use environment variables?</h4>
+      <pre><code>-e NODE_ENV=production
+--env-file .env</code></pre>
+    </div>
+
+    <!-- Q27 -->
+    <div class="interview-q">
+      <h4>Q27. What is Docker Swarm?</h4>
+      <p>Native clustering and orchestration for Docker (predecessor to Kubernetes).</p>
+    </div>
+
+    <!-- Q28 -->
+    <div class="interview-q">
+      <h4>Q28. How to restart container on failure?</h4>
+      <pre><code>--restart unless-stopped</code></pre>
+    </div>
+
+    <!-- Q29 -->
+    <div class="interview-q">
+      <h4>Q29. What is the difference between COPY and ADD?</h4>
+      <p><strong>COPY</strong>: Only local files.<br>
+      <strong>ADD</strong>: Can fetch URLs, extract tar.</p>
+    </div>
+
+    <!-- Q30 -->
+    <div class="interview-q">
+      <h4>Q30. How to build for different platforms?</h4>
+      <pre><code>docker buildx build --platform linux/amd64,linux/arm64 -t myapp . --push</code></pre>
+    </div>
+
+    <!-- Q31 -->
+    <div class="interview-q">
+      <h4>Q31. What is a dangling image?</h4>
+      <p>Untitled image not tagged or referenced. Clean with <code>prune</code>.</p>
+    </div>
+
+    <!-- Q32 -->
+    <div class="interview-q">
+      <h4>Q32. How to scan for vulnerabilities?</h4>
+      <pre><code>trivy image myapp:latest</code></pre>
+    </div>
+
+    <!-- Q33 -->
+    <div class="interview-q">
+      <h4>Q33. What is USER in Dockerfile?</h4>
+      <p>Sets non-root user for security.</p>
+      <pre><code>USER node</code></pre>
+    </div>
+
+    <!-- Q34 -->
+    <div class="interview-q">
+      <h4>Q34. How to use health checks?</h4>
+      <p>Monitor container health. Restart if fails.</p>
+      <pre><code>HEALTHCHECK CMD curl -f http://localhost/ || exit 1</code></pre>
+    </div>
+
+    <!-- Q35 -->
+    <div class="interview-q">
+      <h4>Q35. What is docker stats?</h4>
+      <p>Live resource usage (CPU, memory).</p>
+      <pre><code>docker stats</code></pre>
+    </div>
+
+    <!-- Q36 -->
+    <div class="interview-q">
+      <h4>Q36. How to push to private registry?</h4>
+      <pre><code>docker login myregistry.com
+docker push myregistry.com/app:v1</code></pre>
+    </div>
+
+    <!-- Q37 -->
+    <div class="interview-q">
+      <h4>Q37. What is the role of depends_on?</h4>
+      <p>Starts services in order. Does not wait for readiness.</p>
+    </div>
+
+    <!-- Q38 -->
+    <div class="interview-q">
+      <h4>Q38. How to scale services in Compose?</h4>
+      <pre><code>docker-compose up -d --scale backend=3</code></pre>
+    </div>
+
+    <!-- Q39 -->
+    <div class="interview-q">
+      <h4>Q39. What is docker commit?</h4>
+      <p>Create image from running container (not recommended for prod).</p>
+    </div>
+
+    <!-- Q40 -->
+    <div class="interview-q">
+      <h4>Q40. How to run Docker in production?</h4>
+      <p>Use orchestration (Kubernetes, ECS), monitoring, logging, auto-healing, secure images.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 8. Best Practices -->
+    <h2>Best Practices</h2>
+    <ul>
+      <li>Use <code>alpine</code> or <code>slim</code> base images</li>
+      <li>Run as non-root: <code>USER node</code></li>
+      <li>Use <code>.dockerignore</code></li>
+      <li>Tag with semantic versions</li>
+      <li>Clean up: <code>docker system prune</code></li>
+      <li>Use volumes for DB/data</li>
+      <li>Multi-stage for production</li>
+      <li>Scan images regularly</li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <!-- Key Takeaways -->
+    <h2 class="key-takeaways">Key Takeaways</h2>
+    <ul>
+      <li>Docker = consistency + portability</li>
+      <li>Always use <code>.dockerignore</code> and multi-stage</li>
+      <li>Volumes for persistence, networks for communication</li>
+      <li>Compose for local, Kubernetes/ECS for prod</li>
+      <li>Security: non-root, scan, official images</li>
+      <li>CI/CD: build once, run anywhere</li>
+    </ul>
+
+    <!-- Next Steps -->
+    <h2 class="next-steps">Next Steps: Kubernetes, CI/CD, and AWS ECS Integration</h2>
+    <ol>
+      <li>Learn <strong>Kubernetes</strong> (minikube, kind)</li>
+      <li>Deploy to <strong>AWS ECS/Fargate</strong></li>
+      <li>Build <strong>GitHub Actions CI/CD</strong> with Docker</li>
+      <li>Explore <strong>Helm charts</strong></li>
+      <li>Use <strong>Trivy, Hadolint, Dive</strong> for security</li>
+      <li>Study <strong>Docker Swarm</strong> vs <strong>K8s</strong></li>
+      <li>Implement <strong>canary/blue-green</strong> deployments</li>
+      <li>Aim for <strong>CKA / AWS DevOps</strong> certs</li>
+    </ol>
+
+  </div>
+</body>
+</html>

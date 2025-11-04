@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Git & GitHub Developer Handbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>Git</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --orange: #ce9178;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 3rem; color: var(--teal); text-align: center; margin: 2.5rem 0; }
+    h2 { font-size: 2rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 3rem 0 1.5rem; }
+    h3 { font-size: 1.6rem; color: var(--blue); margin: 2rem 0 1rem; }
+    h4 { font-size: 1.3rem; color: var(--purple); margin: 1.5rem 0 0.8rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+      font-size: 0.95rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 5rem 0; }
+    .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .interview-q {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #404040;
+    }
+    .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
+    .interview-q pre { margin-top: 1rem; }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      border: 1px solid #404040;
+      padding: 0.8rem;
+      text-align: left;
+    }
+    th { background: #2d2d30; color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>Git & GitHub Developer Handbook</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
+        For 2+ Year Developers | Git → Branching → Rebase → 40 Full Interview Qs
+      </p>
+    </div>
+
+    <!-- 1. Introduction -->
+    <h2>Introduction to Git & Version Control</h2>
+
+    <h3>What is Version Control?</h3>
+    <p>System that records changes to files over time. Enables rollback, collaboration, and tracking.</p>
+
+    <h3>Centralized vs Distributed VCS</h3>
+    <table>
+      <tr><th>Centralized (SVN)</th><th>Distributed (Git)</th></tr>
+      <tr><td>Single server</td><td>Full local copy</td></tr>
+      <tr><td>Network required</td><td>Offline work</td></tr>
+      <tr><td>Slower</td><td>Fast branching</td></tr>
+    </table>
+
+    <h3>What is Git?</h3>
+    <p>Fast, distributed VCS created by Linus Torvalds. Uses snapshots, not deltas.</p>
+
+    <h3>GitHub / GitLab / Bitbucket</h3>
+    <ul>
+      <li>Remote hosting</li>
+      <li>Pull Requests</li>
+      <li>CI/CD</li>
+      <li>Issue tracking</li>
+    </ul>
+
+    <h3>Installation & Setup</h3>
+    <pre><code># Install (Ubuntu)
+sudo apt install git
+
+# Configure identity
+git config --global user.name "Gaurav Katwate"
+git config --global user.email "gauravkatwate5@gmail.com"
+
+# Verify
+git --version</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 2. Core Concepts -->
+    <h2>Core Git Concepts</h2>
+
+    <h3>Repository Structure</h3>
+    <ul>
+      <li><strong>Working Directory</strong>: Your files</li>
+      <li><strong>Staging Area</strong>: <code>git add</code></li>
+      <li><strong>Commit History</strong>: <code>.git</code> folder</li>
+    </ul>
+
+    <h3>Basic Commands</h3>
+    <pre><code>git init
+git clone https://github.com/user/repo.git
+git add .
+git commit -m "feat: add login"
+git push origin main</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 3. Branching & Merging -->
+    <h2>Branching & Merging</h2>
+
+    <h3>Branches</h3>
+    <pre><code>git branch feature/auth
+git checkout feature/auth
+git checkout -b feature/payment  # create + switch</code></pre>
+
+    <h3>Merge Types</h3>
+    <ul>
+      <li><strong>Fast-forward</strong>: No divergence</li>
+      <li><strong>3-way merge</strong>: Creates merge commit</li>
+    </ul>
+
+    <h3>Merge Conflict</h3>
+    <pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+const title = "Home";
+=======
+const title = "Dashboard";
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; feature/login</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 4. Undoing Changes -->
+    <h2>Undoing & Reverting Changes</h2>
+
+    <h3>git restore vs reset vs revert</h3>
+    <table>
+      <tr><th>Command</th><th>Effect</th></tr>
+      <tr><td><code>git restore</code></td><td>Unstage or discard changes</td></tr>
+      <tr><td><code>git reset</code></td><td>Move HEAD (destructive)</td></tr>
+      <tr><td><code>git revert</code></td><td>Safe undo via new commit</td></tr>
+    </table>
+
+    <h3>Reset Types</h3>
+    <pre><code>git reset --soft HEAD~1   # keep changes staged
+git reset --mixed HEAD~1  # default, unstage
+git reset --hard HEAD~1   # discard everything</code></pre>
+
+    <h3>Reflog</h3>
+    <pre><code>git reflog
+git reset --hard HEAD@{2}</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 5. Remote & Collaboration -->
+    <h2>Remote Repositories & Collaboration</h2>
+
+    <h3>Remote Commands</h3>
+    <pre><code>git remote add origin https://github.com/user/repo.git
+git remote -v
+git push -u origin main
+git pull origin main</code></pre>
+
+    <h3>Pull vs Fetch</h3>
+    <ul>
+      <li><code>fetch</code>: Download only</li>
+      <li><code>pull</code>: Fetch + merge</li>
+    </ul>
+
+    <h3>Merge vs Rebase</h3>
+    <p><strong>Merge</strong>: Preserves history<br>
+    <strong>Rebase</strong>: Linear history</p>
+    <pre><code>git rebase main        # replay feature on main
+git rebase -i HEAD~3   # interactive</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 6. GitHub Essentials -->
+    <h2>GitHub Essentials</h2>
+
+    <h3>SSH Keys</h3>
+    <pre><code>ssh-keygen -t ed25519 -C "email@example.com"
+cat ~/.ssh/id_ed25519.pub  # copy to GitHub</code></pre>
+
+    <h3>README.md</h3>
+    <pre><code># My App
+A full-stack MERN application.
+
+## Features
+- User auth
+- Real-time chat
+- Deployed on Vercel
+
+![Demo](demo.gif)</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 7. Advanced Topics -->
+    <h2>Advanced Git Topics</h2>
+
+    <h3>Stash</h3>
+    <pre><code>git stash push -m "WIP login"
+git stash list
+git stash apply stash@{0}</code></pre>
+
+    <h3>Cherry-pick</h3>
+    <pre><code>git cherry-pick abc123</code></pre>
+
+    <h3>Interactive Rebase</h3>
+    <pre><code>git rebase -i HEAD~4
+# pick, squash, edit, drop</code></pre>
+
+    <h3>Tags</h3>
+    <pre><code>git tag -a v1.0.0 -m "Stable release"
+git push origin v1.0.0</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 8. 40 Interview Questions -->
+    <h2>40 Full Git & GitHub Interview Questions & Answers</h2>
+
+    <!-- Q1 -->
+    <div class="interview-q">
+      <h4>Q1. What is Git and how is it different from SVN?</h4>
+      <p><strong>Git</strong>: Distributed, local commits, fast branching.<br>
+      <strong>SVN</strong>: Centralized, server-based, slower.</p>
+    </div>
+
+    <!-- Q2 -->
+    <div class="interview-q">
+      <h4>Q2. What is the difference between git pull and git fetch?</h4>
+      <p><code>fetch</code>: Downloads commits, doesn't merge.<br>
+      <code>pull</code>: Fetch + merge into current branch.</p>
+      <pre><code>git fetch origin
+git merge origin/main</code></pre>
+    </div>
+
+    <!-- Q3 -->
+    <div class="interview-q">
+      <h4>Q3. What is the HEAD pointer?</h4>
+      <p>Points to the current commit or branch tip. <code>HEAD~1</code> = parent.</p>
+    </div>
+
+    <!-- Q4 -->
+    <div class="interview-q">
+      <h4>Q4. What are the three main areas of a Git project?</h4>
+      <p>1. Working Directory<br>
+      2. Staging Area (Index)<br>
+      3. Repository (.git)</p>
+    </div>
+
+    <!-- Q5 -->
+    <div class="interview-q">
+      <h4>Q5. How do you undo the last commit?</h4>
+      <p><strong>Keep changes</strong>: <code>git reset --soft HEAD~1</code><br>
+      <strong>Discard</strong>: <code>git reset --hard HEAD~1</code></p>
+    </div>
+
+    <!-- Q6 -->
+    <div class="interview-q">
+      <h4>Q6. Difference between git reset and git revert?</h4>
+      <p><strong>reset</strong>: Moves HEAD, rewrites history (unsafe for shared).<br>
+      <strong>revert</strong>: Creates new commit undoing changes (safe).</p>
+      <pre><code>git revert abc123</code></pre>
+    </div>
+
+    <!-- Q7 -->
+    <div class="interview-q">
+      <h4>Q7. What is git stash?</h4>
+      <p>Temporarily saves uncommitted changes. Use before switching branches.</p>
+      <pre><code>git stash push -m "WIP"
+git stash apply</code></pre>
+    </div>
+
+    <!-- Q8 -->
+    <div class="interview-q">
+      <h4>Q8. How do you resolve merge conflicts?</h4>
+      <p>Edit conflicted files → remove markers → <code>git add</code> → <code>git commit</code>.</p>
+    </div>
+
+    <!-- Q9 -->
+    <div class="interview-q">
+      <h4>Q9. What is rebase and when to avoid it?</h4>
+      <p>Rewrites history by moving commits. Avoid on shared branches.</p>
+      <pre><code>git rebase main  # don't do on pushed branch</code></pre>
+    </div>
+
+    <!-- Q10 -->
+    <div class="interview-q">
+      <h4>Q10. What is .gitignore?</h4>
+      <p>Specifies files Git should ignore.</p>
+      <pre><code>node_modules/
+.env
+*.log</code></pre>
+    </div>
+
+    <!-- Q11 -->
+    <div class="interview-q">
+      <h4>Q11. How to delete a local branch?</h4>
+      <pre><code>git branch -d feature/login</code></pre>
+    </div>
+
+    <!-- Q12 -->
+    <div class="interview-q">
+      <h4>Q12. How to force push safely?</h4>
+      <p>Only on your feature branch. Never on <code>main</code>.</p>
+      <pre><code>git push --force-with-lease</code></pre>
+    </div>
+
+    <!-- Q13 -->
+    <div class="interview-q">
+      <h4>Q13. What is git cherry-pick?</h4>
+      <p>Apply a specific commit from another branch.</p>
+      <pre><code>git cherry-pick abc123</code></pre>
+    </div>
+
+    <!-- Q14 -->
+    <div class="interview-q">
+      <h4>Q14. What is interactive rebase?</h4>
+      <p>Clean up history: squash, edit, reorder commits.</p>
+      <pre><code>git rebase -i HEAD~3</code></pre>
+    </div>
+
+    <!-- Q15 -->
+    <div class="interview-q">
+      <h4>Q15. How to view commit history?</h4>
+      <pre><code>git log --oneline --graph --all</code></pre>
+    </div>
+
+    <!-- Q16 -->
+    <div class="interview-q">
+      <h4>Q16. What is a detached HEAD?</h4>
+      <p>HEAD points to commit, not branch. Changes may be lost.</p>
+    </div>
+
+    <!-- Q17 -->
+    <div class="interview-q">
+      <h4>Q17. How to amend last commit?</h4>
+      <pre><code>git commit --amend -m "New message"</code></pre>
+    </div>
+
+    <!-- Q18 -->
+    <div class="interview-q">
+      <h4>Q18. What is git blame?</h4>
+      <p>Shows who changed each line.</p>
+      <pre><code>git blame index.html</code></pre>
+    </div>
+
+    <!-- Q19 -->
+    <div class="interview-q">
+      <h4>Q19. How to create a tag?</h4>
+      <pre><code>git tag -a v1.0.0 -m "Release"</code></pre>
+    </div>
+
+    <!-- Q20 -->
+    <div class="interview-q">
+      <h4>Q20. What is git bisect?</h4>
+      <p>Binary search to find bug-introducing commit.</p>
+    </div>
+
+    <!-- Q21 -->
+    <div class="interview-q">
+      <h4>Q21. How to squash commits?</h4>
+      <pre><code>git rebase -i HEAD~3 → change "pick" to "squash"</code></pre>
+    </div>
+
+    <!-- Q22 -->
+    <div class="interview-q">
+      <h4>Q22. What is the difference between fork and clone?</h4>
+      <p><strong>Fork</strong>: Copy on GitHub.<br>
+      <strong>Clone</strong>: Local copy.</p>
+    </div>
+
+    <!-- Q23 -->
+    <div class="interview-q">
+      <h4>Q23. How to keep fork in sync?</h4>
+      <pre><code>git remote add upstream original-repo
+git fetch upstream
+git rebase upstream/main</code></pre>
+    </div>
+
+    <!-- Q24 -->
+    <div class="interview-q">
+      <h4>Q24. What is a Pull Request?</h4>
+      <p>Request to merge changes. Enables code review.</p>
+    </div>
+
+    <!-- Q25 -->
+    <div class="interview-q">
+      <h4>Q25. How to resolve PR conflicts?</h4>
+      <p>Pull main → merge locally → resolve → push.</p>
+    </div>
+
+    <!-- Q26 -->
+    <div class="interview-q">
+      <h4>Q26. What is git hook?</h4>
+      <p>Scripts that run on events (pre-commit, post-merge).</p>
+    </div>
+
+    <!-- Q27 -->
+    <div class="interview-q">
+      <h4>Q27. How to ignore tracked files?</h4>
+      <pre><code>git rm --cached file.txt
+echo "file.txt" >> .gitignore</code></pre>
+    </div>
+
+    <!-- Q28 -->
+    <div class="interview-q">
+      <h4>Q28. What is git submodule?</h4>
+      <p>Include another Git repo as subdirectory.</p>
+    </div>
+
+    <!-- Q29 -->
+    <div class="interview-q">
+      <h4>Q29. How to view remote branches?</h4>
+      <pre><code>git branch -r</code></pre>
+    </div>
+
+    <!-- Q30 -->
+    <div class="interview-q">
+      <h4>Q30. What is git worktree?</h4>
+      <p>Checkout multiple branches simultaneously.</p>
+    </div>
+
+    <!-- Q31 -->
+    <div class="interview-q">
+      <h4>Q31. How to clean untracked files?</h4>
+      <pre><code>git clean -fd</code></pre>
+    </div>
+
+    <!-- Q32 -->
+    <div class="interview-q">
+      <h4>Q32. What is git archive?</h4>
+      <p>Create zip/tar of specific commit.</p>
+    </div>
+
+    <!-- Q33 -->
+    <div class="interview-q">
+      <h4>Q33. How to sign commits?</h4>
+      <pre><code>git commit -S -m "Signed"</code></pre>
+    </div>
+
+    <!-- Q34 -->
+    <div class="interview-q">
+      <h4>Q34. What is GitHub Actions?</h4>
+      <p>CI/CD platform. Automate build, test, deploy.</p>
+    </div>
+
+    <!-- Q35 -->
+    <div class="interview-q">
+      <h4>Q35. How to protect main branch?</h4>
+      <p>Branch protection rules: require PR, status checks.</p>
+    </div>
+
+    <!-- Q36 -->
+    <div class="interview-q">
+      <h4>Q36. What is git lfs?</h4>
+      <p>Large File Storage for binaries (videos, models).</p>
+    </div>
+
+    <!-- Q37 -->
+    <div class="interview-q">
+      <h4>Q37. How to undo git add?</h4>
+      <pre><code>git restore --staged file.js</code></pre>
+    </div>
+
+    <!-- Q38 -->
+    <div class="interview-q">
+      <h4>Q38. What is git shortlog?</h4>
+      <p>Summary of commits by author.</p>
+    </div>
+
+    <!-- Q39 -->
+    <div class="interview-q">
+      <h4>Q39. How to create an empty branch?</h4>
+      <pre><code>git checkout --orphan new-branch</code></pre>
+    </div>
+
+    <!-- Q40 -->
+    <div class="interview-q">
+      <h4>Q40. What is the best commit message format?</h4>
+      <pre><code>feat: add user authentication
+fix: resolve null pointer in login
+docs: update API reference</code></pre>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 9. Best Practices -->
+    <h2>Git Best Practices</h2>
+    <ul>
+      <li>Commit often, small changes</li>
+      <li>Use <code>feat:</code>, <code>fix:</code> prefixes</li>
+      <li>Always pull before push</li>
+      <li>Never force push to <code>main</code></li>
+      <li>Use feature branches</li>
+      <li>Write clear PR descriptions</li>
+      <li>Add <code>.gitignore</code> early</li>
+      <li>Review code before merging</li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <!-- Key Takeaways -->
+    <h2 class="key-takeaways">Key Takeaways</h2>
+    <ul>
+      <li>Git = local + distributed</li>
+      <li>Use <code>revert</code> for public history</li>
+      <li>Rebase for clean history, merge for safety</li>
+      <li>Always configure <code>.gitignore</code></li>
+      <li>Feature branches + PRs = best workflow</li>
+      <li>Never commit secrets</li>
+    </ul>
+
+    <!-- Next Steps -->
+    <h2 class="next-steps">Next Steps: CI/CD Integration with Docker & GitHub Actions</h2>
+    <ol>
+      <li>Build <strong>GitHub Actions</strong> workflow</li>
+      <li>Integrate <strong>Docker</strong> builds</li>
+      <li>Deploy to <strong>Vercel/Netlify/AWS</strong></li>
+      <li>Add <strong>linting, tests, security scans</strong></li>
+      <li>Use <strong>semantic versioning</strong></li>
+      <li>Explore <strong>GitOps</strong> with ArgoCD</li>
+      <li>Learn <strong>monorepo</strong> tools (Nx, Turborepo)</li>
+      <li>Contribute to open source</li>
+    </ol>
+
+  </div>
+</body>
+</html>
