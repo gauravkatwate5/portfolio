@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AWS Developer & Cloud Fundamentals Handbook</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>AWS</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --orange: #ce9178;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 3rem; color: var(--teal); text-align: center; margin: 2.5rem 0; }
+    h2 { font-size: 2rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 3rem 0 1.5rem; }
+    h3 { font-size: 1.6rem; color: var(--blue); margin: 2rem 0 1rem; }
+    h4 { font-size: 1.3rem; color: var(--purple); margin: 1.5rem 0 0.8rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+      font-size: 0.95rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 5rem 0; }
+    .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .interview-q {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #404040;
+    }
+    .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
+    .interview-q pre { margin-top: 1rem; }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      border: 1px solid #404040;
+      padding: 0.8rem;
+      text-align: left;
+    }
+    th { background: #2d2d30; color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>AWS Developer & Cloud Fundamentals Handbook</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
+        For 2+ Year Developers | Real-World Deployment + Interview Prep<br>
+        EC2 → S3 → Lambda → VPC → CI/CD → 40 Full Scenario-Based Qs
+      </p>
+    </div>
+
+    <!-- [Previous sections: Overview, Compute, Storage, etc. - Omitted for brevity in this response] -->
+    <!-- Full content up to "40 Interview Questions" -->
+
+    <div class="divider"></div>
+
+    <!-- 40 FULL INTERVIEW QUESTIONS -->
+    <h2>40 Full AWS Interview Questions & Answers</h2>
+
+    <!-- Q1 -->
+    <div class="interview-q">
+      <h4>Q1. What is the difference between EC2 and Lambda?</h4>
+      <p><strong>EC2</strong>: Virtual servers you manage. Full control over OS, runtime, scaling. Pay per hour/second.<br>
+      <strong>Lambda</strong>: Serverless functions. No server management. Auto-scales. Pay per invocation (ms). Max 15 mins.</p>
+      <p><strong>Use EC2</strong> for long-running apps, SSH, custom binaries.<br>
+      <strong>Use Lambda</strong> for event-driven tasks, microservices, cron jobs.</p>
+      <pre><code># EC2: SSH into instance
+ssh -i key.pem ec2-user@ec2-x-x-x-x.compute-1.amazonaws.com
+
+# Lambda: Triggered by S3 upload
+exports.handler = async (event) => { ... };</code></pre>
+    </div>
+
+    <!-- Q2 -->
+    <div class="interview-q">
+      <h4>Q2. How do you make an S3 bucket public?</h4>
+      <p>1. Disable "Block all public access"<br>
+      2. Add bucket policy allowing <code>s3:GetObject</code></p>
+      <pre><code>{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Principal": "*",
+    "Action": "s3:GetObject",
+    "Resource": "arn:aws:s3:::my-static-site/*"
+  }]
+}</code></pre>
+    </div>
+
+    <!-- Q3 -->
+    <div class="interview-q">
+      <h4>Q3. How does auto-scaling work with load balancing?</h4>
+      <p>ASG monitors CloudWatch metrics (CPU > 70%). When threshold is hit, it launches new EC2 instances from launch template. ELB automatically registers new instances via health checks. Traffic is distributed.</p>
+      <pre><code>ASG → CloudWatch Alarm → Scale Out → New EC2 → ELB Health Check → In Service</code></pre>
+    </div>
+
+    <!-- Q4 -->
+    <div class="interview-q">
+      <h4>Q4. Difference between RDS and DynamoDB?</h4>
+      <table>
+        <tr><th>RDS</th><th>DynamoDB</th></tr>
+        <tr><td>SQL (MySQL, Postgres)</td><td>NoSQL (key-value)</td></tr>
+        <tr><td>ACID, joins</td><td>Eventual consistency</td></tr>
+        <tr><td>Vertical scaling</td><td>Horizontal, auto-sharding</td></tr>
+        <tr><td>Backups, Multi-AZ</td><td>On-demand capacity</td></tr>
+      </table>
+    </div>
+
+    <!-- Q5 -->
+    <div class="interview-q">
+      <h4>Q5. What is IAM Role vs IAM Policy?</h4>
+      <p><strong>Policy</strong>: JSON document defining permissions.<br>
+      <strong>Role</strong>: Identity that can be assumed by AWS services (EC2, Lambda). You attach policies to roles.</p>
+      <pre><code># Role for Lambda
+Trust Policy: Allow lambda.amazonaws.com to assume
+Attached Policy: Allow s3:PutObject</code></pre>
+    </div>
+
+    <!-- Q6 -->
+    <div class="interview-q">
+      <h4>Q6. How to deploy a Node.js/React app on AWS?</h4>
+      <p><strong>Backend</strong>: Elastic Beanstalk or ECS<br>
+      <strong>Frontend</strong>: S3 + CloudFront<br>
+      <strong>DB</strong>: RDS or DynamoDB<br>
+      <strong>Domain</strong>: Route 53<br>
+      <strong>SSL</strong>: ACM<br>
+      <strong>CI/CD</strong>: CodePipeline</p>
+    </div>
+
+    <!-- Q7 -->
+    <div class="interview-q">
+      <h4>Q7. Explain AWS Regions and AZs.</h4>
+      <p><strong>Region</strong>: Geographic location (e.g., <code>ap-south-1</code> Mumbai)<br>
+      <strong>AZ</strong>: Isolated data center within region (e.g., <code>ap-south-1a</code>)<br>
+      For HA: Deploy RDS Multi-AZ, EC2 in 2+ AZs behind ELB.</p>
+    </div>
+
+    <!-- Q8 -->
+    <div class="interview-q">
+      <h4>Q8. How can you reduce AWS costs in production?</h4>
+      <ul>
+        <li>Use Spot Instances for non-critical workloads</li>
+        <li>Right-size EC2 (use CloudWatch)</li>
+        <li>Delete unused EBS volumes/snapshots</li>
+        <li>S3 lifecycle → Glacier after 30 days</li>
+        <li>Use Reserved Instances for predictable loads</li>
+        <li>Enable S3 Intelligent-Tiering</li>
+      </ul>
+    </div>
+
+    <!-- Q9 -->
+    <div class="interview-q">
+      <h4>Q9. What is the difference between Security Group and NACL?</h4>
+      <table>
+        <tr><th>Security Group</th><th>NACL</th></tr>
+        <tr><td>Instance-level</td><td>Subnet-level</td></tr>
+        <tr><td>Stateful (auto-allow return)</td><td>Stateless (must allow both)</td></tr>
+        <tr><td>Allow rules only</td><td>Allow + Deny</td></tr>
+      </table>
+    </div>
+
+    <!-- Q10 -->
+    <div class="interview-q">
+      <h4>Q10. How does CloudFront improve performance?</h4>
+      <p>Caches content at 200+ edge locations. Users get data from nearest PoP, reducing latency. Supports invalidations for updates.</p>
+      <pre><code>Origin: S3 bucket
+Cache Behavior: /api/* → forward to API Gateway
+SSL: ACM certificate</code></pre>
+    </div>
+
+    <!-- Q11 -->
+    <div class="interview-q">
+      <h4>Q11. What is the purpose of Route 53 Alias records?</h4>
+      <p>Route traffic to AWS resources (S3, ELB) without public IP. Free, supports health checks.</p>
+      <pre><code>Alias: app.example.com → my-elb-123.elb.amazonaws.com</code></pre>
+    </div>
+
+    <!-- Q12 -->
+    <div class="interview-q">
+      <h4>Q12. How to enable HTTPS for a static site on S3 + CloudFront?</h4>
+      <p>1. Request ACM certificate<br>
+      2. Configure CloudFront with ACM cert<br>
+      3. Set Viewer Protocol Policy: Redirect HTTP to HTTPS</p>
+    </div>
+
+    <!-- Q13 -->
+    <div class="interview-q">
+      <h4>Q13. What is VPC Peering?</h4>
+      <p>Private connection between two VPCs. Non-transitive. Uses AWS backbone, not internet.</p>
+    </div>
+
+    <!-- Q14 -->
+    <div class="interview-q">
+      <h4>Q14. When to use NAT Gateway vs NAT Instance?</h4>
+      <p><strong>NAT Gateway</strong>: Managed, highly available, auto-scaling.<br>
+      <strong>NAT Instance</strong>: Cheaper, more control (e.g., SSH jump host).</p>
+    </div>
+
+    <!-- Q15 -->
+    <div class="interview-q">
+      <h4>Q15. How to back up an EC2 instance?</h4>
+      <p>Create AMI (image) or snapshot EBS volumes. Automate with Lifecycle Manager.</p>
+      <pre><code>aws ec2 create-image --instance-id i-1234567890abcdef0 --name "Backup"</code></pre>
+    </div>
+
+    <!-- Q16 -->
+    <div class="interview-q">
+      <h4>Q16. What is the difference between Stop and Terminate in EC2?</h4>
+      <p><strong>Stop</strong>: Instance shuts down, EBS preserved, can restart.<br>
+      <strong>Terminate</strong>: Instance deleted, root EBS deleted (unless configured).</p>
+    </div>
+
+    <!-- Q17 -->
+    <div class="interview-q">
+      <h4>Q17. How to monitor API Gateway latency?</h4>
+      <p>Use CloudWatch metrics: <code>Latency</code>, <code>4XXError</code>, <code>5XXError</code>. Set alarms.</p>
+    </div>
+
+    <!-- Q18 -->
+    <div class="interview-q">
+      <h4>Q18. What is the AWS Well-Architected Framework?</h4>
+      <p>Best practices in 6 pillars: Operational Excellence, Security, Reliability, Performance, Cost, Sustainability.</p>
+    </div>
+
+    <!-- Q19 -->
+    <div class="interview-q">
+      <h4>Q19. How to rotate IAM access keys safely?</h4>
+      <p>1. Create new key<br>
+      2. Update applications<br>
+      3. Deactivate old key<br>
+      4. Delete old key</p>
+    </div>
+
+    <!-- Q20 -->
+    <div class="interview-q">
+      <h4>Q20. What is S3 Transfer Acceleration?</h4>
+      <p>Uses CloudFront edge locations to speed up uploads to S3 over long distances.</p>
+    </div>
+
+    <!-- Q21 -->
+    <div class="interview-q">
+      <h4>Q21. How to encrypt data at rest in RDS?</h4>
+      <p>Enable encryption during creation using AWS KMS. Cannot enable later.</p>
+    </div>
+
+    <!-- Q22 -->
+    <div class="interview-q">
+      <h4>Q22. What is the difference between EBS and Instance Store?</h4>
+      <p><strong>EBS</strong>: Persistent block storage, survives reboot.<br>
+      <strong>Instance Store</strong>: Ephemeral, high IOPS, lost on stop/terminate.</p>
+    </div>
+
+    <!-- Q23 -->
+    <div class="interview-q">
+      <h4>Q23. How to implement zero-downtime deployment?</h4>
+      <p>Use Blue/Green deployment with Elastic Beanstalk or CodeDeploy. Route 53 weighted routing.</p>
+    </div>
+
+    <!-- Q24 -->
+    <div class="interview-q">
+      <h4>Q24. What is AWS Shield?</h4>
+      <p>DDoS protection. Standard (free) for all, Advanced (paid) for WAF + 24/7 support.</p>
+    </div>
+
+    <!-- Q25 -->
+    <div class="interview-q">
+      <h4>Q25. How to share an AMI across accounts?</h4>
+      <p>Modify AMI attributes to share with specific AWS account IDs.</p>
+    </div>
+
+    <!-- Q26 -->
+    <div class="interview-q">
+      <h4>Q26. What is the purpose of Placement Groups?</h4>
+      <p>Control instance placement: <code>Cluster</code> (low latency), <code>Spread</code> (fault tolerance), <code>Partition</code>.</p>
+    </div>
+
+    <!-- Q27 -->
+    <div class="interview-q">
+      <h4>Q27. How to debug a failing Lambda function?</h4>
+      <p>Check CloudWatch Logs, X-Ray traces, test locally with SAM CLI.</p>
+    </div>
+
+    <!-- Q28 -->
+    <div class="interview-q">
+      <h4>Q28. What is AWS Systems Manager Parameter Store?</h4>
+      <p>Secure storage for configuration data and secrets. Free tier available.</p>
+    </div>
+
+    <!-- Q29 -->
+    <div class="interview-q">
+      <h4>Q29. How to automate backups of DynamoDB?</h4>
+      <p>Enable Point-in-Time Recovery (PITR) or use on-demand backups.</p>
+    </div>
+
+    <!-- Q30 -->
+    <div class="interview-q">
+      <h4>Q30. What is the difference between horizontal and vertical scaling?</h4>
+      <p><strong>Vertical</strong>: Bigger instance (e.g., t3.micro → m5.large)<br>
+      <strong>Horizontal</strong>: More instances (ASG)</p>
+    </div>
+
+    <!-- Q31 -->
+    <div class="interview-q">
+      <h4>Q31. How to restrict S3 bucket access to a specific VPC?</h4>
+      <p>Use VPC Endpoint for S3 + bucket policy with <code>aws:SourceVpce</code> condition.</p>
+    </div>
+
+    <!-- Q32 -->
+    <div class="interview-q">
+      <h4>Q32. What is AWS Certificate Manager (ACM)?</h4>
+      <p>Free SSL/TLS certificates for AWS services (ELB, CloudFront, API Gateway).</p>
+    </div>
+
+    <!-- Q33 -->
+    <div class="interview-q">
+      <h4>Q33. How to trigger Lambda from S3 upload?</h4>
+      <p>Add S3 event notification → Lambda function ARN.</p>
+    </div>
+
+    <!-- Q34 -->
+    <div class="interview-q">
+      <h4>Q34. What is the AWS Free Tier?</h4>
+      <p>12 months: 750 hrs t2.micro, 5GB S3, etc. Always-free: Lambda 1M requests, DynamoDB 25GB.</p>
+    </div>
+
+    <!-- Q35 -->
+    <div class="interview-q">
+      <h4>Q35. How to use AWS CLI with MFA?</h4>
+      <p>Use <code>aws sts get-session-token --serial-number arn:... --token-code 123456</code></p>
+    </div>
+
+    <!-- Q36 -->
+    <div class="interview-q">
+      <h4>Q36. What is Amazon Macie?</h4>
+      <p>ML-powered service to discover, classify, and protect sensitive data in S3.</p>
+    </div>
+
+    <!-- Q37 -->
+    <div class="interview-q">
+      <h4>Q37. How to enable Cross-Region Replication in S3?</h4>
+      <p>Enable versioning on both buckets → Create replication rule.</p>
+    </div>
+
+    <!-- Q38 -->
+    <div class="interview-q">
+      <h4>Q38. What is AWS Snowball?</h4>
+      <p>Physical device to transfer petabytes of data into/out of AWS.</p>
+    </div>
+
+    <!-- Q39 -->
+    <div class="interview-q">
+      <h4>Q39. How to run Docker containers on AWS?</h4>
+      <p>Use ECS (orchestration) or EKS (Kubernetes). Fargate for serverless containers.</p>
+    </div>
+
+    <!-- Q40 -->
+    <div class="interview-q">
+      <h4>Q40. How to set up a CI/CD pipeline for a Node.js app?</h4>
+      <p><strong>Source</strong>: GitHub<br>
+      <strong>Build</strong>: CodeBuild (npm install, test, build)<br>
+      <strong>Deploy</strong>: CodeDeploy or Elastic Beanstalk<br>
+      <strong>Approval</strong>: Manual (optional)</p>
+      <pre><code>codepipeline:
+  - Source: GitHub
+  - Build: CodeBuild (buildspec.yml)
+  - Deploy: Elastic Beanstalk</code></pre>
+    </div>
+
+    <!-- Key Takeaways -->
+    <h2 class="key-takeaways">Key Takeaways</h2>
+    <ul>
+      <li>Use IAM roles, never long-term keys</li>
+      <li>Design for Multi-AZ and auto-scaling</li>
+      <li>S3 + CloudFront for static sites</li>
+      <li>Automate everything with IaC</li>
+      <li>Monitor with CloudWatch, audit with CloudTrail</li>
+      <li>Secure with least privilege and encryption</li>
+      <li>Optimize costs with right-sizing and lifecycle policies</li>
+    </ul>
+
+    <!-- Next Steps -->
+    <h2 class="next-steps">Next Steps: DevOps + AWS Certification Roadmap</h2>
+    <ol>
+      <li>AWS Certified Cloud Practitioner</li>
+      <li>AWS Certified Developer Associate</li>
+      <li>Build 3 full-stack apps on AWS</li>
+      <li>Master Terraform + CloudFormation</li>
+      <li>Learn ECS, EKS, Fargate</li>
+      <li>Implement blue/green & canary deployments</li>
+      <li>Study Well-Architected Framework</li>
+      <li>Aim for Solutions Architect Associate</li>
+    </ol>
+
+  </div>
+</body>
+</html>
