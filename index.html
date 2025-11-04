@@ -1244,7 +1244,11 @@
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             emailjs.sendForm('service_o8kp3sq', 'template_zthf79l', this)
-            .then(() => alert('Message sent successfully!'))
+            .then(() => {
+                alert('Message sent successfully!');
+                document.getElementById('contactForm').reset();
+                window.location.reload();
+            })
             .catch((err) => alert('Failed to send: ' + JSON.stringify(err)));
         });
         
