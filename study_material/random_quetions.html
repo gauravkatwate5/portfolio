@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JavaScript, React & Node.js Core Interview Concepts</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>JS</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --orange: #ce9178;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 3rem; color: var(--teal); text-align: center; margin: 2.5rem 0; }
+    h2 { font-size: 2rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 3rem 0 1.5rem; }
+    h3 { font-size: 1.6rem; color: var(--blue); margin: 2rem 0 1rem; }
+    h4 { font-size: 1.3rem; color: var(--purple); margin: 1.5rem 0 0.8rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+      font-size: 0.95rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 5rem 0; }
+    .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .interview-q {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #404040;
+    }
+    .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      border: 1px solid #404040;
+      padding: 0.8rem;
+      text-align: left;
+    }
+    th { background: #2d2d30; color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>JavaScript, React & Node.js Core Interview Concepts</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
+        For 2+ Year Developers | JS Quirks → React → Node.js → 40+ Interview Qs
+      </p>
+    </div>
+
+    <!-- 1. typeof null -->
+    <h2>What is typeof null?</h2>
+    <p><code>typeof null</code> returns <code>"object"</code> due to a <strong>historical bug</strong> in JavaScript. Originally, values were stored with type tags, and <code>null</code> used the object tag (<code>000</code>). This was never fixed for backward compatibility.</p>
+    <pre><code>console.log(typeof null); // "object"</code></pre>
+    <div class="interview-q">
+      <h4>Q: Is typeof null a bug?</h4>
+      <p>Yes — a legacy bug from the first version of JavaScript. Should return <code>"null"</code>, but returns <code>"object"</code> for compatibility.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 2. undefined vs Not Defined -->
+    <h2>undefined vs Not Defined</h2>
+    <p><strong>undefined</strong>: Variable declared but not assigned.<br>
+    <strong>Not defined</strong>: Variable never declared → <code>ReferenceError</code>.</p>
+    <pre><code>let a;
+console.log(a); // undefined
+
+console.log(b); // ReferenceError: b is not defined</code></pre>
+    <div class="interview-q">
+      <h4>Q: How to check if a variable is undefined?</h4>
+      <p><code>if (typeof x === 'undefined')</code> — safe even if <code>x</code> is not declared.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 3. NaN -->
+    <h2>What is NaN? How to Check?</h2>
+    <p><code>NaN</code> = Not-a-Number. Result of invalid math (e.g., <code>0/0</code>).</p>
+    <p><code>isNaN()</code> coerces value. <code>Number.isNaN()</code> does not.</p>
+    <pre><code>console.log(0 / 0); // NaN
+console.log(isNaN("abc"));      // true (coerces)
+console.log(Number.isNaN("abc")); // false
+console.log(Number.isNaN(NaN));   // true</code></pre>
+    <div class="interview-q">
+      <h4>Q: Is NaN equal to itself?</h4>
+      <p>No. <code>NaN === NaN</code> is <code>false</code>. Use <code>Number.isNaN()</code>.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 4. null vs undefined -->
+    <h2>null vs undefined</h2>
+    <table>
+      <tr><th>Type</th><th>Meaning</th><th>Example</th></tr>
+      <tr><td><code>null</code></td><td>Intentional absence</td><td><code>let user = null;</code></td></tr>
+      <tr><td><code>undefined</code></td><td>Uninitialized</td><td><code>let x;</code></td></tr>
+    </table>
+    <div class="interview-q">
+      <h4>Q: Should you use null or undefined?</h4>
+      <p>Use <code>null</code> for intentional absence. Let JS handle <code>undefined</code> naturally.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 5. Destructuring -->
+    <h2>Destructuring</h2>
+    <p>Extract values from arrays/objects into variables.</p>
+    <pre><code>const user = { name: "Gaurav", city: "Pune" };
+const { name, city } = user;
+console.log(name, city); // Gaurav Pune
+
+const arr = [1, 2, 3];
+const [a, b] = arr;
+console.log(a, b); // 1 2</code></pre>
+    <div class="interview-q">
+      <h4>Q: Can you destructure nested objects?</h4>
+      <p>Yes: <code>const { address: { street } } = user;</code></p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 6. Why React? -->
+    <h2>Why Use React?</h2>
+    <ul>
+      <li>Declarative UI</li>
+      <li>Component-based</li>
+      <li>Virtual DOM → fast updates</li>
+      <li>Rich ecosystem (React Router, Redux, Hooks)</li>
+    </ul>
+    <pre><code>function App() {
+  return &lt;h1&gt;Hello React&lt;/h1&gt;;
+}</code></pre>
+    <div class="interview-q">
+      <h4>Q: React is a library or framework?</h4>
+      <p>Library. You control the app structure.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 7. JSX -->
+    <h2>What is JSX?</h2>
+    <p>Syntax extension to write HTML-like code in JavaScript. Transpiled to <code>React.createElement()</code>.</p>
+    <pre><code>const element = &lt;h2&gt;Welcome, Gaurav!&lt;/h2&gt;;
+// Becomes:
+React.createElement("h2", null, "Welcome, Gaurav!")</code></pre>
+    <div class="interview-q">
+      <h4>Q: Can you use JSX without React?</h4>
+      <p>Technically yes, but it’s designed for React.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 8. Error Boundaries -->
+    <h2>Error Boundaries in React</h2>
+    <p>Catch JavaScript errors in child components. Only work in class components.</p>
+    <pre><code>class ErrorBoundary extends React.Component {
+  state = { hasError: false };
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  render() {
+    return this.state.hasError 
+      ? &lt;h3&gt;Something went wrong!&lt;/h3&gt; 
+      : this.props.children;
+  }
+}</code></pre>
+    <div class="interview-q">
+      <h4>Q: Can hooks replace error boundaries?</h4>
+      <p>No. Hooks cannot catch errors in render phase.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 9. npm -->
+    <h2>npm (Node Package Manager)</h2>
+    <p>Manages dependencies, scripts, and versioning.</p>
+    <pre><code>npm init -y
+npm install express
+npm run dev</code></pre>
+    <div class="interview-q">
+      <h4>Q: Difference between dependencies and devDependencies?</h4>
+      <p><code>dependencies</code>: runtime. <code>devDependencies</code>: build/test tools.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 10. REST API -->
+    <h2>REST API</h2>
+    <p>Architectural style using HTTP methods to perform CRUD.</p>
+    <pre><code>app.get('/users', getUsers);
+app.post('/users', createUser);
+app.put('/users/:id', updateUser);
+app.delete('/users/:id', deleteUser);</code></pre>
+    <div class="interview-q">
+      <h4>Q: What makes an API RESTful?</h4>
+      <p>Stateless, cacheable, uniform interface, resource-based URLs.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 11. HTTP Status Codes -->
+    <h2>Common HTTP Status Codes</h2>
+    <table>
+      <tr><th>Code</th><th>Meaning</th></tr>
+      <tr><td>200</td><td>OK</td></tr>
+      <tr><td>201</td><td>Created</td></tr>
+      <tr><td>400</td><td>Bad Request</td></tr>
+      <tr><td>401</td><td>Unauthorized</td></tr>
+      <tr><td>404</td><td>Not Found</td></tr>
+      <tr><td>500</td><td>Internal Server Error</td></tr>
+    </table>
+    <pre><code>res.status(404).json({ error: "User not found" });</code></pre>
+    <div class="interview-q">
+      <h4>Q: 204 vs 200?</h4>
+      <p><code>204 No Content</code>: success, no body. <code>200</code>: success with data.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 12. Node.js -->
+    <h2>Node.js for Backend</h2>
+    <p>JS runtime on V8. Non-blocking I/O → great for APIs, real-time.</p>
+    <pre><code>import express from "express";
+const app = express();
+app.get("/", (req, res) => res.send("Hello Node"));
+app.listen(3000);</code></pre>
+    <div class="interview-q">
+      <h4>Q: Is Node.js single-threaded?</h4>
+      <p>Yes (event loop), but uses libuv for async I/O.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 13. Sync vs Async -->
+    <h2>Synchronous vs Asynchronous</h2>
+    <p><strong>Sync</strong>: blocks execution.<br>
+    <strong>Async</strong>: continues while waiting.</p>
+    <pre><code>console.log("Start");
+setTimeout(() => console.log("Async"), 1000);
+console.log("End");
+// Output: Start → End → Async</code></pre>
+    <div class="interview-q">
+      <h4>Q: Name three ways to handle async in Node.js</h4>
+      <p>Callbacks, Promises, <code>async/await</code>.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 14. Event Loop -->
+    <h2>Event Loop in Node.js</h2>
+    <p>Handles async callbacks. Phases: timers → I/O → poll → check → microtasks.</p>
+    <pre><code>console.log("A");
+setTimeout(() => console.log("B"), 0);
+Promise.resolve().then(() => console.log("C"));
+console.log("D");
+// Output: A D C B</code></pre>
+    <div class="interview-q">
+      <h4>Q: Why does Promise run before setTimeout?</h4>
+      <p>Microtask queue has higher priority than callback queue.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 15. Microtask Queue -->
+    <h2>Microtask Queue</h2>
+    <p>Higher priority than macrotask (callback) queue. Used by Promises, <code>queueMicrotask</code>.</p>
+    <pre><code>Promise.resolve().then(() => console.log("micro"));
+setTimeout(() => console.log("macro"), 0);
+// micro → macro</code></pre>
+    <div class="interview-q">
+      <h4>Q: Can setTimeout be a microtask?</h4>
+      <p>No. Only Promises and <code>MutationObserver</code>.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 16. React Router -->
+    <h2>React Router</h2>
+    <p>Client-side routing for SPAs.</p>
+    <pre><code>import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+function App() {
+  return (
+    &lt;BrowserRouter&gt;
+      &lt;Routes&gt;
+        &lt;Route path="/" element={&lt;Home /&gt;} /&gt;
+        &lt;Route path="/about" element={&lt;About /&gt;} /&gt;
+      &lt;/Routes&gt;
+    &lt;/BrowserRouter&gt;
+  );
+}</code></pre>
+    <div class="interview-q">
+      <h4>Q: How to get URL params?</h4>
+      <p><code>useParams()</code> hook: <code>const { id } = useParams();</code></p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 17. Middleware -->
+    <h2>Middleware in Node.js</h2>
+    <p>Functions with access to <code>req</code>, <code>res</code>, <code>next</code>.</p>
+    <pre><code>const logger = (req, res, next) => {
+  console.log(\`\${req.method} \${req.url}\`);
+  next();
+};
+app.use(logger);</code></pre>
+    <div class="interview-q">
+      <h4>Q: What happens if you forget next()?</h4>
+      <p>Request hangs — response never sent.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 18. JSON -->
+    <h2>JSON (JavaScript Object Notation)</h2>
+    <p>Lightweight data format. Used in APIs.</p>
+    <pre><code>const obj = { name: "Gaurav", city: "Pune" };
+const json = JSON.stringify(obj);
+console.log(json); // {"name":"Gaurav","city":"Pune"}
+console.log(JSON.parse(json)); // object</code></pre>
+    <div class="interview-q">
+      <h4>Q: Can JSON store functions?</h4>
+      <p>No. Only data: strings, numbers, arrays, objects, boolean, null.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Key Takeaways -->
+    <h2 class="key-takeaways">Key Takeaways</h2>
+    <ul>
+      <li><code>typeof null === "object"</code> → historical bug</li>
+      <li><code>undefined</code> ≠ <code>not defined</code></li>
+      <li><code>NaN === NaN</code> is <code>false</code> → use <code>Number.isNaN()</code></li>
+      <li><code>null</code> = intentional, <code>undefined</code> = uninitialized</li>
+      <li>React = declarative, component-based, Virtual DOM</li>
+      <li>JSX → <code>React.createElement()</code></li>
+      <li>Node.js = non-blocking, event-driven</li>
+      <li>Event Loop: microtasks > macrotasks</li>
+      <li>Always call <code>next()</code> in middleware</li>
+      <li>REST: stateless, resource-based, HTTP verbs</li>
+    </ul>
+
+  </div>
+</body>
+</html>
