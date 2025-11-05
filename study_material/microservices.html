@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Microservices Architecture Explained</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>μ</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --orange: #ce9178;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 3rem; color: var(--teal); text-align: center; margin: 2.5rem 0; }
+    h2 { font-size: 2rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 3rem 0 1.5rem; }
+    h3 { font-size: 1.6rem; color: var(--blue); margin: 2rem 0 1rem; }
+    h4 { font-size: 1.3rem; color: var(--purple); margin: 1.5rem 0 0.8rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+      font-size: 0.95rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 5rem 0; }
+    .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .interview-q {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #404040;
+    }
+    .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
+    .diagram {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--green);
+      margin: 1.5rem 0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      border: 1px solid #404040;
+      padding: 0.8rem;
+      text-align: left;
+    }
+    th { background: #2d2d30; color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>Microservices Architecture Developer Handbook</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
+        Node.js + Express + Docker + RabbitMQ | Real-World Patterns
+      </p>
+    </div>
+
+    <!-- 1. Introduction -->
+    <h2>Introduction to Microservices</h2>
+    <p><strong>Microservices</strong> are small, independent services that work together to form an application. Each service focuses on a single business capability and communicates via lightweight protocols.</p>
+    <table>
+      <tr><th>Aspect</th><th>Monolithic</th><th>Microservices</th></tr>
+      <tr><td>Codebase</td><td>Single</td><td>Multiple</td></tr>
+      <tr><td>Deployment</td><td>All or nothing</td><td>Independent</td></tr>
+      <tr><td>Scaling</td><td>Entire app</td><td>Per service</td></tr>
+      <tr><td>Tech Stack</td><td>One language/DB</td><td>Polyglot</td></tr>
+      <tr><td>Failure</td><td>App-wide crash</td><td>Isolated</td></tr>
+    </table>
+    <div class="diagram">
+[Client] → [API Gateway] → [Auth Service] → [User DB]
+                          → [Order Service] → [Order DB]
+                          → [Payment Service] → [Payment DB]
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 2. Core Concepts -->
+    <h2>Core Concepts</h2>
+    <ul>
+      <li><strong>Service Isolation</strong>: Each service runs in its own process</li>
+      <li><strong>Independent Scaling</strong>: Scale only busy services</li>
+      <li><strong>Database per Service</strong>: Avoid shared DBs</li>
+      <li><strong>Communication</strong>: REST, gRPC, or Message Queues</li>
+    </ul>
+    <pre><code>// Order Service → User Service (Sync)
+import axios from "axios";
+
+app.post("/order", async (req, res) => {
+  const user = await axios.get("http://user-service:4000/user/1");
+  res.json({ msg: `Order for ${user.data.name}` });
+});</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 3. Communication -->
+    <h2>Communication Between Services</h2>
+    <p><strong>Synchronous</strong>: HTTP/REST (request-response)<br>
+    <strong>Asynchronous</strong>: Message Queues (event-driven)</p>
+    <pre><code>// Async: Order → Payment via RabbitMQ
+import amqp from "amqplib";
+
+const conn = await amqp.connect("amqp://rabbitmq");
+const ch = await conn.createChannel();
+await ch.assertQueue("payment_queue");
+
+ch.sendToQueue("payment_queue", Buffer.from(JSON.stringify({
+  orderId: 123, amount: 99.99
+})));</code></pre>
+    <pre><code>// Consumer (Payment Service)
+ch.consume("payment_queue", async (msg) => {
+  const data = JSON.parse(msg.content.toString());
+  // process payment
+  ch.ack(msg);
+});</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 4. Database per Service -->
+    <h2>Database per Service</h2>
+    <p>Each service owns its data. No shared schema → true independence.</p>
+    <pre><code>// User Service (MongoDB)
+import mongoose from "mongoose";
+const UserSchema = new mongoose.Schema({ name: String, email: String });
+export default mongoose.model("User", UserSchema);
+
+// Order Service (PostgreSQL)
+// Uses pg + knex or Prisma</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 5. API Gateway -->
+    <h2>API Gateway</h2>
+    <p>Single entry point. Handles auth, routing, rate limiting, logging.</p>
+    <pre><code>import express from "express";
+import { createProxyMiddleware } from "http-proxy-middleware";
+
+const app = express();
+app.use("/users", createProxyMiddleware({ target: "http://user-service:4000" }));
+app.use("/orders", createProxyMiddleware({ target: "http://order-service:5000" }));
+app.listen(8080);</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 6. Service Discovery -->
+    <h2>Service Discovery</h2>
+    <p>Services register with a registry. Clients discover via name, not IP.</p>
+    <div class="diagram">
+[User Service] → POST /register → [Consul]
+[Order Service] → GET /find/user → [Consul] → IP:4000
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 7. Security -->
+    <h2>Inter-Service Security</h2>
+    <pre><code>app.use((req, res, next) => {
+  const token = req.headers["x-internal-token"];
+  if (token !== process.env.INTERNAL_SECRET) {
+    return res.status(403).json({ error: "Forbidden" });
+  }
+  next();
+});</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 8. Docker -->
+    <h2>Dockerizing Microservices</h2>
+    <pre><code># Dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+EXPOSE 4000
+CMD ["node", "index.js"]</code></pre>
+    <pre><code># docker-compose.yml
+version: "3.8"
+services:
+  user-service:
+    build: ./user
+    ports: ["4000:4000"]
+    environment:
+      - DB_URL=mongodb://mongo:27017/users
+  order-service:
+    build: ./order
+    ports: ["5000:5000"]
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports: ["5672:5672", "15672:15672"]</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 9. Health & Monitoring -->
+    <h2>Logging & Health Checks</h2>
+    <pre><code>app.get("/health", (req, res) => {
+  res.json({ status: "UP", service: "order-service", timestamp: new Date() });
+});
+
+// Winston logging
+import winston from "winston";
+const logger = winston.createLogger({
+  transports: [new winston.transports.Console()]
+});
+logger.info("Order created", { orderId: 123 });</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 10. Circuit Breaker -->
+    <h2>Circuit Breakers & Resilience</h2>
+    <pre><code>import CircuitBreaker from "opossum";
+import axios from "axios";
+
+const breaker = new CircuitBreaker(async () => {
+  return axios.post("http://payment-service/pay", { amount: 100 });
+}, { timeout: 3000, errorThresholdPercentage: 50 });
+
+breaker.fallback(() => ({ status: "failed", retry: true }));
+breaker.fire().catch(console.error);</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 11. Design Patterns -->
+    <h2>Common Design Patterns</h2>
+    <ul>
+      <li><strong>API Gateway</strong>: Single entry</li>
+      <li><strong>Database per Service</strong>: Data isolation</li>
+      <li><strong>Saga</strong>: Distributed transactions via events</li>
+      <li><strong>CQRS</strong>: Separate read/write models</li>
+      <li><strong>Event Sourcing</strong>: Store state as events</li>
+    </ul>
+    <div class="diagram">
+Order Created → [Payment Service] → Payment Success/Fail
+        ↓ (fail)
+[Compensation] → Cancel Order → Update Inventory
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 12. Interview Q&A -->
+    <h2>Interview Questions & Answers</h2>
+
+    <div class="interview-q">
+      <h4>Q1. Monolithic vs Microservices?</h4>
+      <p><strong>Monolith</strong>: Single deployable unit. Simple but hard to scale.<br>
+      <strong>Microservices</strong>: Independent, scalable, fault-isolated. Complex ops.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q2. How do services communicate?</h4>
+      <p><strong>Sync</strong>: REST/gRPC (blocking).<br>
+      <strong>Async</strong>: RabbitMQ, Kafka (event-driven).</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q3. Why database per service?</h4>
+      <p>Prevents coupling. Allows schema evolution, different DB tech per service.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q4. How to handle distributed transactions?</h4>
+      <p>Use <strong>Saga Pattern</strong>: sequence of local transactions with compensation.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q5. What is API Gateway?</h4>
+      <p>Reverse proxy. Handles auth, routing, rate limiting, caching.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q6. Synchronous vs Asynchronous?</h4>
+      <p><strong>Sync</strong>: Immediate response. Can cascade failures.<br>
+      <strong>Async</strong>: Decoupled, resilient, eventual consistency.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q7. How to secure inter-service calls?</h4>
+      <p>mTLS, JWT, internal API keys, VPC-only traffic.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q8. What is service discovery?</h4>
+      <p>Dynamic registry (Consul, Eureka) to find service IPs.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q9. How to monitor microservices?</h4>
+      <p>Structured logs (ELK), metrics (Prometheus), traces (Jaeger), health endpoints.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q10. How to scale?</h4>
+      <p>Horizontal scaling per service. Use Kubernetes, Docker Swarm, or ECS.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 13. Scaling -->
+    <h2>Scaling & Deployment</h2>
+    <pre><code># Scale order service to 3 instances
+docker-compose up --scale order-service=3
+
+# Kubernetes
+kubectl scale deployment order-service --replicas=5</code></pre>
+    <p>Use <strong>load balancers</strong>, <strong>auto-scaling groups</strong>, and <strong>distributed tracing</strong>.</p>
+
+    <div class="divider"></div>
+
+    <!-- Best Practices -->
+    <h2>Best Practices</h2>
+    <ul>
+      <li>Keep services small and focused</li>
+      <li>Use API Gateway + Service Mesh</li>
+      <li>Implement health checks and circuit breakers</li>
+      <li>Log with correlation IDs</li>
+      <li>Version APIs (v1, v2)</li>
+      <li>Automate deployments with CI/CD</li>
+      <li>Use Docker + Kubernetes</li>
+      <li>Monitor everything</li>
+    </ul>
+
+    <h2>Common Pitfalls</h2>
+    <ul>
+      <li>Too many small services → overhead</li>
+      <li>Shared database → tight coupling</li>
+      <li>No circuit breakers → cascading failures</li>
+      <li>Poor logging → hard debugging</li>
+      <li>Direct IP calls → not resilient</li>
+      <li>Ignoring data consistency</li>
+    </ul>
+
+    <h2>Next Steps: Deploying on AWS / Kubernetes</h2>
+    <ol>
+      <li>Containerize with <strong>Docker</strong></li>
+      <li>Orchestrate with <strong>Kubernetes (EKS)</strong></li>
+      <li>Use <strong>API Gateway + Lambda</strong> or <strong>ALB</strong></li>
+      <li>Monitor with <strong>CloudWatch, Prometheus, Grafana</strong></li>
+      <li>Trace with <strong>AWS X-Ray or Jaeger</strong></li>
+      <li>Secure with <strong>IAM, VPC, mTLS</strong></li>
+      <li>CI/CD with <strong>CodePipeline, GitHub Actions</strong></li>
+      <li>Implement <strong>Blue-Green / Canary Deployments</strong></li>
+    </ol>
+
+  </div>
+</body>
+</html>
