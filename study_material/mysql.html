@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MySQL Developer Handbook + Interview Notes</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>MySQL</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --orange: #ce9178;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 3rem; color: var(--teal); text-align: center; margin: 2.5rem 0; }
+    h2 { font-size: 2rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 3rem 0 1.5rem; }
+    h3 { font-size: 1.6rem; color: var(--blue); margin: 2rem 0 1rem; }
+    h4 { font-size: 1.3rem; color: var(--purple); margin: 1.5rem 0 0.8rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+      font-size: 0.95rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 5rem 0; }
+    .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .interview-q {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #404040;
+    }
+    .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
+    .diagram {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--green);
+      margin: 1.5rem 0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      border: 1px solid #404040;
+      padding: 0.8rem;
+      text-align: left;
+    }
+    th { background: #2d2d30; color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>MySQL Developer Handbook + Interview Notes</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
+        Queries • Optimization • Indexing • Real-World Examples
+      </p>
+    </div>
+
+    <!-- 1. Introduction -->
+    <h2>Introduction to MySQL</h2>
+    <p><strong>MySQL</strong> is a popular open-source relational database management system (RDBMS) using SQL.</p>
+    <p><strong>Features</strong>: ACID compliance, replication, partitioning, full-text search, JSON support.</p>
+    <table>
+      <tr><th>MySQL</th><th>NoSQL</th></tr>
+      <tr><td>Fixed schema</td><td>Flexible schema</td></tr>
+      <tr><td>ACID</td><td>BASE</td></tr>
+      <tr><td>Joins</td><td>No joins</td></tr>
+      <tr><td>Vertical scaling</td><td>Horizontal scaling</td></tr>
+    </table>
+    <p><strong>Architecture</strong>: Client → Query Parser → Optimizer → Storage Engine (InnoDB, MyISAM)</p>
+    <pre><code>SHOW DATABASES;
+USE employees;
+SHOW TABLES;</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 2. Data Types -->
+    <h2>MySQL Data Types</h2>
+    <table>
+      <tr><th>Category</th><th>Examples</th><th>Description</th></tr>
+      <tr><td>Numeric</td><td><code>INT</code>, <code>DECIMAL</code></td><td>Whole/fixed-point numbers</td></tr>
+      <tr><td>String</td><td><code>VARCHAR</code>, <code>TEXT</code></td><td>Variable/fixed text</td></tr>
+      <tr><td>Date/Time</td><td><code>DATE</code>, <code>DATETIME</code></td><td>Date and time</td></tr>
+      <tr><td>JSON</td><td><code>JSON</code></td><td>Structured data</td></tr>
+    </table>
+    <pre><code>CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(255) UNIQUE,
+  age TINYINT,
+  balance DECIMAL(10,2),
+  registered_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  settings JSON
+);</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 3. CRUD -->
+    <h2>CRUD Operations</h2>
+    <h3>Create (INSERT)</h3>
+    <pre><code>INSERT INTO users (name, age, email) 
+VALUES ('Gaurav', 25, 'g@example.com');</code></pre>
+
+    <h3>Read (SELECT)</h3>
+    <pre><code>SELECT name, age FROM users WHERE age > 20 ORDER BY age DESC;</code></pre>
+
+    <h3>Update</h3>
+    <pre><code>UPDATE users SET age = 26 WHERE name = 'Gaurav';</code></pre>
+
+    <h3>Delete</h3>
+    <pre><code>DELETE FROM users WHERE id = 5;</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 4. Joins -->
+    <h2>Joins in MySQL</h2>
+    <pre><code>-- INNER JOIN
+SELECT u.name, o.amount
+FROM users u
+INNER JOIN orders o ON u.id = o.user_id;
+
+-- LEFT JOIN
+SELECT u.name, o.id AS order_id
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id;
+
+-- Users with no orders
+SELECT u.name
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE o.id IS NULL;</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 5. Aggregates -->
+    <h2>Aggregate Functions & Grouping</h2>
+    <pre><code>SELECT 
+  department,
+  COUNT(*) AS total,
+  AVG(salary) AS avg_salary,
+  MAX(salary) AS highest
+FROM employees
+GROUP BY department
+HAVING avg_salary > 50000
+ORDER BY avg_salary DESC;</code></pre>
+    <p><strong>HAVING</strong> filters groups. <strong>WHERE</strong> filters rows before grouping.</p>
+
+    <div class="divider"></div>
+
+    <!-- 6. Constraints -->
+    <h2>Constraints</h2>
+    <table>
+      <tr><th>Constraint</th><th>Purpose</th></tr>
+      <tr><td><code>PRIMARY KEY</code></td><td>Unique identifier</td></tr>
+      <tr><td><code>FOREIGN KEY</code></td><td>Referential integrity</td></tr>
+      <tr><td><code>UNIQUE</code></td><td>No duplicates</td></tr>
+      <tr><td><code>NOT NULL</code></td><td>Required value</td></tr>
+      <tr><td><code>CHECK</code></td><td>Range validation</td></tr>
+    </table>
+    <pre><code>CREATE TABLE orders (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  amount DECIMAL(10,2) CHECK (amount > 0),
+  status ENUM('pending','completed') DEFAULT 'pending',
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 7. Indexing -->
+    <h2>Indexing in MySQL</h2>
+    <p><strong>Index</strong> = B-Tree structure for fast lookup. Speeds up <code>WHERE</code>, <code>JOIN</code>, <code>ORDER BY</code>.</p>
+    <pre><code>CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_orders_user_status ON orders(user_id, status);
+
+EXPLAIN SELECT * FROM users WHERE email = 'g@example.com';</code></pre>
+    <div class="diagram">
+[Full Table Scan] → 1,000,000 rows → Slow
+       ↓
+[Index Lookup] → B-Tree → 1 row → Fast
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 8. Normalization -->
+    <h2>Normalization</h2>
+    <ul>
+      <li><strong>1NF</strong>: Atomic values, no repeating groups</li>
+      <li><strong>2NF</strong>: 1NF + no partial dependency</li>
+      <li><strong>3NF</strong>: 2NF + no transitive dependency</li>
+    </ul>
+    <p>Eliminates redundancy, ensures data integrity.</p>
+
+    <div class="divider"></div>
+
+    <!-- 9. Transactions -->
+    <h2>Transactions (ACID)</h2>
+    <pre><code>START TRANSACTION;
+UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+COMMIT;
+
+-- On error:
+ROLLBACK;</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 10. Stored Procedures -->
+    <h2>Stored Procedures & Functions</h2>
+    <pre><code>DELIMITER //
+CREATE PROCEDURE GetActiveUsers()
+BEGIN
+  SELECT * FROM users WHERE status = 'active';
+END //
+DELIMITER ;
+
+CALL GetActiveUsers();
+
+-- Function
+CREATE FUNCTION CalculateTax(amount DECIMAL(10,2))
+RETURNS DECIMAL(10,2)
+DETERMINISTIC
+RETURN amount * 0.18;</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 11. Triggers -->
+    <h2>Triggers</h2>
+    <pre><code>CREATE TRIGGER before_user_insert
+BEFORE INSERT ON users
+FOR EACH ROW
+SET NEW.created_at = NOW(), NEW.updated_at = NOW();</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 12. Views -->
+    <h2>Views</h2>
+    <pre><code>CREATE VIEW high_value_customers AS
+SELECT u.name, SUM(o.amount) as total_spent
+FROM users u
+JOIN orders o ON u.id = o.user_id
+GROUP BY u.id
+HAVING total_spent > 10000;
+
+SELECT * FROM high_value_customers;</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 13. Optimization -->
+    <h2>Optimization Techniques</h2>
+    <ul>
+      <li>Use specific columns (<code>SELECT name</code> not <code>*</code>)</li>
+      <li>Index columns in <code>WHERE</code>, <code>JOIN</code>, <code>ORDER BY</code></li>
+      <li>Avoid functions on indexed columns</li>
+      <li>Use <code>EXPLAIN</code> to analyze query plan</li>
+    </ul>
+    <pre><code>EXPLAIN FORMAT=JSON 
+SELECT * FROM orders WHERE YEAR(created_at) = 2025;</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 14. Backup -->
+    <h2>Backup & Restore</h2>
+    <pre><code># Backup
+mysqldump -u root -p --single-transaction employees > backup.sql
+
+# Restore
+mysql -u root -p employees < backup.sql</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 15. Real-World Queries -->
+    <h2>Real-World Queries</h2>
+    <pre><code>-- Top 5 highest paid per dept
+SELECT department, name, salary
+FROM (
+  SELECT *, ROW_NUMBER() OVER (PARTITION BY department ORDER BY salary DESC) as rn
+  FROM employees
+) ranked
+WHERE rn <= 5;
+
+-- Pagination
+SELECT * FROM users 
+ORDER BY id 
+LIMIT 10 OFFSET 20; -- Page 3 (10 per page)</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 16. Interview Q&A -->
+    <h2>MySQL Interview Questions & Answers</h2>
+
+    <div class="interview-q">
+      <h4>Q1. INNER vs LEFT JOIN?</h4>
+      <p><code>INNER</code>: Only matching rows.<br>
+      <code>LEFT</code>: All from left + matched right (NULL if no match).</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q2. What is an Index?</h4>
+      <p>B-Tree structure for fast lookup. Reduces full table scans.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q3. Why normalize?</h4>
+      <p>Reduce redundancy, prevent anomalies (insert/update/delete).</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q4. ACID?</h4>
+      <p><strong>A</strong>tomicity, <strong>C</strong>onsistency, <strong>I</strong>solation, <strong>D</strong>urability.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q5. CHAR vs VARCHAR?</h4>
+      <p><code>CHAR</code>: Fixed length (padded).<br>
+      <code>VARCHAR</code>: Variable (1-2 byte overhead).</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q6. Optimize slow query?</h4>
+      <p>Run <code>EXPLAIN</code>, add indexes, avoid <code>*</code>, use <code>LIMIT</code>.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q7. DELETE vs TRUNCATE vs DROP?</h4>
+      <p><code>DELETE</code>: Row-by-row, triggerable.<br>
+      <code>TRUNCATE</code>: Faster, resets auto-increment.<br>
+      <code>DROP</code>: Removes table.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q8. UNION vs UNION ALL?</h4>
+      <p><code>UNION</code>: Removes duplicates.<br>
+      <code>UNION ALL</code>: Faster, keeps all.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q9. InnoDB vs MyISAM?</h4>
+      <p><code>InnoDB</code>: ACID, FK, row-level lock.<br>
+      <code>MyISAM</code>: Faster reads, table-level lock.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q10. Pagination?</h4>
+      <pre><code>SELECT * FROM users 
+ORDER BY id 
+LIMIT 10 OFFSET 20;</code></pre>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 17. Node.js Integration -->
+    <h2>MySQL with Node.js</h2>
+    <pre><code>import mysql from "mysql2/promise";
+
+const pool = mysql.createPool({
+  host: "localhost",
+  user: "root",
+  password: "secret",
+  database: "shop"
+});
+
+const [rows] = await pool.execute(
+  "SELECT * FROM users WHERE age > ?", [18]
+);
+console.log(rows);</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Key Takeaways -->
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Always index <code>WHERE</code>, <code>JOIN</code>, <code>ORDER BY</code> columns</li>
+      <li>Use <code>EXPLAIN</code> before optimizing</li>
+      <li>Normalize to 3NF for OLTP</li>
+      <li>Use transactions for multi-statement consistency</li>
+      <li><code>VARCHAR</code> over <code>CHAR</code> for variable text</li>
+      <li><code>UNION ALL</code> > <code>UNION</code> unless deduplication needed</li>
+      <li>Backup regularly with <code>mysqldump</code></li>
+    </ul>
+
+    <h2>Common Mistakes</h2>
+    <ul>
+      <li>Using <code>SELECT *</code> in production</li>
+      <li>Functions on indexed columns: <code>YEAR(date)</code></li>
+      <li>No <code>LIMIT</code> in pagination</li>
+      <li>Storing JSON when relational is better</li>
+      <li>Forgetting <code>WHERE</code> in <code>UPDATE/DELETE</code></li>
+      <li>Using <code>MyISAM</code> for transactional apps</li>
+    </ul>
+
+    <h2>Performance Tuning Tips</h2>
+    <ul>
+      <li>Cache frequent queries (Redis)</li>
+      <li>Use connection pooling</li>
+      <li>Partition large tables</li>
+      <li>Enable slow query log</li>
+      <li>Tune <code>innodb_buffer_pool_size</code></li>
+    </ul>
+
+    <h2>Backup & Restore Commands</h2>
+    <pre><code># Full backup
+mysqldump -u root -p --all-databases > full_backup.sql
+
+# Single DB
+mysqldump -u root -p employees > employees.sql
+
+# Restore
+mysql -u root -p < full_backup.sql</code></pre>
+
+    <h2>Next Steps</h2>
+    <ol>
+      <li>Learn <strong>Sequelize ORM</strong> or <strong>Prisma</strong></li>
+      <li>Master <strong>query optimization</strong> with <code>EXPLAIN ANALYZE</code></li>
+      <li>Explore <strong>replication</strong> (Master-Slave, GTID)</li>
+      <li>Study <strong>sharding</strong> and <strong>read replicas</strong></li>
+      <li>Implement <strong>connection pooling</strong> in Node.js</li>
+    </ol>
+
+  </div>
+</body>
+</html>

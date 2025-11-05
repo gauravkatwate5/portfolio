@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kubernetes + Docker + CI/CD Pipeline</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>K8s</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --orange: #ce9178;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 3rem; color: var(--teal); text-align: center; margin: 2.5rem 0; }
+    h2 { font-size: 2rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 3rem 0 1.5rem; }
+    h3 { font-size: 1.6rem; color: var(--blue); margin: 2rem 0 1rem; }
+    h4 { font-size: 1.3rem; color: var(--purple); margin: 1.5rem 0 0.8rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+      font-size: 0.95rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 5rem 0; }
+    .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .interview-q {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #404040;
+    }
+    .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
+    .diagram {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--green);
+      margin: 1.5rem 0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      border: 1px solid #404040;
+      padding: 0.8rem;
+      text-align: left;
+    }
+    th { background: #2d2d30; color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>Kubernetes + CI/CD for Microservices Deployment</h1>
+      <p class="author">Compiled by <strong>Gaurav Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
+        Docker → Kubernetes → GitHub Actions → Production-Ready Microservices
+      </p>
+    </div>
+
+    <!-- 1. Introduction -->
+    <h2>Introduction to Container Orchestration</h2>
+    <p><strong>Container Orchestration</strong> automates deployment, scaling, and management of containerized apps.</p>
+    <p><strong>Why Kubernetes?</strong> Industry standard. Handles scheduling, scaling, self-healing, rollouts, service discovery.</p>
+    <table>
+      <tr><th>Docker Compose</th><th>Kubernetes</th></tr>
+      <tr><td>Local dev / single host</td><td>Production clusters</td></tr>
+      <tr><td>Simple YAML</td><td>Rich API + declarative</td></tr>
+      <tr><td>No auto-scaling</td><td>HPA, VPA</td></tr>
+      <tr><td>Limited networking</td><td>Ingress, Service Mesh</td></tr>
+    </table>
+    <div class="diagram">
+[User] → [Load Balancer]
+         ↓
+     [Ingress Controller]
+         ↓
+   [Service] → [Pods] → [Containers]
+               ↑
+           [ReplicaSet]
+               ↑
+           [Deployment]
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 2. Core Concepts -->
+    <h2>Core Kubernetes Concepts</h2>
+    <ul>
+      <li><strong>Pod</strong>: Smallest deployable unit (1+ containers)</li>
+      <li><strong>ReplicaSet</strong>: Ensures desired # of pods</li>
+      <li><strong>Deployment</strong>: Manages rollouts & rollbacks</li>
+      <li><strong>Service</strong>: Exposes pods via stable endpoint</li>
+      <li><strong>Namespace</strong>: Virtual cluster isolation</li>
+    </ul>
+    <p><strong>Control Plane</strong>: API Server, etcd, Scheduler, Controller Manager<br>
+    <strong>Nodes</strong>: kubelet, kube-proxy, container runtime</p>
+    <pre><code>kubectl get pods -n prod
+kubectl get deployments
+kubectl describe service user-service</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 3. Deploy Node.js -->
+    <h2>Deploying a Node.js Microservice</h2>
+    <pre><code># Dockerfile
+FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+EXPOSE 4000
+CMD ["node", "index.js"]</code></pre>
+    <pre><code># k8s/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  namespace: prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+        - name: user-service
+          image: gauravkatwate/user-service:v1
+          ports:
+            - containerPort: 4000
+          env:
+            - name: MONGO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: uri
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+spec:
+  selector:
+    app: user-service
+  ports:
+    - port: 4000
+      targetPort: 4000
+  type: ClusterIP</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 4. Ingress -->
+    <h2>Ingress & Load Balancing</h2>
+    <p><strong>Ingress</strong> manages external HTTP/S traffic. Requires <code>IngressController</code> (NGINX, Traefik).</p>
+    <pre><code># ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: api.myapp.local
+      http:
+        paths:
+          - path: /users
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 4000
+    - host: myapp.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 3000</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 5. CI/CD -->
+    <h2>CI/CD Pipeline (GitHub Actions)</h2>
+    <p>Automate build → test → push → deploy on every push.</p>
+    <pre><code># .github/workflows/deploy.yml
+name: Deploy Microservice
+on:
+  push:
+    branches: [ main ]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push
+        run: |
+          docker build -t gauravkatwate/user-service:${{ github.sha }} .
+          docker push gauravkatwate/user-service:${{ github.sha }}
+
+      - name: Deploy to Kubernetes
+        uses: azure/k8s-deploy@v4
+        with:
+          namespace: prod
+          manifests: |
+            k8s/deployment.yaml
+            k8s/service.yaml
+          images: |
+            gauravkatwate/user-service:${{ github.sha }}
+          kubectl-version: 'latest'</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 6. Monitoring & Scaling -->
+    <h2>Monitoring & Scaling</h2>
+    <p><strong>HPA</strong> auto-scales pods based on CPU/memory.</p>
+    <pre><code>kubectl autoscale deployment user-service \
+  --cpu-percent=70 --min=2 --max=10 -n prod</code></pre>
+    <p><strong>Prometheus</strong> scrapes metrics. <strong>Grafana</strong> visualizes.</p>
+    <pre><code># Add to Deployment
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 7. Interview Questions -->
+    <h2>Common Interview Questions</h2>
+
+    <div class="interview-q">
+      <h4>Q1. ReplicaSet vs Deployment?</h4>
+      <p><strong>ReplicaSet</strong>: Ensures pod count.<br>
+      <strong>Deployment</strong>: Manages ReplicaSets + rollouts/rollbacks.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q2. What is a Pod?</h4>
+      <p>Atomic unit. 1+ containers sharing network/storage. Co-located & co-scheduled.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q3. ConfigMaps vs Secrets?</h4>
+      <p><strong>ConfigMap</strong>: Non-sensitive config (env, files).<br>
+      <strong>Secret</strong>: Base64-encoded sensitive data (passwords, tokens).</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q4. How does Kubernetes scale?</h4>
+      <p><strong>Horizontal</strong>: HPA adds pods.<br>
+      <strong>Vertical</strong>: VPA adjusts resources.<br>
+      <strong>Cluster Autoscaler</strong>: adds nodes.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q5. How to handle secrets in CI/CD?</h4>
+      <p>Use sealed secrets, Hashicorp Vault, or external secret operators. Never commit plaintext.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q6. What are health checks?</h4>
+      <p><strong>livenessProbe</strong>: Restart if fails.<br>
+      <strong>readinessProbe</strong>: Remove from traffic if not ready.</p>
+      <pre><code>livenessProbe:
+  httpGet:
+    path: /health
+    port: 4000
+  initialDelaySeconds: 30
+  periodSeconds: 10</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q7. Rolling vs Blue-Green?</h4>
+      <p><strong>Rolling</strong>: Gradual pod replacement.<br>
+      <strong>Blue-Green</strong>: Switch traffic instantly between two environments.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Key Takeaways -->
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Pods are ephemeral — never store state</li>
+      <li>Use <code>Deployment</code> for rollouts, not ReplicaSet directly</li>
+      <li>Services provide stable IPs</li>
+      <li>Ingress needs controller + rules</li>
+      <li>HPA requires resource requests</li>
+      <li>CI/CD should be automated and reproducible</li>
+      <li>Secrets must be encrypted at rest</li>
+      <li>Always define liveness/readiness probes</li>
+    </ul>
+
+    <h2>Common Pitfalls</h2>
+    <ul>
+      <li>Running stateful apps in stateless pods</li>
+      <li>Not setting resource limits → noisy neighbor</li>
+      <li>Using <code>latest</code> tag in production</li>
+      <li>Exposing services without auth</li>
+      <li>No health checks → zombie pods</li>
+      <li>Hardcoding IPs instead of service names</li>
+      <li>Ignoring namespace isolation</li>
+    </ul>
+
+  </div>
+</body>
+</html>
