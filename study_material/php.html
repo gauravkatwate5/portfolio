@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PHP Developer Handbook + Interview Notes</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>PHP</text></svg>">
+  <style>
+    :root {
+      --bg: #1e1e1e;
+      --text: #d4d4d4;
+      --code-bg: #252526;
+      --teal: #4ec9b0;
+      --blue: #569cd6;
+      --purple: #c586c0;
+      --green: #6a9955;
+      --yellow: #dcdcaa;
+      --red: #f44747;
+      --orange: #ce9178;
+      --gray: #858585;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
+      padding: 2rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3, h4 { font-family: 'JetBrains Mono', monospace; }
+    h1 { font-size: 3rem; color: var(--teal); text-align: center; margin: 2.5rem 0; }
+    h2 { font-size: 2rem; color: var(--teal); border-bottom: 2px solid var(--teal); padding-bottom: 0.5rem; margin: 3rem 0 1.5rem; }
+    h3 { font-size: 1.6rem; color: var(--blue); margin: 2rem 0 1rem; }
+    h4 { font-size: 1.3rem; color: var(--purple); margin: 1.5rem 0 0.8rem; }
+    p, li { margin-bottom: 1rem; }
+    ul, ol { padding-left: 2rem; }
+    code {
+      background: var(--code-bg);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--yellow);
+    }
+    pre {
+      background: var(--code-bg);
+      padding: 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--teal);
+      font-size: 0.95rem;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+      color: inherit;
+    }
+    .cover { text-align: center; padding: 5rem 0; }
+    .author { font-size: 1.4rem; color: var(--gray); margin-top: 1.2rem; }
+    .interview-q {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+      border: 1px solid #404040;
+    }
+    .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
+    .diagram {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--green);
+      margin: 1.5rem 0;
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    th, td {
+      border: 1px solid #404040;
+      padding: 0.8rem;
+      text-align: left;
+    }
+    th { background: #2d2d30; color: var(--teal); }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Cover Page -->
+    <div class="cover">
+      <h1>PHP Developer Handbook + Interview Notes</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
+      <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
+        Core PHP • OOP • MVC • REST APIs • MySQL • 50+ Interview Qs
+      </p>
+    </div>
+
+    <!-- 1. Introduction -->
+    <h2>Introduction to PHP</h2>
+    <p><strong>PHP</strong> (Hypertext Preprocessor) is a server-side scripting language designed for web development.</p>
+    <p><strong>Why PHP?</strong> Easy syntax, vast ecosystem (Laravel, WordPress), C-like syntax, fast prototyping.</p>
+    <table>
+      <tr><th>PHP 5</th><th>PHP 7</th><th>PHP 8</th></tr>
+      <tr><td>Legacy</td><td>2x faster</td><td>JIT, Union Types</td></tr>
+      <tr><td>No type hints</td><td>Scalar types</td><td>Match, Attributes</td></tr>
+    </table>
+    <pre><code>&lt;?php
+echo "Hello, Gaurav!";
+?&gt;</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 2. Syntax -->
+    <h2>PHP Syntax & Basics</h2>
+    <pre><code>$name = "Gaurav";
+$age = 25;
+define("PI", 3.14);
+
+echo strtoupper($name); // GAURAV
+echo $_SERVER["REQUEST_METHOD"];
+echo $_GET["id"] ?? "N/A";</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 3. Control Structures -->
+    <h2>Control Structures</h2>
+    <pre><code>$users = [["name" => "Gaurav"], ["name" => "Raj"]];
+
+foreach ($users as $u) {
+    echo $u["name"] . "&lt;br&gt;";
+}
+
+for ($i = 0; $i < 5; $i++) {
+    if ($i == 2) continue;
+    echo $i;
+}</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 4. Functions -->
+    <h2>Functions</h2>
+    <pre><code>function greet($name = "Guest") {
+    return "Hello, $name!";
+}
+
+function sum(...$nums) {
+    return array_sum($nums);
+}
+
+function modify(&$val) {
+    $val *= 2;
+}
+$x = 5;
+modify($x);
+echo $x; // 10</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 5. Arrays -->
+    <h2>Arrays</h2>
+    <pre><code>$fruits = ["apple", "banana"];
+$person = ["name" => "Gaurav", "city" => "Pune"];
+
+$merged = array_merge($fruits, ["orange"]);
+$filtered = array_filter($person, fn($v) => $v !== "Pune");
+$mapped = array_map("strtoupper", $fruits);</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 6. OOP -->
+    <h2>Object-Oriented PHP</h2>
+    <pre><code>namespace App\Models;
+
+class User {
+    public function __construct(private string $name) {}
+
+    public function getName(): string {
+        return $this->name;
+    }
+}
+
+trait Loggable {
+    public function log($msg) {
+        error_log($msg);
+    }
+}
+
+interface Payable {
+    public function pay(float $amount): bool;
+}
+
+class Admin extends User implements Payable {
+    use Loggable;
+    public function pay(float $amount): bool { return true; }
+}</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 7. MySQL -->
+    <h2>PHP with MySQL</h2>
+    <pre><code>$pdo = new PDO("mysql:host=localhost;dbname=test", "root", "");
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->execute([1]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 8. Sessions & Cookies -->
+    <h2>Sessions & Cookies</h2>
+    <pre><code>session_start();
+$_SESSION["user_id"] = 123;
+
+setcookie("theme", "dark", time() + 86400, "/", "", true, true);</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 9. File Handling -->
+    <h2>File Handling</h2>
+    <pre><code>file_put_contents("log.txt", "Error at " . date("Y-m-d H:i:s"));
+
+$upload = $_FILES["avatar"];
+if ($upload["size"] > 2 * 1024 * 1024) {
+    die("File too large");
+}
+move_uploaded_file($upload["tmp_name"], "uploads/" . $upload["name"]);</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 10. Error Handling -->
+    <h2>PHP Error Handling</h2>
+    <pre><code>try {
+    if (!file_exists("config.php")) {
+        throw new Exception("Config missing");
+    }
+} catch (Exception $e) {
+    error_log($e->getMessage());
+    http_response_code(500);
+}</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 11. Security -->
+    <h2>Security (Critical)</h2>
+    <ul>
+      <li><strong>SQL Injection</strong>: Use prepared statements</li>
+      <li><strong>XSS</strong>: <code>htmlspecialchars()</code></li>
+      <li><strong>CSRF</strong>: Tokens + SameSite cookies</li>
+      <li><strong>Password</strong>: <code>password_hash()</code></li>
+    </ul>
+    <pre><code>$hash = password_hash("secret123", PASSWORD_BCRYPT);
+password_verify("secret123", $hash); // true</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 12. REST APIs -->
+    <h2>PHP REST APIs</h2>
+    <pre><code>header("Content-Type: application/json");
+http_response_code(201);
+echo json_encode(["status" => "created", "id" => 42]);</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 13. MVC -->
+    <h2>MVC Architecture</h2>
+    <div class="diagram">
+[Client] → POST /users → [Router] → [UserController@store]
+                                 ↓
+                            [UserModel] → [DB]
+                                 ↓
+                            [user.created.view.php]
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- 14. Composer -->
+    <h2>Composer</h2>
+    <pre><code>{
+  "require": {
+    "monolog/monolog": "^2.0"
+  },
+  "autoload": {
+    "psr-4": { "App\\": "app/" }
+  }
+}</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- 15. PHP 8 -->
+    <h2>PHP 8 Features</h2>
+    <pre><code>function divide(int|float $a, int|float $b): int|float {
+    return $a / $b;
+}
+
+echo match($status) {
+    1 => "Active",
+    0 => "Inactive",
+    default => "Unknown"
+};</code></pre>
+
+    <div class="divider"></div>
+
+    <!-- Interview Questions -->
+    <h2>50+ Interview Questions & Answers</h2>
+
+    <!-- Fundamentals -->
+    <div class="interview-q">
+      <h4>Q1. isset() vs empty()?</h4>
+      <p><code>isset()</code>: Checks if var exists and not null.<br>
+      <code>empty()</code>: Checks if var is falsy (0, "", null, false).</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q2. == vs ===?</h4>
+      <p><code>==</code>: Value equality (type juggles).<br>
+      <code>===</code>: Strict (value + type).</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q3. Call by value vs reference?</h4>
+      <p>Value: Copy passed. Reference: <code>&$var</code> modifies original.</p>
+    </div>
+
+    <!-- OOP -->
+    <div class="interview-q">
+      <h4>Q4. What are Traits?</h4>
+      <p>Reusable code blocks. Horizontal composition. <code>use Loggable;</code></p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q5. Interface vs Abstract Class?</h4>
+      <p>Interface: Contract (no impl). Abstract: Partial impl + contract.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q6. Encapsulation vs Abstraction?</h4>
+      <p>Encapsulation: Hide internals (private). Abstraction: Show only essentials.</p>
+    </div>
+
+    <!-- MySQL -->
+    <div class="interview-q">
+      <h4>Q7. Why Prepared Statements?</h4>
+      <p>Prevent SQL injection, pre-compile query, faster reuse.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q8. DELETE vs TRUNCATE vs DROP?</h4>
+      <p><code>DELETE</code>: Row-by-row, triggerable.<br>
+      <code>TRUNCATE</code>: Reset table, no triggers.<br>
+      <code>DROP</code>: Remove table.</p>
+    </div>
+
+    <!-- Web -->
+    <div class="interview-q">
+      <h4>Q9. Cookies vs Sessions?</h4>
+      <p>Cookies: Client-side, small. Sessions: Server-side, secure.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q10. What is REST?</h4>
+      <p>Stateless, resource-based, HTTP verbs (GET, POST, etc).</p>
+    </div>
+
+    <!-- PHP In-Depth -->
+    <div class="interview-q">
+      <h4>Q11. What is Composer?</h4>
+      <p>Dependency manager. <code>composer require</code>, autoload.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q12. What is PSR?</h4>
+      <p>PHP Standards Recommendations (PSR-4 autoload, PSR-7 HTTP).</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q13. JWT Authentication?</h4>
+      <p>Stateless token: Header.Payload.Signature. Used in APIs.</p>
+    </div>
+
+    <!-- Real-World -->
+    <div class="interview-q">
+      <h4>Q14. Scale PHP with Caching?</h4>
+      <p>Use Redis/Memcached for sessions, query results, API cache.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q15. Secure File Upload?</h4>
+      <p>Validate MIME, size, extension, move to non-web dir, scan.</p>
+    </div>
+
+    <!-- More Questions (16–50 summarized) -->
+    <div class="interview-q">
+      <h4>Q16–50 Summary (Key Topics)</h4>
+      <ul>
+        <li>Autoloading with <code>spl_autoload_register</code></li>
+        <li>Namespaces prevent naming conflicts</li>
+        <li><code>password_hash()</code> + <code>password_verify()</code></li>
+        <li>CSRF: Hidden token + <code>SameSite</code></li>
+        <li>MVC: Separation of concerns</li>
+        <li>PHP 8: JIT, match, named args</li>
+        <li>REST: Stateless, JSON, HTTP codes</li>
+        <li>PDO vs MySQLi: PDO supports multiple DBs</li>
+        <li>Sessions: <code>session_regenerate_id()</code> after login</li>
+        <li>Rate limiting with Redis</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Key Takeaways -->
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Always use <strong>prepared statements</strong></li>
+      <li>Use <strong>password_hash()</strong> — never MD5</li>
+      <li><strong>===</strong> over <code>==</code> in conditionals</li>
+      <li>Validate + sanitize all input</li>
+      <li>Use <strong>Composer</strong> + PSR-4</li>
+      <li>Implement <strong>MVC</strong> for large apps</li>
+      <li>Log errors, don’t display in prod</li>
+      <li>Use <strong>JWT</strong> for APIs</li>
+    </ul>
+
+    <h2>Common Mistakes</h2>
+    <ul>
+      <li>Direct <code>$_POST</code> in SQL → injection</li>
+      <li>Storing passwords in plain text</li>
+      <li>No CSRF protection in forms</li>
+      <li><code>SELECT *</code> in production</li>
+      <li>Using <code>mysql_*</code> functions (deprecated)</li>
+      <li>Hardcoding DB credentials</li>
+      <li>Not using <code>try/catch</code> with PDO</li>
+    </ul>
+
+  </div>
+</body>
+</html>
