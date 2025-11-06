@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>JavaScript, React & Node.js Core Interview Concepts</title>
+  <title>JavaScript & Node.js Interview Handbook</title>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>JS</text></svg>">
   <style>
@@ -68,18 +68,18 @@
       border: 1px solid #404040;
     }
     .interview-q h4 { color: var(--orange); margin-bottom: 0.8rem; }
-    .divider { height: 1px; background: #404040; margin: 3rem 0; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
+    .diagram {
+      background: #2d2d30;
+      padding: 1.5rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--green);
       margin: 1.5rem 0;
+      white-space: pre;
+      overflow-x: auto;
     }
-    th, td {
-      border: 1px solid #404040;
-      padding: 0.8rem;
-      text-align: left;
-    }
-    th { background: #2d2d30; color: var(--teal); }
+    .divider { height: 1px; background: #404040; margin: 3rem 0; }
   </style>
 </head>
 <body>
@@ -87,248 +87,277 @@
 
     <!-- Cover Page -->
     <div class="cover">
-      <h1>JavaScript, React & Node.js Core Interview Concepts</h1>
-      <p class="author">Compiled by <strong>Gaurav Katwate</strong></p>
+      <h1>JavaScript & Node.js Interview Handbook</h1>
+      <p class="author">Compiled by <strong>Gaurav Rajaram Katwate</strong></p>
       <p style="margin-top: 2rem; font-size: 1.2rem; color: var(--gray);">
-        For 2+ Year Developers | JS Quirks → React → Node.js → 40+ Interview Qs
+        59 Real Interview Questions • Complete Answers • Production Code Examples
       </p>
     </div>
 
-    <!-- 1. typeof null -->
-    <h2>What is typeof null?</h2>
-    <p><code>typeof null</code> returns <code>"object"</code> due to a <strong>historical bug</strong> in JavaScript. Originally, values were stored with type tags, and <code>null</code> used the object tag (<code>000</code>). This was never fixed for backward compatibility.</p>
-    <pre><code>console.log(typeof null); // "object"</code></pre>
-    <div class="interview-q">
-      <h4>Q: Is typeof null a bug?</h4>
-      <p>Yes — a legacy bug from the first version of JavaScript. Should return <code>"null"</code>, but returns <code>"object"</code> for compatibility.</p>
-    </div>
-
     <div class="divider"></div>
 
-    <!-- 2. undefined vs Not Defined -->
-    <h2>undefined vs Not Defined</h2>
-    <p><strong>undefined</strong>: Variable declared but not assigned.<br>
-    <strong>Not defined</strong>: Variable never declared → <code>ReferenceError</code>.</p>
-    <pre><code>let a;
-console.log(a); // undefined
+    <!-- All Unique Questions with Full, Detailed Answers -->
 
-console.log(b); // ReferenceError: b is not defined</code></pre>
+    <h2>JavaScript Core Concepts</h2>
+
     <div class="interview-q">
-      <h4>Q: How to check if a variable is undefined?</h4>
-      <p><code>if (typeof x === 'undefined')</code> — safe even if <code>x</code> is not declared.</p>
+      <h4>Q1. What is typeof null?</h4>
+      <p><strong>Answer</strong>: <code>typeof null</code> returns <code>"object"</code>. This is a well-known historical bug in JavaScript introduced in the first version and preserved for backward compatibility. The original intent was to represent null as a separate type, but due to implementation, it was grouped under objects.</p>
+      <pre><code>console.log(typeof null); // "object"</code></pre>
+      <p><strong>Best Practice</strong>: Always use strict equality (<code>===</code>) when checking for <code>null</code>:</p>
+      <pre><code>if (value === null) { /* handle null */ }</code></pre>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- 3. NaN -->
-    <h2>What is NaN? How to Check?</h2>
-    <p><code>NaN</code> = Not-a-Number. Result of invalid math (e.g., <code>0/0</code>).</p>
-    <p><code>isNaN()</code> coerces value. <code>Number.isNaN()</code> does not.</p>
-    <pre><code>console.log(0 / 0); // NaN
-console.log(isNaN("abc"));      // true (coerces)
-console.log(Number.isNaN("abc")); // false
-console.log(Number.isNaN(NaN));   // true</code></pre>
     <div class="interview-q">
-      <h4>Q: Is NaN equal to itself?</h4>
-      <p>No. <code>NaN === NaN</code> is <code>false</code>. Use <code>Number.isNaN()</code>.</p>
+      <h4>Q2. What is the difference between undefined and not defined?</h4>
+      <p><strong>undefined</strong>: A variable has been declared but not assigned a value. It is a primitive value in JavaScript.</p>
+      <p><strong>not defined</strong>: The variable has never been declared in the current scope, leading to a <code>ReferenceError</code> when accessed.</p>
+      <pre><code>let x;           // declared, not initialized
+console.log(x);  // undefined
+
+console.log(y);  // ReferenceError: y is not defined</code></pre>
+      <p><strong>Real-world</strong>: Use <code>typeof</code> to safely check without throwing error:</p>
+      <pre><code>if (typeof y === 'undefined') { /* safe */ }</code></pre>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- 4. null vs undefined -->
-    <h2>null vs undefined</h2>
-    <table>
-      <tr><th>Type</th><th>Meaning</th><th>Example</th></tr>
-      <tr><td><code>null</code></td><td>Intentional absence</td><td><code>let user = null;</code></td></tr>
-      <tr><td><code>undefined</code></td><td>Uninitialized</td><td><code>let x;</code></td></tr>
-    </table>
     <div class="interview-q">
-      <h4>Q: Should you use null or undefined?</h4>
-      <p>Use <code>null</code> for intentional absence. Let JS handle <code>undefined</code> naturally.</p>
+      <h4>Q3. What is NaN? How to check for it properly?</h4>
+      <p><code>NaN</code> stands for <strong>Not a Number</strong>. It is a special value representing an invalid number result (e.g., <code>0/0</code>, <code>"abc" * 5</code>).</p>
+      <p>Crucially, <code>NaN === NaN</code> is <code>false</code> — it is not equal to itself.</p>
+      <pre><code>console.log(0 / 0);           // NaN
+console.log("hello" * 10);    // NaN
+console.log(NaN === NaN);     // false</code></pre>
+      <p><strong>Correct way to check</strong>:</p>
+      <pre><code>Number.isNaN(value)   // ES6, recommended
+// or
+isNaN(value)          // older, but coerces types</code></pre>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- 5. Destructuring -->
-    <h2>Destructuring</h2>
-    <p>Extract values from arrays/objects into variables.</p>
-    <pre><code>const user = { name: "Gaurav", city: "Pune" };
-const { name, city } = user;
-console.log(name, city); // Gaurav Pune
-
-const arr = [1, 2, 3];
-const [a, b] = arr;
-console.log(a, b); // 1 2</code></pre>
     <div class="interview-q">
-      <h4>Q: Can you destructure nested objects?</h4>
-      <p>Yes: <code>const { address: { street } } = user;</code></p>
+      <h4>Q4. What is the difference between null and undefined?</h4>
+      <p><strong>null</strong>: An intentional absence of any object value. It is a primitive value assigned by the developer.</p>
+      <p><strong>undefined</strong>: Represents an uninitialized or missing value. Occurs when a variable is declared but not assigned, or a function returns nothing.</p>
+      <pre><code>let a = null;           // explicit empty value
+let b;                  // automatically undefined
+console.log(a === null);     // true
+console.log(b === undefined); // true
+console.log(a == b);         // true (loose)
+console.log(a === b);        // false (strict)</code></pre>
+      <p><strong>Rule of Thumb</strong>: Use <code>null</code> for "no value", <code>undefined</code> for "not set".</p>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- 6. Why React? -->
-    <h2>Why Use React?</h2>
-    <ul>
-      <li>Declarative UI</li>
-      <li>Component-based</li>
-      <li>Virtual DOM → fast updates</li>
-      <li>Rich ecosystem (React Router, Redux, Hooks)</li>
-    </ul>
-    <pre><code>function App() {
-  return &lt;h1&gt;Hello React&lt;/h1&gt;;
-}</code></pre>
     <div class="interview-q">
-      <h4>Q: React is a library or framework?</h4>
-      <p>Library. You control the app structure.</p>
+      <h4>Q5. What is destructuring in JavaScript?</h4>
+      <p>Destructuring is a syntax that allows you to unpack values from arrays or properties from objects into distinct variables in a concise way.</p>
+      <pre><code>// Array destructuring
+const [first, second] = [10, 20];
+console.log(first);  // 10
+
+// Object destructuring
+const { name, age } = { name: "Gaurav", age: 25 };
+console.log(name);   // "Gaurav"
+
+// With defaults and rest
+const { city = "Pune", ...rest } = user;</code></pre>
+      <p><strong>Use Case</strong>: Clean API responses, function parameters.</p>
     </div>
 
-    <div class="divider"></div>
+    <div class="interview-q">
+      <h4>Q6. Can you destructure nested objects?</h4>
+      <p>Yes. You can nest destructuring patterns to any depth.</p>
+      <pre><code>const user = {
+  profile: {
+    name: "Gaurav",
+    address: { city: "Pune", pin: "411001" }
+  }
+};
 
-    <!-- 7. JSX -->
-    <h2>What is JSX?</h2>
-    <p>Syntax extension to write HTML-like code in JavaScript. Transpiled to <code>React.createElement()</code>.</p>
-    <pre><code>const element = &lt;h2&gt;Welcome, Gaurav!&lt;/h2&gt;;
+const { profile: { name, address: { city } } } = user;
+console.log(name, city); // Gaurav, Pune</code></pre>
+      <p><strong>With alias and default</strong>:</p>
+      <pre><code>const { profile: { address: { pin: zip = '000000' } } } = user;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q7. Is NaN equal to itself?</h4>
+      <p><strong>No</strong>. <code>NaN</code> is the only value in JavaScript not equal to itself.</p>
+      <pre><code>console.log(NaN === NaN); // false</code></pre>
+      <p>This is why <code>Number.isNaN()</code> exists.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q8. Can JSON store functions?</h4>
+      <p><strong>No</strong>. JSON is a data format. It supports only:</p>
+      <ul>
+        <li>strings</li>
+        <li>numbers</li>
+        <li>arrays</li>
+        <li>objects</li>
+        <li>booleans</li>
+        <li><code>null</code></li>
+      </ul>
+      <p>Functions, <code>undefined</code>, and <code>Symbol</code> are lost on <code>JSON.stringify()</code>.</p>
+      <pre><code>const obj = { fn: () => {}, x: undefined };
+JSON.stringify(obj); // "{}"</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q9. What is JSX?</h4>
+      <p>JSX (JavaScript XML) is a syntax extension for JavaScript that allows writing HTML-like code in JavaScript. It is used heavily in React and compiled via Babel to <code>React.createElement()</code> calls.</p>
+      <pre><code>const element = <h1 className="title">Hello World</h1>;
 // Becomes:
-React.createElement("h2", null, "Welcome, Gaurav!")</code></pre>
-    <div class="interview-q">
-      <h4>Q: Can you use JSX without React?</h4>
-      <p>Technically yes, but it’s designed for React.</p>
+React.createElement("h1", { className: "title" }, "Hello World")</code></pre>
+      <p><strong>Key Rules</strong>: Must return one parent, use <code>className</code>, self-closing tags.</p>
     </div>
 
-    <div class="divider"></div>
+    <div class="interview-q">
+      <h4>Q10. Why use React?</h4>
+      <p>React is a declarative, component-based library for building user interfaces with:</p>
+      <ul>
+        <li>Virtual DOM for performance</li>
+        <li>Reusable components</li>
+        <li>One-way data flow</li>
+        <li>Strong ecosystem (React Router, Redux, Next.js)</li>
+        <li>Great developer experience</li>
+      </ul>
+      <p>Ideal for SPAs and complex UIs.</p>
+    </div>
 
-    <!-- 8. Error Boundaries -->
-    <h2>Error Boundaries in React</h2>
-    <p>Catch JavaScript errors in child components. Only work in class components.</p>
-    <pre><code>class ErrorBoundary extends React.Component {
+    <div class="interview-q">
+      <h4>Q11. What are Error Boundaries in React?</h4>
+      <p>Error Boundaries are React components that catch JavaScript errors anywhere in their child component tree, log them, and display a fallback UI instead of crashing the app.</p>
+      <p>Only work with <strong>class components</strong> using <code>static getDerivedStateFromError()</code> or <code>componentDidCatch()</code>.</p>
+      <pre><code>class ErrorBoundary extends React.Component {
   state = { hasError: false };
-  static getDerivedStateFromError() {
+
+  static getDerivedStateFromError(error) {
     return { hasError: true };
   }
+
+  componentDidCatch(error, info) {
+    logErrorToService(error, info);
+  }
+
   render() {
     return this.state.hasError 
-      ? &lt;h3&gt;Something went wrong!&lt;/h3&gt; 
+      ? <h1>Something went wrong.</h1> 
       : this.props.children;
   }
 }</code></pre>
-    <div class="interview-q">
-      <h4>Q: Can hooks replace error boundaries?</h4>
-      <p>No. Hooks cannot catch errors in render phase.</p>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- 9. npm -->
-    <h2>npm (Node Package Manager)</h2>
-    <p>Manages dependencies, scripts, and versioning.</p>
-    <pre><code>npm init -y
-npm install express
-npm run dev</code></pre>
     <div class="interview-q">
-      <h4>Q: Difference between dependencies and devDependencies?</h4>
-      <p><code>dependencies</code>: runtime. <code>devDependencies</code>: build/test tools.</p>
+      <h4>Q12. Can hooks replace error boundaries?</h4>
+      <p><strong>No</strong>. Hooks cannot catch errors thrown in:</p>
+      <ul>
+        <li>Render phase</li>
+        <li>Event handlers</li>
+        <li>Async code</li>
+        <li>Child component lifecycle</li>
+      </ul>
+      <p>Error boundaries are still required for robust error handling.</p>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- 10. REST API -->
-    <h2>REST API</h2>
-    <p>Architectural style using HTTP methods to perform CRUD.</p>
-    <pre><code>app.get('/users', getUsers);
-app.post('/users', createUser);
-app.put('/users/:id', updateUser);
-app.delete('/users/:id', deleteUser);</code></pre>
     <div class="interview-q">
-      <h4>Q: What makes an API RESTful?</h4>
-      <p>Stateless, cacheable, uniform interface, resource-based URLs.</p>
+      <h4>Q13. What is npm? Why do we use it?</h4>
+      <p><strong>npm</strong> (Node Package Manager) is the default package manager for JavaScript. It allows developers to:</p>
+      <ul>
+        <li>Install third-party libraries</li>
+        <li>Manage dependencies</li>
+        <li>Run scripts</li>
+        <li>Publish packages</li>
+      </ul>
+      <pre><code>npm install react
+npm run build
+npm publish</code></pre>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- 11. HTTP Status Codes -->
-    <h2>Common HTTP Status Codes</h2>
-    <table>
-      <tr><th>Code</th><th>Meaning</th></tr>
-      <tr><td>200</td><td>OK</td></tr>
-      <tr><td>201</td><td>Created</td></tr>
-      <tr><td>400</td><td>Bad Request</td></tr>
-      <tr><td>401</td><td>Unauthorized</td></tr>
-      <tr><td>404</td><td>Not Found</td></tr>
-      <tr><td>500</td><td>Internal Server Error</td></tr>
-    </table>
-    <pre><code>res.status(404).json({ error: "User not found" });</code></pre>
     <div class="interview-q">
-      <h4>Q: 204 vs 200?</h4>
-      <p><code>204 No Content</code>: success, no body. <code>200</code>: success with data.</p>
+      <h4>Q14. What is a REST API?</h4>
+      <p>REST (Representational State Transfer) is an architectural style for designing networked applications. It uses:</p>
+      <ul>
+        <li>HTTP methods (GET, POST, PUT, DELETE)</li>
+        <li>Stateless communication</li>
+        <li>Resource-based URLs</li>
+        <li>JSON/XML payloads</li>
+      </ul>
+      <pre><code>GET    /api/users        → List users
+POST   /api/users        → Create user
+PUT    /api/users/1      → Update user
+DELETE /api/users/1      → Delete user</code></pre>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- 12. Node.js -->
-    <h2>Node.js for Backend</h2>
-    <p>JS runtime on V8. Non-blocking I/O → great for APIs, real-time.</p>
-    <pre><code>import express from "express";
-const app = express();
-app.get("/", (req, res) => res.send("Hello Node"));
-app.listen(3000);</code></pre>
     <div class="interview-q">
-      <h4>Q: Is Node.js single-threaded?</h4>
-      <p>Yes (event loop), but uses libuv for async I/O.</p>
+      <h4>Q15. What are common HTTP status codes?</h4>
+      <p><strong>2xx Success</strong>: <code>200 OK</code>, <code>201 Created</code>, <code>204 No Content</code><br>
+      <strong>4xx Client Error</strong>: <code>400 Bad Request</code>, <code>401 Unauthorized</code>, <code>404 Not Found</code><br>
+      <strong>5xx Server Error</strong>: <code>500 Internal Server Error</code>, <code>503 Service Unavailable</code></p>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- 13. Sync vs Async -->
-    <h2>Synchronous vs Asynchronous</h2>
-    <p><strong>Sync</strong>: blocks execution.<br>
-    <strong>Async</strong>: continues while waiting.</p>
-    <pre><code>console.log("Start");
-setTimeout(() => console.log("Async"), 1000);
-console.log("End");
-// Output: Start → End → Async</code></pre>
     <div class="interview-q">
-      <h4>Q: Name three ways to handle async in Node.js</h4>
-      <p>Callbacks, Promises, <code>async/await</code>.</p>
+      <h4>Q16. Difference between 204 and 200?</h4>
+      <p><strong>200 OK</strong>: Request succeeded and response has a body.<br>
+      <strong>204 No Content</strong>: Request succeeded but no response body (common in DELETE, or when no data to return).</p>
+      <pre><code>// DELETE /users/1
+res.status(204).send(); // No body</code></pre>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- 14. Event Loop -->
-    <h2>Event Loop in Node.js</h2>
-    <p>Handles async callbacks. Phases: timers → I/O → poll → check → microtasks.</p>
-    <pre><code>console.log("A");
-setTimeout(() => console.log("B"), 0);
-Promise.resolve().then(() => console.log("C"));
-console.log("D");
-// Output: A D C B</code></pre>
     <div class="interview-q">
-      <h4>Q: Why does Promise run before setTimeout?</h4>
-      <p>Microtask queue has higher priority than callback queue.</p>
+      <h4>Q17. Difference between dependencies and devDependencies?</h4>
+      <p><strong>dependencies</strong>: Packages required in production (e.g., <code>express</code>, <code>react</code>).<br>
+      <strong>devDependencies</strong>: Only needed during development (e.g., <code>jest</code>, <code>eslint</code>).</p>
+      <pre><code>npm install express           # dependencies
+npm install --save-dev jest   # devDependencies
+
+// In production:
+npm install --production      # skips devDependencies</code></pre>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- 15. Microtask Queue -->
-    <h2>Microtask Queue</h2>
-    <p>Higher priority than macrotask (callback) queue. Used by Promises, <code>queueMicrotask</code>.</p>
-    <pre><code>Promise.resolve().then(() => console.log("micro"));
-setTimeout(() => console.log("macro"), 0);
-// micro → macro</code></pre>
     <div class="interview-q">
-      <h4>Q: Can setTimeout be a microtask?</h4>
-      <p>No. Only Promises and <code>MutationObserver</code>.</p>
+      <h4>Q18. What is a meta tag?</h4>
+      <p>HTML <code>&lt;meta&gt;</code> tags provide metadata about the document.</p>
+      <pre><code>&lt;meta charset="UTF-8"&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;meta name="description" content="React App"&gt;
+&lt;meta name="author" content="Gaurav"&gt;</code></pre>
+      <p>Used by browsers, search engines, and social platforms.</p>
     </div>
 
-    <div class="divider"></div>
+    <div class="interview-q">
+      <h4>Q19. Describe require vs import</h4>
+      <p><strong>require (CommonJS)</strong>:</p>
+      <ul>
+        <li>Used in Node.js by default</li>
+        <li>Dynamic, synchronous</li>
+        <li>Can be called anywhere</li>
+      </ul>
+      <p><strong>import (ES6 Modules)</strong>:</p>
+      <ul>
+        <li>Static, hoisted</li>
+        <li>Supports tree-shaking</li>
+        <li>Requires <code>"type": "module"</code> in <code>package.json</code></li>
+      </ul>
+      <pre><code>// CommonJS
+const fs = require('fs');
 
-    <!-- 16. React Router -->
-    <h2>React Router</h2>
-    <p>Client-side routing for SPAs.</p>
-    <pre><code>import { BrowserRouter, Routes, Route } from "react-router-dom";
+// ES6
+import fs from 'fs';</code></pre>
+    </div>
+
+    <h2>React & Frontend</h2>
+
+    <div class="interview-q">
+      <h4>Q20. What is React Router? How does it work?</h4>
+      <p>React Router is the standard library for routing in React apps. It enables navigation between views without full page reloads using client-side routing.</p>
+      <pre><code>import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 function App() {
   return (
     &lt;BrowserRouter&gt;
+      &lt;nav&gt;
+        &lt;Link to="/"&gt;Home&lt;/Link&gt;
+        &lt;Link to="/about"&gt;About&lt;/Link&gt;
+      &lt;/nav&gt;
       &lt;Routes&gt;
         &lt;Route path="/" element={&lt;Home /&gt;} /&gt;
         &lt;Route path="/about" element={&lt;About /&gt;} /&gt;
@@ -336,55 +365,489 @@ function App() {
     &lt;/BrowserRouter&gt;
   );
 }</code></pre>
-    <div class="interview-q">
-      <h4>Q: How to get URL params?</h4>
-      <p><code>useParams()</code> hook: <code>const { id } = useParams();</code></p>
+      <p>Uses HTML5 History API or hash routing.</p>
     </div>
 
-    <div class="divider"></div>
+    <h2>Node.js & Backend</h2>
 
-    <!-- 17. Middleware -->
-    <h2>Middleware in Node.js</h2>
-    <p>Functions with access to <code>req</code>, <code>res</code>, <code>next</code>.</p>
-    <pre><code>const logger = (req, res, next) => {
-  console.log(\`\${req.method} \${req.url}\`);
+    <div class="interview-q">
+      <h4>Q21. What is Node.js? Why use it for backend?</h4>
+      <p>Node.js is a runtime environment that executes JavaScript outside the browser using Chrome’s V8 engine and <code>libuv</code> for async I/O.</p>
+      <p><strong>Why for backend?</strong></p>
+      <ul>
+        <li>Non-blocking, event-driven I/O</li>
+        <li>Great for real-time apps (chat, streaming)</li>
+        <li>Full-stack JavaScript</li>
+        <li>Huge npm ecosystem</li>
+        <li>High performance for I/O-heavy tasks</li>
+      </ul>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q22. Difference between synchronous and asynchronous programming?</h4>
+      <p><strong>Synchronous</strong>: Operations block execution until complete.<br>
+      <strong>Asynchronous</strong>: Operations run in background; callbacks/promises handle results later.</p>
+      <pre><code>// Sync - blocks
+const data = fs.readFileSync('file.txt');
+console.log(data);
+
+// Async - non-blocking
+fs.readFile('file.txt', (err, data) => {
+  console.log(data);
+});
+console.log('This runs first');</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q23. What is the Event Loop in Node.js?</h4>
+      <p>The event loop is the heart of Node.js async model. It continuously checks the call stack and task queues.</p>
+      <div class="diagram">
+Call Stack (empty?)
+  ↓
+Microtask Queue (Promise.then, queueMicrotask)
+  ↓
+Macrotask Queue (setTimeout, setInterval, I/O)
+  ↓
+Repeat
+      </div>
+      <p>Order: Call stack → Microtasks → One macrotask → Repeat.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q24. What is the microtask queue?</h4>
+      <p>Higher-priority queue than macrotasks. Contains:</p>
+      <ul>
+        <li><code>Promise</code> resolutions</li>
+        <li><code>queueMicrotask()</code></li>
+        <li><code>MutationObserver</code></li>
+      </ul>
+      <p>Drained completely before macrotasks.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q25. Can setTimeout be a microtask?</h4>
+      <p><strong>No</strong>. <code>setTimeout</code> is a <strong>macrotask</strong>. Microtasks run before the next macrotask.</p>
+      <pre><code>console.log('1');
+setTimeout(() => console.log('2'), 0);
+Promise.resolve().then(() => console.log('3'));
+console.log('4');
+// Output: 1 4 3 2</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q26. Why does Promise run before setTimeout?</h4>
+      <p>Microtasks (Promises) have higher priority than macrotasks (<code>setTimeout</code>) in the event loop.</p>
+      <p>After current call stack, all microtasks are processed before any macrotask.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q27. Name three ways to handle async in Node.js</h4>
+      <ol>
+        <li><strong>Callbacks</strong>: <code>fs.readFile(path, callback)</code></li>
+        <li><strong>Promises</strong>: <code>fs.promises.readFile()</code></li>
+        <li><strong>async/await</strong>: <code>const data = await readFile()</code></li>
+      </ol>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q28. Difference between Promises and async/await?</h4>
+      <p><strong>Promises</strong>: Object-based async pattern.<br>
+      <strong>async/await</strong>: Syntactic sugar over Promises for cleaner, synchronous-looking code.</p>
+      <pre><code>// Promise
+getUser(id)
+  .then(user => getPosts(user.id))
+  .then(posts => console.log(posts));
+
+// async/await
+const user = await getUser(id);
+const posts = await getPosts(user.id);
+console.log(posts);</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q29. What is middleware in Node.js?</h4>
+      <p>Functions that have access to <code>req</code>, <code>res</code>, and <code>next()</code>. Used in Express for:</p>
+      <ul>
+        <li>Logging</li>
+        <li>Authentication</li>
+        <li>Parsing JSON</li>
+        <li>Error handling</li>
+      </ul>
+      <pre><code>app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
   next();
-};
-app.use(logger);</code></pre>
-    <div class="interview-q">
-      <h4>Q: What happens if you forget next()?</h4>
-      <p>Request hangs — response never sent.</p>
+});</code></pre>
     </div>
 
-    <div class="divider"></div>
-
-    <!-- 18. JSON -->
-    <h2>JSON (JavaScript Object Notation)</h2>
-    <p>Lightweight data format. Used in APIs.</p>
-    <pre><code>const obj = { name: "Gaurav", city: "Pune" };
-const json = JSON.stringify(obj);
-console.log(json); // {"name":"Gaurav","city":"Pune"}
-console.log(JSON.parse(json)); // object</code></pre>
     <div class="interview-q">
-      <h4>Q: Can JSON store functions?</h4>
-      <p>No. Only data: strings, numbers, arrays, objects, boolean, null.</p>
+      <h4>Q30. What is JSON?</h4>
+      <p>JSON (JavaScript Object Notation) is a lightweight, text-based data interchange format. Human-readable and language-independent.</p>
+      <pre><code>{
+  "name": "Gaurav",
+  "age": 25,
+  "active": true,
+  "hobbies": ["coding", "reading"]
+}</code></pre>
+      <p>Used in APIs, config files, storage.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q31. What is Mongoose? Why use it with MongoDB?</h4>
+      <p>Mongoose is an ODM (Object Data Modeling) library for MongoDB and Node.js. It provides:</p>
+      <ul>
+        <li>Schema definition and validation</li>
+        <li>Middleware (pre/post hooks)</li>
+        <li>Population (joins)</li>
+        <li>Query building</li>
+      </ul>
+      <pre><code>const userSchema = new Schema({
+  name: { type: String, required: true },
+  email: { type: String, unique: true }
+});
+const User = mongoose.model('User', userSchema);</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q32. Why use Mongoose instead of raw MongoDB driver?</h4>
+      <p>Raw driver is low-level. Mongoose adds:</p>
+      <ul>
+        <li>Type casting</li>
+        <li>Validation</li>
+        <li>Default values</li>
+        <li>Middleware</li>
+        <li>Population</li>
+      </ul>
+      <p>Use raw driver for performance-critical apps.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q33. Difference between JavaScript and Node.js?</h4>
+      <p><strong>JavaScript</strong>: Programming language.<br>
+      <strong>Node.js</strong>: Runtime environment to run JS outside browser with file system, network, etc.</p>
+      <table>
+        <tr><th>JavaScript</th><th>Node.js</th></tr>
+        <tr><td>Runs in browser</td><td>Runs on server</td></tr>
+        <tr><td>DOM, window</td><td>fs, http, process</td></tr>
+      </table>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q34. Is Node.js single-threaded?</h4>
+      <p><strong>Yes</strong>, for JavaScript execution (event loop). But:</p>
+      <ul>
+        <li>Uses <code>libuv</code> thread pool (default 4 threads) for I/O</li>
+        <li>CPU-heavy tasks can block</li>
+      </ul>
+      <p>Use <code>worker_threads</code> or clustering for CPU work.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q35. How does Node.js handle concurrency despite being single-threaded?</h4>
+      <p>Through <strong>non-blocking I/O</strong> and the <strong>event loop</strong>. While waiting for DB/file/network, it processes other requests.</p>
+      <p>Thread pool handles blocking system calls (DNS, file I/O).</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q36. What is the control flow in Node.js?</h4>
+      <ol>
+        <li>Execute current call stack</li>
+        <li>Process all microtasks</li>
+        <li>Process one macrotask</li>
+        <li>Repeat</li>
+      </ol>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q37. Main disadvantages of Node.js?</h4>
+      <ul>
+        <li>Single-threaded → CPU-heavy tasks block event loop</li>
+        <li>Callback hell (if not using Promises)</li>
+        <li>Immaturity in some enterprise tools</li>
+        <li>Not ideal for heavy computation</li>
+      </ul>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q38. What is REPL in Node.js?</h4>
+      <p>REPL = Read-Eval-Print Loop. Interactive shell to test JavaScript.</p>
+      <pre><code>$ node
+> 2 + 2
+4
+> const x = [1,2,3]
+> x.map(n => n * 2)
+[2, 4, 6]</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q39. Default module system in Node.js?</h4>
+      <p><strong>CommonJS</strong> (<code>require</code>, <code>module.exports</code>).</p>
+      <p>ES6 modules supported with <code>"type": "module"</code> in <code>package.json</code>.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q40. What is package.json?</h4>
+      <p>Project manifest file containing:</p>
+      <ul>
+        <li>Metadata (name, version)</li>
+        <li>Dependencies</li>
+        <li>Scripts</li>
+        <li>Configuration</li>
+      </ul>
+      <pre><code>{
+  "name": "my-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": { "start": "node index.js" }
+}</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q41. Show "Hello World" on client without Express</h4>
+      <pre><code>const http = require('http');
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Hello World\n');
+});
+
+server.listen(3000, () => {
+  console.log('Server running at http://localhost:3000');
+});</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q42. Why use Express.js?</h4>
+      <p>Express is a minimal, unopinionated web framework that simplifies:</p>
+      <ul>
+        <li>Routing</li>
+        <li>Middleware</li>
+        <li>JSON parsing</li>
+        <li>Error handling</li>
+        <li>Templating</li>
+      </ul>
+      <p>Reduces boilerplate from raw <code>http</code> module.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q43. What is event-driven programming in Node.js?</h4>
+      <p>Code responds to events (request, file read, timer) via listeners.</p>
+      <pre><code>const EventEmitter = require('events');
+const emitter = new EventEmitter();
+
+emitter.on('greet', (name) => console.log(`Hello ${name}`));
+emitter.emit('greet', 'Gaurav');</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q44. What is Buffer in Node.js?</h4>
+      <p><code>Buffer</code> is a way to handle binary data (streams, files, sockets). It’s like an array of bytes.</p>
+      <pre><code>const buf = Buffer.from('Hello');
+console.log(buf);        // <Buffer 48 65 6c 6c 6f>
+console.log(buf.toString()); // "Hello"</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q45. What are Streams in Node.js?</h4>
+      <p>Streams process data in chunks. Types:</p>
+      <ul>
+        <li><code>Readable</code>: Input (file, HTTP request)</li>
+        <li><code>Writable</code>: Output</li>
+        <li><code>Duplex</code>: Both</li>
+        <li><code>Transform</code>: Modify data</li>
+      </ul>
+      <p>Efficient for large files.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q46. What is callback hell?</h4>
+      <p>Nested callbacks leading to unreadable, hard-to-maintain code.</p>
+      <pre><code>fs.readFile('a.txt', (err, data) => {
+  fs.writeFile('b.txt', data, () => {
+    fs.readFile('b.txt', (err, data) => {
+      // deeply nested
+    });
+  });
+});</code></pre>
+      <p><strong>Solutions</strong>: Promises, async/await, named functions.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q47. What is body-parser in Node.js?</h4>
+      <p>Middleware to parse incoming request bodies (JSON, URL-encoded). Now built into Express:</p>
+      <pre><code>app.use(express.json());
+app.use(express.urlencoded({ extended: true }));</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q48. What is CORS? Why use it?</h4>
+      <p>CORS (Cross-Origin Resource Sharing) is a security feature that allows or restricts cross-domain requests.</p>
+      <pre><code>const cors = require('cors');
+app.use(cors({ origin: 'https://myfrontend.com' }));</code></pre>
+      <p>Prevents unauthorized domains from accessing your API.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q49. How to implement authentication in Node.js?</h4>
+      <p>Common methods:</p>
+      <ul>
+        <li><strong>JWT</strong>: Stateless tokens</li>
+        <li><strong>Sessions</strong>: Server-side storage</li>
+        <li><strong>OAuth</strong>: Google, GitHub login</li>
+      </ul>
+      <p>Use <code>bcrypt</code> for password hashing.</p>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q50. Packages for file upload in Node.js?</h4>
+      <ul>
+        <li><code>multer</code>: Most popular</li>
+        <li><code>formidable</code></li>
+        <li><code>express-fileupload</code></li>
+      </ul>
+      <pre><code>const upload = multer({ dest: 'uploads/' });
+app.post('/upload', upload.single('avatar'), (req, res) => {
+  res.send('File uploaded');
+});</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q51. Which package is used to hash passwords?</h4>
+      <p><strong>bcrypt</strong> (recommended) or <strong>argon2</strong>.</p>
+      <pre><code>const bcrypt = require('bcrypt');
+const hash = await bcrypt.hash('password123', 10);
+const match = await bcrypt.compare('password123', hash);</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q52. What is EJS?</h4>
+      <p>EJS (Embedded JavaScript) is a templating engine to generate HTML with JavaScript.</p>
+      <pre><code>&lt;h1&gt;&lt;%= user.name %&gt;&lt;/h1&gt;
+&lt;% if (user.isAdmin) { %&gt;
+  &lt;p&gt;Admin Panel&lt;/p&gt;
+&lt;% } %&gt;</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q53. Query params vs path params?</h4>
+      <p><strong>Path params</strong>: Part of URL path (required).</p>
+      <pre><code>GET /users/123 → req.params.id = "123"</code></pre>
+      <p><strong>Query params</strong>: Optional filters after <code>?</code>.</p>
+      <pre><code>GET /users?active=true&page=2 → req.query</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q54. How to implement Google Authentication?</h4>
+      <p>Use <code>passport-google-oauth20</code> strategy with OAuth 2.0.</p>
+      <pre><code>passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_ID,
+  clientSecret: process.env.GOOGLE_SECRET,
+  callbackURL: "/auth/google/callback"
+}, (accessToken, refreshToken, profile, done) => {
+  // find or create user
+}));</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q55. What is WebSocket? How to use in Node.js?</h4>
+      <p>WebSocket enables full-duplex, real-time communication over a single TCP connection.</p>
+      <p>Use <code>ws</code> or <code>Socket.IO</code>:</p>
+      <pre><code>const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', ws => {
+  ws.on('message', msg => {
+    wss.clients.forEach(client => client.send(msg));
+  });
+});</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q56. How to handle sessions in Node.js?</h4>
+      <p>Use <code>express-session</code> with a store (Redis, MongoDB):</p>
+      <pre><code>app.use(session({
+  secret: 'my-secret',
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: '...' })
+}));</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q57. What is Cluster in Node.js?</h4>
+      <p>Allows using all CPU cores by forking worker processes.</p>
+      <pre><code>const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
+
+if (cluster.isMaster) {
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+} else {
+  // worker: start server
+}</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q58. Regular expressions in MongoDB?</h4>
+      <pre><code>// Case-insensitive search for "gaurav"
+db.users.find({ name: { $regex: /gaurav/i } })
+
+// Starts with "Gau"
+db.users.find({ name: { $regex: /^Gau/ } })</code></pre>
+    </div>
+
+    <div class="interview-q">
+      <h4>Q59. How to write a Student schema in Mongoose?</h4>
+      <pre><code>const studentSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true
+  },
+  age: {
+    type: Number,
+    min: [5, 'Too young'],
+    max: [100, 'Too old']
+  },
+  grade: {
+    type: String,
+    enum: ['A', 'B', 'C', 'D', 'F'],
+    default: 'A'
+  },
+  enrolledAt: {
+    type: Date,
+    default: Date.now
+  },
+  isActive: {
+    type: Boolean,
+    default: true
+  }
+}, { timestamps: true });
+
+const Student = mongoose.model('Student', studentSchema);</code></pre>
     </div>
 
     <div class="divider"></div>
 
     <!-- Key Takeaways -->
-    <h2 class="key-takeaways">Key Takeaways</h2>
+    <h2>Key Takeaways</h2>
     <ul>
-      <li><code>typeof null === "object"</code> → historical bug</li>
-      <li><code>undefined</code> ≠ <code>not defined</code></li>
-      <li><code>NaN === NaN</code> is <code>false</code> → use <code>Number.isNaN()</code></li>
-      <li><code>null</code> = intentional, <code>undefined</code> = uninitialized</li>
-      <li>React = declarative, component-based, Virtual DOM</li>
-      <li>JSX → <code>React.createElement()</code></li>
-      <li>Node.js = non-blocking, event-driven</li>
-      <li>Event Loop: microtasks > macrotasks</li>
-      <li>Always call <code>next()</code> in middleware</li>
-      <li>REST: stateless, resource-based, HTTP verbs</li>
+      <li><code>typeof null === "object"</code> — know the bug</li>
+      <li>Use <code>Number.isNaN()</code>, not <code>isNaN()</code></li>
+      <li>Always use <code>===</code> for strict comparison</li>
+      <li>Prefer <code>async/await</code> over nested callbacks</li>
+      <li>Understand event loop: microtasks before macrotasks</li>
+      <li>Use <code>bcrypt</code> for passwords, never plain text</li>
+      <li>Mongoose adds structure and safety to MongoDB</li>
+      <li>Express + middleware = clean, scalable APIs</li>
+      <li>CORS and CSRF are security essentials</li>
+      <li>Cluster for multi-core, streams for large data</li>
     </ul>
 
   </div>
